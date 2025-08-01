@@ -33,7 +33,6 @@
       id="dropdownFixtureLists"
       class="w-100 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800"
     >
-      <!-- Crear nueva lista -->
       <ul class="py-3 font-medium" aria-labelledby="dropdownFixtureListsButton">
         <li>
           <router-link
@@ -46,11 +45,12 @@
         </li>
       </ul>
 
-      <!-- Listado de fixture lists -->
-      <ul class="py-3 font-medium" aria-labelledby="dropdownFixtureListsButton">
+      <ul class="py-3" aria-labelledby="dropdownFixtureListsButton">
         <li
           v-for="fixtureList in fixtureLists"
           :key="'fixture-list-' + fixtureList.id"
+          class="cursor-pointer"
+          :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fixtureList.id === selectedFixtureList?.id }"
         >
           <div
             @click="selectFixtureList(fixtureList)"
