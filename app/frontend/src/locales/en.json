@@ -1,6 +1,8 @@
 {
   "miscellaneous": {
+    "apply": "Apply",
     "close": "Close",
+    "reset": "Reset",
     "create": "Create",
     "update": "Update",
     "search": "Search",
