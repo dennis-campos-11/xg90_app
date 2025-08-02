@@ -224,7 +224,7 @@ function hasField(id) {
 }
 
 function hasCompetition(id) {
-  return selectedCompetitions.value.some(c => c.id === id)
+  return selectedCompetitions.value.some(c => c.competition.id === id)
 }
 
 watch(

@@ -60,7 +60,7 @@ class FixtureListQuery
 
   def by_competition(scope)
     return scope if fixture_list&.available_fixture_list_competitions.empty?
-    scope.where(competition_id: fixture_list.fixture_list_competitions.map(&:competition_id))
+    scope.where(competition_id: fixture_list.available_fixture_list_competitions.map(&:competition_id))
   end
 
   def by_location(scope)
