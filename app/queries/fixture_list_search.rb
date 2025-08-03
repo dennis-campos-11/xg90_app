@@ -1,4 +1,4 @@
-class FixtureListQuery
+class FixtureListSearch
   attr_reader :fixture_list
 
   def self.call(fixture_list:)

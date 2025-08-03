@@ -8,13 +8,13 @@ class Api::V1::FixtureListsController < ApplicationController
     @fixture_lists = FixtureList.all
   end
 
-  def query
+  def search
     @fixture_list = FixtureList.includes(:fixture_list_competitions, fixture_list_fields: :data_field).new(fixture_list_params)
-    render_query
+    render_search
   end
 
   def show
-    render_query
+    render_search
   end
 
   def create
@@ -66,13 +66,13 @@ class Api::V1::FixtureListsController < ApplicationController
     )
   end
 
-  def render_query
-    prepare_query_fields
-    @grouped_fixtures = FixtureListQuery.call(fixture_list: @fixture_list)
-    render template: 'api/v1/fixture_lists/query'
+  def render_search
+    prepare_search_fields
+    @grouped_fixtures = FixtureListSearch.call(fixture_list: @fixture_list)
+    render template: 'api/v1/fixture_lists/search'
   end
 
-  def prepare_query_fields
+  def prepare_search_fields
     fields = @fixture_list.preload_data_fields!
 
     @allowed_stats = fields.select { |f| f.data_field&.statistic? }.map { |f| f.data_field.code }

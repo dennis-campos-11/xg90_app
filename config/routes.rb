@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get 'me', to: 'users#me'
       resource :user_settings, only: [:update]
       resources :fixture_lists do
-        post "query", on: :collection
+        post "search", on: :collection
         get 'meta', on: :collection
       end
     end

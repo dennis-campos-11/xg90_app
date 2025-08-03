@@ -1,17 +1,10 @@
 <template>
   <div class="flex-1 w-full my-5">
-    <FixtureListFilterForm
-      :fixture-lists="fixtureLists"
-      :fixture-list-meta="fixtureListMeta" 
-      @handleQuery="handleQuery"
-      @getAllFixtureLists="getAllFixtureLists"
-    />
+    <FixtureListFilterForm :fixture-lists="fixtureLists" :fixture-list-meta="fixtureListMeta" @search="search"
+      @getAllFixtureLists="getAllFixtureLists" />
   </div>
   <div class="flex-1 w-full">
-    <FixturesTable 
-      :grouped-fixtures="groupedFixtures" 
-      :fixture-list="fixtureList"
-    />
+    <FixturesTable :grouped-fixtures="groupedFixtures" :fixture-list="fixtureList" />
   </div>
 </template>
 
@@ -31,8 +24,8 @@ onMounted(() => {
   getFixtureListMeta()
 })
 
-const handleQuery = async (params = {}) => {
-  const data = await fixtureListsApi.query({ fixture_list: params })
+const search = async (params = {}) => {
+  const data = await fixtureListsApi.search({ fixture_list: params })
   groupedFixtures.value = data?.grouped_fixtures || []
   fixtureList.value = data?.fixture_list
 }

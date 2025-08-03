@@ -26,8 +26,8 @@ const fixtureLists = {
     return response.data
   },
 
-  async query(payload) {
-    const response = await api.post(`/fixture_lists/query`, payload)
+  async search(payload) {
+    const response = await api.post(`/fixture_lists/search`, payload)
     return response.data
   }
 }

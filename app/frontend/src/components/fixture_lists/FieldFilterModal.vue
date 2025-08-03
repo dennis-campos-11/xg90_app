@@ -1,6 +1,10 @@
 <template>
-  <div :id="modalId" tabindex="-1" aria-hidden="true"
-    class="hidden fixed inset-0 z-50 flex items-center justify-center">
+  <div 
+    :id="modalId" 
+    tabindex="-1" 
+    aria-hidden="true"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center"
+  >
     <div
       class="relative bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 w-full max-w-2xl max-h-full">
       <!-- Header -->
@@ -193,5 +197,5 @@ const closeModal = () => {
   emit("close")
 }
 
-defineExpose({ openModal, closeModal, ensureNotEmpty })
+defineExpose({ openModal, closeModal })
 </script>

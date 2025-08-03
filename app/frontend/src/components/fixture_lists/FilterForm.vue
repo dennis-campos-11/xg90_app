@@ -1,7 +1,18 @@
 <template>
-  <div class="flex mb-5">
+  <div class="flex mb-5 items-center justify-between">
     <FixtureListsDropdown :fixture-lists="fixtureLists" :selected-fixture-list="selectedFixtureList"
       @selectFixtureList="selectFixtureList" />
+
+    <div class="flex gap-3">
+      <button type="button" :disabled="!isFormValid" @click="openModal" 
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm 
+                    hover:bg-blue-700 focus-visible:ring-4 focus:outline-none 
+                    focus-visible:ring-blue-300 dark:focus-visible:ring-blue-800 
+                    disabled:opacity-50 animated"
+      >
+        {{ $t(`miscellaneous.${saveActionType}`) }}
+      </button>
+    </div>
   </div>
 
   <form @submit.prevent="submitForm" @keydown.enter.prevent class="space-y-6 mb-6">
@@ -61,22 +72,6 @@
       </div>
     </div>
 
-    <div class="relative flex gap-3">
-      <button type="submit" :disabled="!isFormValid" @click="formAction = 'query'" class="bg-blue-600 text-white px-4 py-2 rounded-lg 
-         hover:bg-blue-700 focus-visible:ring-4 focus:outline-none 
-         focus-visible:ring-blue-300 dark:focus-visible:ring-blue-800 
-         disabled:opacity-50 animated">
-        {{ $t('miscellaneous.search') }}
-      </button>
-
-      <button type="button" :disabled="!isFormValid" @click="openModal" class="bg-blue-600 text-white px-4 py-2 rounded-lg 
-         hover:bg-blue-700 focus-visible:ring-4 focus:outline-none 
-         focus-visible:ring-blue-300 dark:focus-visible:ring-blue-800 
-         disabled:opacity-50 animated">
-        {{ $t(`miscellaneous.${saveActionType}`) }}
-      </button>
-    </div>
-
     <SaveModal v-if="isModalOpen" v-model="form.name" :action-type="saveActionType" :errors="saveModalErrors"
       @close="isModalOpen = false" />
   </form>
@@ -105,12 +100,11 @@ const props = defineProps({
 
 const router = useRouter()
 const isModalOpen = ref(false)
-const formAction = ref(null)
 const saveModalErrors = ref({})
 const selectedFields = ref([])
 const selectedCompetitions = ref([])
 const isReady = ref(false)
-const emit = defineEmits(['handleQuery', 'getAllFixtureLists', 'getFixtureList'])
+const emit = defineEmits(['search', 'getAllFixtureLists', 'getFixtureList'])
 
 const form = reactive({
   name: null,
@@ -134,7 +128,6 @@ const activeData = (collection) => {
 }
 
 const openModal = () => {
-  formAction.value = 'save'
   isModalOpen.value = true
 }
 
@@ -217,7 +210,7 @@ function hasCompetition(id) {
 }
 
 watch(form, () => {
-  debouncedSubmit()
+  search()
 }, { deep: true })
 
 watch(
@@ -280,21 +273,16 @@ function hydrateForm(fixtureList) {
   isReady.value = true
 }
 
-const debouncedSubmit = debounce(() => {
+const search = debounce(() => {
   if (!isReady.value) return
-  if (isFormValid.value && formAction.value !== 'save') {
-    formAction.value = 'query'
-    submitForm()
+  if (isFormValid.value) {
+    emit('search', form)
   }
 }, 200)
 
 function submitForm() {
   if (isFormValid.value) {
-    if (formAction.value === 'query') {
-      emit('handleQuery', form)
-    } else if (formAction.value === 'save') {
-      handleSaveFixtureList(form)
-    }
+    handleSaveFixtureList(form)
   }
 }
 

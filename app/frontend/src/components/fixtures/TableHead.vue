@@ -9,7 +9,7 @@
     </th>
   </tr>
   <tr class="text-xs uppercase bg-gray-100 relative after:header-border-b dark:bg-neutral-900">
-    <th class="font-medium px-3 h-10 min-w-22 max-w-22 whitespace-nowrap">{{ $t(`fixtures.kick_off`) }}</th>
+    <th class="font-medium px-3 h-10 min-w-22 max-w-22 whitespace-nowrap text-center">{{ $t(`fixtures.kick_off`) }}</th>
     <th class="font-medium px-3 h-10 min-w-50 max-w-50 sticky left-0 bg-inherit"
       :class="{ 'right-shadow': hasScrolled }">{{ $t(`fixtures.matches`) }}</th>
     <template v-for="field in fields">
