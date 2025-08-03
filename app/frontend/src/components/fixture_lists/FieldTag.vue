@@ -6,13 +6,13 @@
       class="inline-flex items-center cursor-pointer border border-gray-200 focus:outline-none rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
       @click="openFiltersModal"
     >
-      <span class="text-sm font-medium px-3 py-2.5">
+      <span class="font-medium px-3 py-2">
         {{ $t(`data_fields.${field.data_field.code}`) }}
       </span>
 
       <span
         v-if="hasFiltersApplied"
-        class="bg-green-500 h-2.5 w-2.5 rounded-full"
+        class="bg-green-500 h-2 w-2.5 rounded-full"
       ></span>
 
       <span

@@ -18,7 +18,7 @@
           <p class="text-lg mb-6">
             Unlock access to performance data, match history, xG and insights trusted by thousands of analysts and fans.
           </p>
-          <div class="text-white text-sm font-medium">
+          <div class="text-white font-medium">
             Already helping <span class="font-bold">3k+</span> users.
           </div>
         </div>

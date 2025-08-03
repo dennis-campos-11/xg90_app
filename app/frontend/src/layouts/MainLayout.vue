@@ -21,7 +21,7 @@
           <ul class="flex flex-col font-medium space-x-1 rtl:space-x-reverse flex-row">
             <li>
               <button
-                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg text-sm p-2.5 mr-1 animated">
+                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg p-2.5 mr-1 animated">
                 <span class="material-symbols-outlined">
                   search
                 </span>
@@ -29,13 +29,13 @@
             </li>
             <li>
               <button @click="toggleTheme('light')" v-if="userStore?.user?.appearance === 'dark'"
-                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg text-sm p-2.5 mr-1 animated">
+                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg p-2.5 mr-1 animated">
                 <span class="material-symbols-outlined">
                   light_mode
                 </span>
               </button>
               <button @click="toggleTheme('dark')" v-if="userStore?.user?.appearance === 'light'"
-                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg text-sm p-2.5 mr-1 animated">
+                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg p-2.5 mr-1 animated">
                 <span class="material-symbols-outlined">
                   dark_mode
                 </span>
@@ -43,14 +43,14 @@
             </li>
             <li>
               <button data-dropdown-toggle="accountMenu"
-                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg text-sm p-2.5 mr-1 animated">
+                class="flex items-center justify-center w-10 h-10 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200 dark:focus-visible:ring-gray-700 rounded-lg p-2.5 mr-1 animated">
                 <span class="material-symbols-outlined">
                   account_circle
                 </span>
               </button>
               <div id="accountMenu"
                 class="z-50 hidden bg-white divide-y divide-gray-200 rounded-lg shadow-sm w-44 dark:bg-neutral-900 dark:divide-neutral-800">
-                <ul class="py-2 text-sm" aria-labelledby="accountMenu">
+                <ul class="py-2" aria-labelledby="accountMenu">
                   <li>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800">Settings</a>
                   </li>
@@ -60,7 +60,7 @@
                 </ul>
                 <div class="py-2">
                   <a @click="handleLogout"
-                    class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-800">Logout</a>
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800">Logout</a>
                 </div>
               </div>
             </li>

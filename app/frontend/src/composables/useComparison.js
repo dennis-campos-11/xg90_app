@@ -1,7 +1,7 @@
 export function useComparison() {
 
   const formatDifference = (teamValue, competitionValue) => {
-    const baseClass = 'text-sm'
+    const baseClass = 'text-base'
 
     if (
       teamValue == null ||
@@ -33,7 +33,7 @@ export function useComparison() {
 
     const cssClass =
       (teamValue > opponentValue)
-        ? 'font-semibold'
+        ? 'font-semibold dark:text-neutral-200'
         : 'font-normal'
 
     return {

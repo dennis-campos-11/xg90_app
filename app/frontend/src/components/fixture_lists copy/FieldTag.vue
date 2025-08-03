@@ -4,7 +4,7 @@
     <button type="button"
       class="inline-flex items-center cursor-pointer border border-gray-200 hover:bg-gray-100 focus:outline-none rounded-lg dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
       @click="openModal">
-      <span class="text-sm font-medium px-3 py-2.5">
+      <span class="font-medium px-3 py-2.5">
         {{ $t(`data_fields.${selectedField.data_field.code}`) }}
       </span>
 
@@ -43,7 +43,7 @@
               <div class="font-medium">{{ $t(`fixtures.metrics.${key}.label`) }}</div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div v-for="team in ['home', 'away']" :key="team">
-                  <label class="block text-sm font-medium mb-2">
+                  <label class="block font-medium mb-2">
                     {{ $t(`fixture_lists.filters.locations.${team}`) }}
                   </label>
                   <Slider v-model="filtersLocal[key][team]" :min="selectedField.data_field.settings?.[key].min"
@@ -66,7 +66,7 @@
           <!-- Footer -->
           <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-neutral-800">
             <button @click="closeModal" type="button"
-              class="py-2.5 px-5 text-sm font-medium focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:border-neutral-800 dark:hover:bg-neutral-800">
+              class="py-2.5 px-5 font-medium focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:border-neutral-800 dark:hover:bg-neutral-800">
               {{ $t("miscellaneous.close") }}
             </button>
           </div>

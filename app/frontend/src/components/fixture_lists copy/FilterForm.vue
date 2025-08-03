@@ -44,7 +44,7 @@
       <div class="relative">
         <button id="dropdownHomeLocationButton" data-dropdown-toggle="dropdownHomeLocation"
           data-dropdown-placement="bottom-start"
-          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-sm text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
           type="button">
           <div class="flex">
             <div>{{ $t('fixture_lists.home_location.label') }}</div>
@@ -59,13 +59,13 @@
         </button>
         <div id="dropdownHomeLocation"
           class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800">
-          <ul class="p-3 text-sm " aria-labelledby="dropdownHomeLocationButton">
+          <ul class="p-3 " aria-labelledby="dropdownHomeLocationButton">
             <li v-for="item in fixtureListMeta.home_locations" :key="'home-location-' + item.id">
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input type="radio" :id="'home-location-' + item.id" :value="item.id" v-model="form.home_location"
                   name="home-location"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
-                <label :for="'home-location-' + item.id" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
+                <label :for="'home-location-' + item.id" class="w-full py-2 ms-2 font-medium rounded-sm">{{
                   $t(`fixture_lists.home_location.values.${item.id}`) }}</label>
               </div>
             </li>
@@ -77,7 +77,7 @@
       <div class="relative">
         <button id="dropdownAwayLocationButton" data-dropdown-toggle="dropdownAwayLocation"
           data-dropdown-placement="bottom-start"
-          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-sm text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
           type="button">
           <div class="flex">
             <div>{{ $t('fixture_lists.away_location.label') }}</div>
@@ -92,13 +92,13 @@
         </button>
         <div id="dropdownAwayLocation"
           class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800">
-          <ul class="p-3 text-sm " aria-labelledby="dropdownAwayLocationButton">
+          <ul class="p-3 " aria-labelledby="dropdownAwayLocationButton">
             <li v-for="item in fixtureListMeta.away_locations" :key="'away-location-' + item.id">
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input type="radio" :id="'away-location-' + item.id" :value="item.id" v-model="form.away_location"
                   name="away-location"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
-                <label :for="'away-location-' + item.id" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
+                <label :for="'away-location-' + item.id" class="w-full py-2 ms-2 font-medium rounded-sm">{{
                   $t(`fixture_lists.away_location.values.${item.id}`) }}</label>
               </div>
             </li>
@@ -109,7 +109,7 @@
       <!-- SAMPLE -->
       <div class="relative">
         <button id="dropdownSampleButton" data-dropdown-toggle="dropdownSample" data-dropdown-placement="bottom-start"
-          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-sm text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
           type="button">
           <div class="flex">
             <div>{{ $t('fixture_lists.sample.label') }}</div>
@@ -124,12 +124,12 @@
         </button>
         <div id="dropdownSample"
           class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800">
-          <ul class="p-3 text-sm " aria-labelledby="dropdownSampleButton">
+          <ul class="p-3 " aria-labelledby="dropdownSampleButton">
             <li v-for="item in fixtureListMeta.samples" :key="'sample-location-' + item.id">
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input type="radio" :id="'sample-' + item.id" :value="item.id" v-model="form.sample" name="sample"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
-                <label :for="'sample-' + item.id" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
+                <label :for="'sample-' + item.id" class="w-full py-2 ms-2 font-medium rounded-sm">{{
                   $t(`fixture_lists.sample.values.${item.id}`) }}</label>
               </div>
             </li>
@@ -140,7 +140,7 @@
       <!-- FIELDS -->
       <div class="relative">
         <button id="dropdownFieldsButton" data-dropdown-toggle="dropdownFields" data-dropdown-placement="bottom-start"
-          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-sm text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
           type="button">
           <div
             v-html="$t('fixture_lists.fields.total', { total: `<span class='font-medium'>${totalSelected(selectedFields, 'Fields')}</span>` })">
@@ -162,16 +162,16 @@
                 </svg>
               </div>
               <input v-model="fieldSearch" type="text" :placeholder="$t('fixture_lists.fields.search_placeholder')"
-                class="block w-full p-2 ps-10 text-sm border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 focus-visible:border-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500 dark:focus-visible:border-blue-500" />
+                class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 focus-visible:border-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500 dark:focus-visible:border-blue-500" />
             </div>
           </div>
-          <ul class="h-48 p-3 overflow-y-auto text-sm ">
+          <ul class="h-48 p-3 overflow-y-auto ">
             <li v-for="field in filteredFields" :key="'field-' + field.id">
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input :id="`checkbox-field-${field.id}`" type="checkbox" :checked="hasField(field.id)"
                   @change="toggleField(field)"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
-                <label :for="`checkbox-field-${field.id}`" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
+                <label :for="`checkbox-field-${field.id}`" class="w-full py-2 ms-2 font-medium rounded-sm">{{
                   $t(`data_fields.${field.code}`) }}</label>
               </div>
             </li>
@@ -182,7 +182,7 @@
               <div
                 class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
               </div>
-              <span class="ms-3 text-sm font-medium">Show only selected</span>
+              <span class="ms-3 font-medium">Show only selected</span>
             </label>
           </div>
         </div>
@@ -192,7 +192,7 @@
       <div class="relative">
         <button id="dropdownCompetitionsButton" data-dropdown-toggle="dropdownCompetitions"
           data-dropdown-placement="bottom-start"
-          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-sm text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+          class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-5 py-2.5 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
           type="button">
           <div
             v-html="$t('fixture_lists.competitions.total', { total: `<span class='font-medium'>${totalSelected(selectedCompetitions, 'Competitions')}</span>` })">
@@ -215,17 +215,17 @@
               </div>
               <input v-model="competitionSearch" type="text"
                 :placeholder="$t('fixture_lists.competitions.search_placeholder')"
-                class="block w-full p-2 ps-10 text-sm border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 focus-visible:border-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500 dark:focus-visible:border-blue-500" />
+                class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 focus-visible:border-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500 dark:focus-visible:border-blue-500" />
             </div>
           </div>
-          <ul class="h-48 p-3 overflow-y-auto text-sm ">
+          <ul class="h-48 p-3 overflow-y-auto ">
             <li v-for="competition in filteredCompetitions" :key="'competition-' + competition.id">
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input :id="`checkbox-competition-${competition.id}`" type="checkbox"
                   :checked="hasCompetition(competition.id)" @change="toggleCompetition(competition)"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
                 <label :for="`checkbox-competition-${competition.id}`"
-                  class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
+                  class="w-full py-2 ms-2 font-medium rounded-sm">{{
                     competition.name }}</label>
               </div>
             </li>
@@ -236,7 +236,7 @@
               <div
                 class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
               </div>
-              <span class="ms-3 text-sm font-medium">Show only selected</span>
+              <span class="ms-3 font-medium">Show only selected</span>
             </label>
           </div>
         </div>
@@ -249,7 +249,7 @@
           <div
             class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
           </div>
-          <span class="ms-3 text-sm font-medium">{{
+          <span class="ms-3 font-medium">{{
             $t('fixture_lists.only_current_competition.label') }}</span>
         </label>
       </div>
@@ -261,7 +261,7 @@
           <div
             class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
           </div>
-          <span class="ms-3 text-sm font-medium">{{
+          <span class="ms-3 font-medium">{{
             $t('fixture_lists.show_variance_against_competition.label') }}</span>
         </label>
       </div>

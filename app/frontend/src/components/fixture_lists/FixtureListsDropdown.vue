@@ -4,12 +4,12 @@
       id="dropdownFixtureListsButton"
       data-dropdown-toggle="dropdownFixtureLists"
       data-dropdown-placement="bottom-start"
-      class="w-full hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg p-2 text-3xl font-medium text-center flex items-center justify-between dark:hover:bg-neutral-900 dark:focus-visible:ring-neutral-600 animated"
+      class="w-full hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-2 py-1 text-3xl font-medium text-center flex items-center justify-between dark:hover:bg-neutral-900 dark:focus-visible:ring-neutral-600 animated"
       type="button"
     >
       <div class="flex">
-        <div v-if="selectedFixtureList">
-          {{ selectedFixtureList.name }}
+        <div v-if="fixtureList">
+          {{ fixtureList.name }}
         </div>
         <div v-else>{{ $t("fixture_lists.select_fixture_list") }}</div>
       </div>
@@ -47,16 +47,16 @@
 
       <ul class="py-3" aria-labelledby="dropdownFixtureListsButton">
         <li
-          v-for="fixtureList in fixtureLists"
-          :key="'fixture-list-' + fixtureList.id"
+          v-for="fl in fixtureLists"
+          :key="'fixture-list-' + fl.id"
           class="cursor-pointer"
-          :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fixtureList.id === selectedFixtureList?.id }"
+          :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fl.id === fixtureList?.id }"
         >
           <div
-            @click="selectFixtureList(fixtureList)"
+            @click="selectFixtureList(fl)"
             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800"
           >
-            {{ fixtureList.name }}
+            {{ fl.name }}
           </div>
         </li>
       </ul>
@@ -71,7 +71,7 @@ const emit = defineEmits(['selectFixtureList'])
 
 defineProps({
   fixtureLists: Array,
-  selectedFixtureList: Object
+  fixtureList: Object
 })
 
 const selectFixtureList = (fixtureList) => {

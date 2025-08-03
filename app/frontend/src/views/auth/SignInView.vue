@@ -22,34 +22,34 @@
               d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z">
             </path>
           </svg>
-          <span class="text-sm font-medium">Sign in with Google</span>
+          <span class="font-medium">Sign in with Google</span>
         </button>
       </div>
       <div class="relative my-4">
         <div class="absolute inset-0 flex items-center">
           <div class="w-full border-t border-gray-300"></div>
         </div>
-        <div class="relative flex justify-center text-sm">
+        <div class="relative flex justify-center">
           <span class="bg-white px-2 text-gray-500">or</span>
         </div>
       </div>
       <form class="space-y-6" @submit.prevent="handleLogin">
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <label for="email" class="block font-medium text-gray-700">Email</label>
           <input v-model="email" type="email" autocomplete="email"
             class="mt-1 w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
         </div>
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <label for="password" class="block font-medium text-gray-700">Password</label>
           <input v-model="password" type="password" autocomplete="current-password"
             class="mt-1 w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
         </div>
         <div class="flex items-center justify-between">
           <label class="flex items-center">
             <input type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-            <span class="ml-2 text-sm text-gray-900">Remember me</span>
+            <span class="ml-2 text-gray-900">Remember me</span>
           </label>
-          <div class="text-sm">
+          <div>
             <router-link to="/forgot_password" class="font-medium text-blue-600 hover:text-blue-500">
               Forgot password
             </router-link>
@@ -57,12 +57,12 @@
         </div>
         <div>
           <button type="submit"
-            class="w-full flex justify-center py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+            class="w-full flex justify-center py-2 px-2 border border-transparent rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
             Sign in to your account
           </button>
         </div>
       </form>
-      <div class="text-center text-sm text-gray-600">
+      <div class="text-center text-gray-600">
         Don't have an account?
         <router-link to="/sign_up" class="font-medium text-blue-600 hover:text-blue-500">
           Sign up

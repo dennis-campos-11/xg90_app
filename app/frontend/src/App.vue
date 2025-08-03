@@ -8,7 +8,7 @@ const userStore = useUserStore()
 
 onMounted(() => {
   userStore.loadUser()
-  setHtmlTheme(localStorage.getItem('theme')|| 'light')
+  setHtmlTheme(localStorage.getItem('theme') || 'light')
 })
 
 const setHtmlTheme = (theme) => {
@@ -44,7 +44,7 @@ const alertClass = computed(() => {
 <template>
   <div class="w-screen">
     <div v-if="alert.show" :class="alertClass" role="alert"
-      class="fixed top-0 w-full p-4 mb-4 text-sm flex justify-between z-60">
+      class="fixed top-0 w-full p-4 mb-4 flex justify-between z-60">
       <span class="font-medium">{{ alert.message }}</span>
       <button type="button"
         class="ms-auto -mx-1.5 -my-1.5 p-1.5 inline-flex items-center justify-center h-8 w-8 opacity-70 hover:opacity-100"

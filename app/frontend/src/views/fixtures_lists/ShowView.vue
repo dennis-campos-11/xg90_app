@@ -1,6 +1,6 @@
 <template>
   <div class="flex-1 w-full my-5">
-    <FixtureListFilterForm :fixture-lists="fixtureLists" :selected-fixture-list="fixtureList"
+    <FixtureListFilterForm :fixture-lists="fixtureLists" :fixture-list="selectedFixtureList"
       :fixture-list-meta="fixtureListMeta" @search="search" @getAllFixtureLists="getAllFixtureLists"
       @getFixtureList="getFixtureList" />
   </div>
@@ -21,6 +21,7 @@ const fixtureLists = ref([])
 const fixtureListMeta = ref({})
 const groupedFixtures = ref([])
 const fixtureList = ref(null)
+const selectedFixtureList = ref(null)
 
 onMounted(() => {
   const id = route.params.id
@@ -40,7 +41,7 @@ const getFixtureList = async (id) => {
   if (id === undefined) return
   const data = await fixtureListsApi.get(id)
   groupedFixtures.value = data?.grouped_fixtures || []
-  fixtureList.value = data?.fixture_list
+  selectedFixtureList.value = data?.fixture_list
 }
 
 const getAllFixtureLists = async () => {
