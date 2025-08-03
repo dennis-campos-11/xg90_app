@@ -15,7 +15,7 @@
         <li v-for="item in items" :key="`${id}-${item.id}`">
           <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
             <input type="radio" :id="`${id}-${item.id}`" :value="item.id" :name="id" v-model="internalValue"
-              class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
             <label :for="`${id}-${item.id}`" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">
               {{ getSelectedLabel(item.id) }}
             </label>

@@ -1,10 +1,7 @@
 <template>
   <div class="flex mb-5">
-    <FixtureListsDropdown
-      :fixture-lists="fixtureLists"
-      :selected-fixture-list="selectedFixtureList"
-      @selectFixtureList="selectFixtureList"
-    />
+    <FixtureListsDropdown :fixture-lists="fixtureLists" :selected-fixture-list="selectedFixtureList"
+      @selectFixtureList="selectFixtureList" />
   </div>
 
   <form @submit.prevent="submitForm" @keydown.enter.prevent class="space-y-6 mb-6">
@@ -37,7 +34,7 @@
         <label class="inline-flex items-center cursor-pointer">
           <input type="checkbox" v-model="form.only_current_competition" class="sr-only peer" />
           <div
-            class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-violet-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-violet-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+            class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
           </div>
           <span class="ms-3 text-sm font-medium">{{ $t('fixture_lists.only_current_competition.label') }}</span>
         </label>
@@ -47,10 +44,10 @@
         <label class="inline-flex items-center cursor-pointer">
           <input type="checkbox" v-model="form.show_variance_against_competition" class="sr-only peer" />
           <div
-            class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-violet-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-violet-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+            class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
           </div>
           <span class="ms-3 text-sm font-medium">{{ $t('fixture_lists.show_variance_against_competition.label')
-            }}</span>
+          }}</span>
         </label>
       </div>
     </div>
@@ -59,43 +56,34 @@
     <div v-if="activeData(selectedFields).length > 0" class="mt-10">
       <div class="font-medium mb-2">Selected Fields</div>
       <div class="flex flex-wrap gap-2 overflow-x-auto">
-        <FieldTag
-          v-for="({ attr, idx, field }) in visibleFields"
-          :key="`tag-${attr.data_field_id || idx}`"
-          v-model="form.fixture_list_fields_attributes[idx]"
-          :field="field"
-          @remove="toggleField(field.data_field)"
-        />
+        <FieldTag v-for="({ attr, idx, field }) in visibleFields" :key="`tag-${attr.data_field_id || idx}`"
+          v-model="form.fixture_list_fields_attributes[idx]" :field="field" @remove="toggleField(field.data_field)" />
       </div>
     </div>
 
     <div class="relative flex gap-3">
-      <button type="submit" :disabled="!isFormValid" @click="formAction = 'query'" class="bg-violet-600 text-white px-4 py-2 rounded-lg 
-         hover:bg-violet-700 focus-visible:ring-4 focus:outline-none 
-         focus-visible:ring-violet-300 dark:focus-visible:ring-violet-800 
+      <button type="submit" :disabled="!isFormValid" @click="formAction = 'query'" class="bg-blue-600 text-white px-4 py-2 rounded-lg 
+         hover:bg-blue-700 focus-visible:ring-4 focus:outline-none 
+         focus-visible:ring-blue-300 dark:focus-visible:ring-blue-800 
          disabled:opacity-50 animated">
         {{ $t('miscellaneous.search') }}
       </button>
 
-      <button type="button" :disabled="!isFormValid" @click="openModal" class="bg-violet-600 text-white px-4 py-2 rounded-lg 
-         hover:bg-violet-700 focus-visible:ring-4 focus:outline-none 
-         focus-visible:ring-violet-300 dark:focus-visible:ring-violet-800 
+      <button type="button" :disabled="!isFormValid" @click="openModal" class="bg-blue-600 text-white px-4 py-2 rounded-lg 
+         hover:bg-blue-700 focus-visible:ring-4 focus:outline-none 
+         focus-visible:ring-blue-300 dark:focus-visible:ring-blue-800 
          disabled:opacity-50 animated">
         {{ $t(`miscellaneous.${saveActionType}`) }}
       </button>
     </div>
 
-    <SaveModal
-      v-if="isModalOpen"
-      v-model="form.name"
-      :action-type="saveActionType"
-      :errors="saveModalErrors"
-      @close="isModalOpen = false"
-    />
+    <SaveModal v-if="isModalOpen" v-model="form.name" :action-type="saveActionType" :errors="saveModalErrors"
+      @close="isModalOpen = false" />
   </form>
 </template>
 
 <script setup>
+import debounce from 'lodash-es/debounce'
 import { reactive, ref, watch, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { initDropdowns } from 'flowbite'
@@ -121,6 +109,7 @@ const formAction = ref(null)
 const saveModalErrors = ref({})
 const selectedFields = ref([])
 const selectedCompetitions = ref([])
+const isReady = ref(false)
 const emit = defineEmits(['handleQuery', 'getAllFixtureLists', 'getFixtureList'])
 
 const form = reactive({
@@ -227,53 +216,77 @@ function hasCompetition(id) {
   return selectedCompetitions.value.some(c => c.competition.id === id)
 }
 
+watch(form, () => {
+  debouncedSubmit()
+}, { deep: true })
+
 watch(
   () => props.selectedFixtureList,
-  (newVal) => {
-    if (!newVal) return
-
-    const simpleFields = [
-      'id',
-      'name',
-      'sample',
-      'home_location',
-      'away_location',
-      'only_current_competition',
-      'show_variance_against_competition'
-    ]
-    simpleFields.forEach(key => {
-      form[key] = newVal[key] ?? null
-    })
-
-    const fixture_list_field = newVal.fixture_list_fields || []
-    form.fixture_list_fields_attributes = fixture_list_field.map(lf => ({
-      id: lf.id,
-      data_field_id: lf.data_field.id,
-      filters: lf.filters,
-      index: lf.index,
-      _destroy: lf._destroy
-    }))
-    selectedFields.value = fixture_list_field.map(lf => ({
-      id: lf.id,
-      data_field: lf.data_field,
-      filters: lf.filters,
-      index: lf.index,
-      _destroy: lf._destroy
-    }))
-
-    const fixture_list_competition = newVal.fixture_list_competitions || []
-    form.fixture_list_competitions_attributes = fixture_list_competition.map(lc => ({
-      id: lc.id,
-      competition_id: lc.competition.id,
-      _destroy: lc._destroy
-    }))
-    selectedCompetitions.value = fixture_list_competition.map(lc => ({
-      id: lc.id,
-      competition: lc.competition
-    }))
+  (newVal, oldVal) => {
+    if (
+      !newVal ||
+      (newVal?.id === oldVal?.id)
+    ) {
+      isReady.value = true
+      return
+    }
+    hydrateForm(newVal)
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
+
+function hydrateForm(fixtureList) {
+  const simpleFields = [
+    'id',
+    'name',
+    'sample',
+    'home_location',
+    'away_location',
+    'only_current_competition',
+    'show_variance_against_competition'
+  ]
+  simpleFields.forEach(key => {
+    form[key] = fixtureList[key] !== undefined ? fixtureList[key] : null
+  })
+
+  const fields = fixtureList.fixture_list_fields || []
+  form.fixture_list_fields_attributes = fields.map(lf => ({
+    id: lf.id,
+    data_field_id: lf.data_field.id,
+    filters: lf.filters,
+    index: lf.index,
+    _destroy: lf._destroy
+  }))
+  selectedFields.value = fields.map(lf => ({
+    id: lf.id,
+    data_field: lf.data_field,
+    filters: lf.filters,
+    index: lf.index,
+    _destroy: lf._destroy
+  }))
+
+  const competitions = fixtureList.fixture_list_competitions || []
+  form.fixture_list_competitions_attributes = competitions.map(lc => ({
+    id: lc.id,
+    competition_id: lc.competition.id,
+    _destroy: lc._destroy
+  }))
+  selectedCompetitions.value = competitions.map(lc => ({
+    id: lc.id,
+    competition: lc.competition,
+    _destroy: lc._destroy
+  }))
+
+  isReady.value = true
+}
+
+const debouncedSubmit = debounce(() => {
+  if (!isReady.value) return
+  if (isFormValid.value && formAction.value !== 'save') {
+    formAction.value = 'query'
+    submitForm()
+  }
+}, 200)
 
 function submitForm() {
   if (isFormValid.value) {

@@ -64,7 +64,7 @@
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input type="radio" :id="'home-location-' + item.id" :value="item.id" v-model="form.home_location"
                   name="home-location"
-                  class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
                 <label :for="'home-location-' + item.id" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
                   $t(`fixture_lists.home_location.values.${item.id}`) }}</label>
               </div>
@@ -97,7 +97,7 @@
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input type="radio" :id="'away-location-' + item.id" :value="item.id" v-model="form.away_location"
                   name="away-location"
-                  class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
                 <label :for="'away-location-' + item.id" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
                   $t(`fixture_lists.away_location.values.${item.id}`) }}</label>
               </div>
@@ -128,7 +128,7 @@
             <li v-for="item in fixtureListMeta.samples" :key="'sample-location-' + item.id">
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input type="radio" :id="'sample-' + item.id" :value="item.id" v-model="form.sample" name="sample"
-                  class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
                 <label :for="'sample-' + item.id" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
                   $t(`fixture_lists.sample.values.${item.id}`) }}</label>
               </div>
@@ -162,7 +162,7 @@
                 </svg>
               </div>
               <input v-model="fieldSearch" type="text" :placeholder="$t('fixture_lists.fields.search_placeholder')"
-                class="block w-full p-2 ps-10 text-sm border-0 rounded-lg bg-gray-100 focus-visible:ring-violet-500 focus-visible:border-violet-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-violet-500 dark:focus-visible:border-violet-500" />
+                class="block w-full p-2 ps-10 text-sm border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 focus-visible:border-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500 dark:focus-visible:border-blue-500" />
             </div>
           </div>
           <ul class="h-48 p-3 overflow-y-auto text-sm ">
@@ -170,7 +170,7 @@
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input :id="`checkbox-field-${field.id}`" type="checkbox" :checked="hasField(field.id)"
                   @change="toggleField(field)"
-                  class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
                 <label :for="`checkbox-field-${field.id}`" class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
                   $t(`data_fields.${field.code}`) }}</label>
               </div>
@@ -180,7 +180,7 @@
             <label class="inline-flex items-center cursor-pointer">
               <input type="checkbox" v-model="showOnlySelectedFields" class="sr-only peer">
               <div
-                class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-violet-300 dark:peer-focus-visible:ring-violet-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-neutral-600 peer-checked:bg-violet-600 dark:peer-checked:bg-violet-600">
+                class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
               </div>
               <span class="ms-3 text-sm font-medium">Show only selected</span>
             </label>
@@ -215,7 +215,7 @@
               </div>
               <input v-model="competitionSearch" type="text"
                 :placeholder="$t('fixture_lists.competitions.search_placeholder')"
-                class="block w-full p-2 ps-10 text-sm border-0 rounded-lg bg-gray-100 focus-visible:ring-violet-500 focus-visible:border-violet-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-violet-500 dark:focus-visible:border-violet-500" />
+                class="block w-full p-2 ps-10 text-sm border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 focus-visible:border-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500 dark:focus-visible:border-blue-500" />
             </div>
           </div>
           <ul class="h-48 p-3 overflow-y-auto text-sm ">
@@ -223,7 +223,7 @@
               <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 dark:hover:bg-neutral-800">
                 <input :id="`checkbox-competition-${competition.id}`" type="checkbox"
                   :checked="hasCompetition(competition.id)" @change="toggleCompetition(competition)"
-                  class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600">
                 <label :for="`checkbox-competition-${competition.id}`"
                   class="w-full py-2 ms-2 text-sm font-medium rounded-sm">{{
                     competition.name }}</label>
@@ -234,7 +234,7 @@
             <label class="inline-flex items-center cursor-pointer">
               <input type="checkbox" v-model="showOnlySelectedCompetitions" class="sr-only peer">
               <div
-                class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-violet-300 dark:peer-focus-visible:ring-violet-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-neutral-600 peer-checked:bg-violet-600 dark:peer-checked:bg-violet-600">
+                class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
               </div>
               <span class="ms-3 text-sm font-medium">Show only selected</span>
             </label>
@@ -247,7 +247,7 @@
           <input type="checkbox" v-model="form.only_current_competition" name="only_current_competition"
             class="sr-only peer">
           <div
-            class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-violet-300 dark:peer-focus-visible:ring-violet-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-violet-600 dark:peer-checked:bg-violet-600">
+            class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
           </div>
           <span class="ms-3 text-sm font-medium">{{
             $t('fixture_lists.only_current_competition.label') }}</span>
@@ -259,7 +259,7 @@
           <input type="checkbox" v-model="form.show_variance_against_competition"
             name="show_variance_against_competition" class="sr-only peer">
           <div
-            class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-violet-300 dark:peer-focus-visible:ring-violet-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-violet-600 dark:peer-checked:bg-violet-600">
+            class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 dark:peer-focus-visible:ring-blue-800 rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
           </div>
           <span class="ms-3 text-sm font-medium">{{
             $t('fixture_lists.show_variance_against_competition.label') }}</span>
@@ -280,7 +280,7 @@
 
     <div class="relative">
       <button type="submit"
-        class="bg-violet-600 text-white px-4 py-2 rounded-lg hover:bg-violet-700 focus-visible:ring-4 focus:outline-none focus-visible:ring-violet-300 dark:focus-visible:ring-violet-800 animated">
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus-visible:ring-4 focus:outline-none focus-visible:ring-blue-300 dark:focus-visible:ring-blue-800 animated">
         Save
       </button>
     </div>

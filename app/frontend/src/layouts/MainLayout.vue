@@ -6,14 +6,14 @@
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
           <ul class="flex flex-col font-medium space-x-8 rtl:space-x-reverse flex-row">
             <li>
-              <a href="#" class="block rounded-sm hover:text-violet-600">Leagues</a>
+              <a href="#" class="block rounded-sm hover:text-blue-600">Leagues</a>
             </li>
             <li>
-              <router-link to="/fixture_lists" class="block rounded-sm hover:text-violet-600">Fixture
+              <router-link to="/fixture_lists" class="block rounded-sm hover:text-blue-600">Fixture
                 Lists</router-link>
             </li>
             <li>
-              <a href="#" class="block rounded-sm hover:text-violet-600">Players</a>
+              <a href="#" class="block rounded-sm hover:text-blue-600">Players</a>
             </li>
           </ul>
         </div>
@@ -70,7 +70,7 @@
     </nav>
     <div class="flex-1">
       <div class="container mx-auto px-4 md:px-0">
-        <router-view/>
+        <router-view />
       </div>
     </div>
   </div>

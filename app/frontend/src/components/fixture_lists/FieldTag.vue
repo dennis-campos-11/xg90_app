@@ -28,7 +28,7 @@
       ref="modalRef"
       v-model="filtersLocal"
       :field="field"
-      :modal-id="`fieldFilterModal-${field.id}`"
+      :modal-id="`fieldFilterModal-${field.data_field.id}`"
     />
   </div>
 </template>

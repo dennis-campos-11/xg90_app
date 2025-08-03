@@ -9,11 +9,12 @@
       </span>
 
       <!-- Indicador de filtros -->
-      <span v-if="hasFiltersApplied" class="bg-violet-500 h-2 w-2 rounded-full ring-3 ring-violet-200">
+      <span v-if="hasFiltersApplied" class="bg-blue-500 h-2 w-2 rounded-full ring-3 ring-blue-200">
       </span>
 
       <!-- Botón para eliminar campo -->
-      <span class="material-symbols-outlined !text-lg px-3 py-1.5 text-gray-400 hover:text-red-600 dark:text-neutral-500"
+      <span
+        class="material-symbols-outlined !text-lg px-3 py-1.5 text-gray-400 hover:text-red-600 dark:text-neutral-500"
         @click.stop="$emit('remove')">
         close
       </span>
@@ -30,7 +31,8 @@
             <h3 class="text-lg font-semibold">
               {{ $t(`data_fields.${selectedField.data_field.code}`) }}
             </h3>
-            <button type="button" @click="closeModal" class="text-gray-400 hover:text-gray-900 dark:hover:text-neutral-600">
+            <button type="button" @click="closeModal"
+              class="text-gray-400 hover:text-gray-900 dark:hover:text-neutral-600">
               ✕
             </button>
           </div>
@@ -44,13 +46,8 @@
                   <label class="block text-sm font-medium mb-2">
                     {{ $t(`fixture_lists.filters.locations.${team}`) }}
                   </label>
-                  <Slider 
-                    v-model="filtersLocal[key][team]"
-                    :min="selectedField.data_field.settings?.[key].min"
-                    :max="selectedField.data_field.settings?.[key].max"
-                    :step="-1"
-                    show-tooltip="drag"
-                    class="
+                  <Slider v-model="filtersLocal[key][team]" :min="selectedField.data_field.settings?.[key].min"
+                    :max="selectedField.data_field.settings?.[key].max" :step="-1" show-tooltip="drag" class="
                       [--slider-connect-bg:#7c3aed]
                       [--slider-connect-bg-hover:#6d28d9]
                       [--slider-rail-bg:#ede9fe]
@@ -60,8 +57,7 @@
                       [--slider-handle-shadow:0_0_0_3px_#c4b5fd]
                       [--slider-tooltip-bg:#7c3aed]
                       [--slider-tooltip-color:white]
-                    "
-                  />
+                    " />
                 </div>
               </div>
             </div>
