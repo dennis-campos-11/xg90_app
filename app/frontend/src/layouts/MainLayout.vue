@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col max-w-screen">
-    <nav class="bg-white dark:bg-neutral-950 sticky top-0 z-40 h-15 w-full">
+    <nav class="bg-white dark:bg-black sticky top-0 z-40 h-15 w-full">
       <div class="container flex flex-wrap items-center justify-between mx-auto px-4 py-2">
         <span class="text-xl font-bold">XG90</span>
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">

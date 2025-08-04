@@ -1,14 +1,13 @@
 <template>
   <!-- eslint-disable vue/no-v-for-template-key -->
-  <tr @mouseenter="onMouseEnter(index)" @mouseleave="onMouseLeave"
-    :class="[
-      { 'bg-gray-100 dark:bg-neutral-900': (hoveredIndex === index) }, 
-      { 'bg-white dark:bg-neutral-950': (hoveredIndex !== index) }, 
-      { 'border-b-1 border-gray-200 dark:border-neutral-800': isLastColumn }
-    ]">
-    <td v-if="isFirstColumn" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle"
-      :rowspan="2">
+  <tr @mouseenter="onMouseEnter(index)" @mouseleave="onMouseLeave" :class="[
+    { 'bg-gray-100 dark:bg-neutral-900': (hoveredIndex === index) },
+    { 'bg-white dark:bg-black': (hoveredIndex !== index) },
+    { 'border-b-1 border-gray-200 dark:border-neutral-800': isLastColumn }
+  ]">
+    <td v-if="isFirstColumn" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle" :rowspan="2">
       <div class="mb-1">{{ fixture.kick_off }}</div>
+      <img :src="getCompetitionLogo(competition.id)" class="block mx-auto w-7 h-7" />
     </td>
 
     <td class="px-3 min-w-50 max-w-50 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
@@ -69,5 +68,9 @@ const onMouseLeave = () => {
 
 function getTeamLogo(teamId) {
   return `http://localhost:3000/laliga/${teamId}.png` // ajusta según tu estructura real
+}
+
+function getCompetitionLogo(competitionId) {
+  return `http://localhost:3000/competitions/${competitionId}.png` // ajusta según tu estructura real
 }
 </script>

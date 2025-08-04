@@ -1,5 +1,5 @@
 <template>
-  <div v-if="fixtureList && activeFields.length > 0">
+  <div class="text-sm" v-if="fixtureList && activeFields.length > 0">
     <div ref="tableWrapperHead" class="w-full overflow-x-auto sticky top-15 z-20 scrollbar-hidden"
       @scroll="syncScroll('head')">
       <table class="w-full border-collapse text-left" v-if="groupedFixtures.length">

@@ -1,5 +1,5 @@
 <template>
-  <tr class="border-b border-gray-200 dark:border-neutral-800">
+  <tr class="border-b border-gray-200 dark:border-neutral-800 hidden">
     <td></td>
     <td class="px-3 min-w-22 max-w-22 h-12 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
       :class="{ 'right-shadow': hasScrolled }">

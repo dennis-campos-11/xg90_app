@@ -15,7 +15,7 @@ json.fixture_list_competitions fixture_list.fixture_list_competitions do |lc|
   json._destroy lc._destroy
 end
 
-json.fixture_list_fields fixture_list.fixture_list_fields do |lf|
+json.fixture_list_fields fixture_list.fixture_list_fields.sort_by(&:index) do |lf|
   json.id lf.id
   json.data_field do
     json.id lf.data_field.id

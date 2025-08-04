@@ -3,20 +3,24 @@
     <!-- Botón que abre el modal -->
     <button
       type="button"
-      class="inline-flex items-center cursor-pointer border border-gray-200 focus:outline-none rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
-      @click="openFiltersModal"
+      class="inline-flex items-center cursor-pointer border border-gray-200 focus:outline-none rounded-lg dark:border-neutral-800 animated"
+      @click="openFiltersModal"     
+      :class="[
+        { 'hover:bg-gray-100 dark:hover:bg-neutral-900': !hasFiltersApplied },
+        { 'text-white bg-gray-950 hover:bg-gray-800 dark:text-black dark:bg-neutral-50 dark:hover:bg-neutral-200': hasFiltersApplied }
+      ]"
     >
-      <span class="font-medium px-3 py-2">
+      <span class="px-3 py-2.5">
         {{ $t(`data_fields.${field.data_field.code}`) }}
       </span>
 
       <span
-        v-if="hasFiltersApplied"
-        class="bg-green-500 h-2 w-2.5 rounded-full"
+        v-if="hasFiltersApplied && false"
+        class="bg-green-500 h-2 w-2 rounded-full"
       ></span>
 
       <span
-        class="material-symbols-outlined !text-xl px-3 py-1 text-gray-400 hover:text-red-600 dark:text-neutral-500"
+        class="material-symbols-outlined !text-xl px-3 py-1 text-inherit hover:text-red-600 dark:text-neutral-500"
         @click.stop="$emit('remove')"
       >
         close

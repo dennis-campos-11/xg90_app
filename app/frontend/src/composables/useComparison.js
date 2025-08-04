@@ -1,7 +1,7 @@
 export function useComparison() {
 
   const formatDifference = (teamValue, competitionValue) => {
-    const baseClass = 'text-base'
+    const baseClass = 'text-sm'
 
     if (
       teamValue == null ||

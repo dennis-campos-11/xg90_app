@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex mb-5 items-center justify-between">
+    <div class="flex mb-3 items-center justify-between">
       <FixtureListsDropdown :fixture-lists="fixtureLists" :fixture-list="fixtureList"
         @selectFixtureList="selectFixtureList" />
 
@@ -17,7 +17,7 @@
     </div>
 
     <form @submit.prevent="submitForm" @keydown.enter.prevent class="space-y-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-3">
+      <div class="flex flex-wrap gap-3">
 
         <DropdownRadio id="home-location" :label="$t('fixture_lists.home_location.label')"
           :items="fixtureListMeta.home_locations" v-model="form.home_location"
@@ -48,7 +48,7 @@
             <div
               class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
             </div>
-            <span class="ms-3 font-medium">{{ $t('fixture_lists.only_current_competition.label') }}</span>
+            <span class="ms-3">{{ $t('fixture_lists.only_current_competition.label') }}</span>
           </label>
         </div>
 
@@ -58,19 +58,29 @@
             <div
               class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
             </div>
-            <span class="ms-3 font-medium">{{ $t('fixture_lists.show_variance_against_competition.label')
-            }}</span>
+            <span class="ms-3">{{ $t('fixture_lists.show_variance_against_competition.label') }}</span>
           </label>
         </div>
       </div>
 
       <!-- Render de tags -->
       <div v-if="activeData(selectedFields).length > 0">
-        <div class="font-medium mb-2">Selected Fields</div>
-        <div class="flex flex-wrap gap-2 overflow-x-auto">
-          <FieldTag v-for="({ attr, idx, field }) in visibleFields" :key="`tag-${attr.data_field_id || idx}`"
-            v-model="form.fixture_list_fields_attributes[idx]" :field="field" @remove="toggleField(field.data_field)" />
-        </div>
+        <draggable
+          v-model="form.fixture_list_fields_attributes"
+          item-key="id" 
+          class="flex flex-wrap gap-2 overflow-x-auto"
+          @end="updateIndexes"
+          :animation="200"
+          ghost-class="opacity-50"
+        >
+          <template #item="{ index }">
+            <FieldTag
+              v-model="form.fixture_list_fields_attributes[index]"
+              :field="visibleFields[index].field"
+              @remove="toggleField(visibleFields[index].field.data_field)"
+            />
+          </template>
+        </draggable>
       </div>
 
       <SaveModal v-if="isModalOpen" v-model="form.name" :action-type="saveActionType" :errors="saveModalErrors"
@@ -84,6 +94,7 @@ import { debounce, omit } from 'lodash'
 import { reactive, ref, watch, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { initDropdowns } from 'flowbite'
+import draggable from 'vuedraggable'
 import FixtureListsDropdown from './FixtureListsDropdown.vue'
 import FieldTag from './FieldTag.vue'
 import DropdownRadio from './DropdownRadio.vue'
@@ -158,6 +169,12 @@ const formWatched = computed(() => {
   return omit({ ...form }, ['name'])
 })
 
+const updateIndexes = () => {
+  form.fixture_list_fields_attributes.forEach((f, idx) => {
+    f.index = idx + 1
+  })
+}
+
 function toggleField(field) {
   if (hasField(field.id)) {
     handleRemove(form.fixture_list_fields_attributes, selectedFields, 'data_field_id', field.id)
@@ -170,6 +187,7 @@ function toggleField(field) {
       filters: {},
       _destroy: false,
     })
+    updateIndexes()
   }
 }
 
