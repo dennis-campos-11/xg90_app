@@ -65,22 +65,10 @@
 
       <!-- Render de tags -->
       <div v-if="activeData(selectedFields).length > 0">
-        <draggable
-          v-model="form.fixture_list_fields_attributes"
-          item-key="id" 
-          class="flex flex-wrap gap-2 overflow-x-auto"
-          @end="updateIndexes"
-          :animation="200"
-          ghost-class="opacity-50"
-        >
-          <template #item="{ index }">
-            <FieldTag
-              v-model="form.fixture_list_fields_attributes[index]"
-              :field="visibleFields[index].field"
-              @remove="toggleField(visibleFields[index].field.data_field)"
-            />
-          </template>
-        </draggable>
+        <div class="flex flex-wrap gap-2 overflow-x-auto">
+          <FieldTag v-for="({ attr, idx, field }) in visibleFields" :key="`tag-${attr.data_field_id || idx}`"
+            v-model="form.fixture_list_fields_attributes[idx]" :field="field" @remove="toggleField(field.data_field)" />
+        </div>
       </div>
 
       <SaveModal v-if="isModalOpen" v-model="form.name" :action-type="saveActionType" :errors="saveModalErrors"
@@ -94,7 +82,6 @@ import { debounce, omit } from 'lodash'
 import { reactive, ref, watch, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { initDropdowns } from 'flowbite'
-import draggable from 'vuedraggable'
 import FixtureListsDropdown from './FixtureListsDropdown.vue'
 import FieldTag from './FieldTag.vue'
 import DropdownRadio from './DropdownRadio.vue'
