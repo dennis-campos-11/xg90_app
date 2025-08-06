@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 w-full my-5">
-    <FixtureListFilterForm :fixture-lists="fixtureLists" :fixture-list="selectedFixtureList"
-      :fixture-list-meta="fixtureListMeta" @search="search" @getAllFixtureLists="getAllFixtureLists"
+    <SearchForm :fixture-lists="fixtureLists" :fixture-list="selectedFixtureList"
+      :meta-data="fixtureListMeta" @search="search" @getAllFixtureLists="getAllFixtureLists"
       @getFixtureList="getFixtureList" />
   </div>
   <div class="flex-1 w-full">
@@ -14,7 +14,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import fixtureListsApi from '@/api/fixture_list'
 import FixturesTable from '@/components/fixtures/DataTable.vue'
-import FixtureListFilterForm from '@/components/fixture_lists/FilterForm.vue'
+import SearchForm from '@/components/fixture_lists/SearchForm.vue'
 
 const route = useRoute()
 const fixtureLists = ref([])

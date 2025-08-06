@@ -4,7 +4,7 @@
     <button
       type="button"
       class="inline-flex items-center cursor-pointer border border-gray-200 focus:outline-none rounded-lg dark:border-neutral-800 animated"
-      @click="openFiltersModal"
+      @click="openFiltersModal"     
       :class="[
         { 'hover:bg-gray-100 dark:hover:bg-neutral-900': !hasFiltersApplied },
         { 'text-white bg-gray-950 hover:bg-gray-800 dark:text-black dark:bg-neutral-50 dark:hover:bg-neutral-200': hasFiltersApplied }

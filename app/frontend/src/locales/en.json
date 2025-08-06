@@ -3,6 +3,7 @@
     "apply": "Apply",
     "close": "Close",
     "reset": "Reset",
+    "save": "Save",
     "create": "Create",
     "update": "Update",
     "search": "Search",
@@ -31,18 +32,20 @@
         "1": "Last 5 games",
         "2": "Last 10 games",
         "3": "Last 15 games",
-        "4": "current season",
+        "4": "Current season",
         "5": "Last season",
         "6": "Last 2 seasons",
         "7": "Last 3 seasons"
       }
     },
     "fields": {
-      "total": "Fields: {total} selected",
+      "label": "Fields",
+      "total": "{total} selected",
       "search_placeholder": "Search fields"
     },
     "competitions": {
-      "total": "Competitions: {total} selected",
+      "label": "Competitions",
+      "total": "{total} selected",
       "search_placeholder": "Search competitions"
     },
     "only_current_competition": { 

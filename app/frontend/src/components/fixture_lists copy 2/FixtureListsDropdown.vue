@@ -8,8 +8,8 @@
       type="button"
     >
       <div class="flex">
-        <div v-if="selectedFixtureList">
-          {{ selectedFixtureList.name }}
+        <div v-if="fixtureList">
+          {{ fixtureList.name }}
         </div>
         <div v-else>{{ $t("fixture_lists.select_fixture_list") }}</div>
       </div>
@@ -47,16 +47,16 @@
 
       <ul class="py-3" aria-labelledby="dropdownFixtureListsButton">
         <li
-          v-for="fixtureList in fixtureLists"
-          :key="'fixture-list-' + fixtureList.id"
+          v-for="fl in fixtureLists"
+          :key="'fixture-list-' + fl.id"
           class="cursor-pointer"
-          :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fixtureList.id === selectedFixtureList?.id }"
+          :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fl.id === fixtureList?.id }"
         >
           <div
-            @click="selectFixtureList(fixtureList)"
+            @click="selectFixtureList(fl)"
             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800"
           >
-            {{ fixtureList.name }}
+            {{ fl.name }}
           </div>
         </li>
       </ul>
@@ -71,11 +71,11 @@ const emit = defineEmits(['selectFixtureList'])
 
 defineProps({
   fixtureLists: Array,
-  selectedFixtureList: Object
+  fixtureList: Object
 })
 
-const selectFixtureList = (selectedFixtureList) => {
-  router.push(`/fixture_lists/${selectedFixtureList.id}`)
-  emit('selectFixtureList', selectedFixtureList)
+const selectFixtureList = (fixtureList) => {
+  router.push(`/fixture_lists/${fixtureList.id}`)
+  emit('selectFixtureList', fixtureList)
 }
 </script>

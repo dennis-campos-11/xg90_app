@@ -1,13 +1,12 @@
 <template>
   <div :id="modalId" tabindex="-1" aria-hidden="true"
-    v-if="fixtureListField?.data_field"
     class="hidden fixed inset-0 z-50 flex items-center justify-center">
     <div
       class="relative bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 w-full max-w-2xl max-h-full">
       <!-- Header -->
       <div class="flex items-center justify-between p-4 border-b dark:border-neutral-800 border-gray-200">
         <h3 class="text-lg font-semibold">
-          {{ $t(`data_fields.${fixtureListField?.data_field?.code}`) }}
+          {{ $t(`data_fields.${field.data_field.code}`) }}
         </h3>
         <button type="button"
           class="material-symbols-outlined text-gray-400 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-600"
@@ -31,8 +30,8 @@
                 </span>
                 <input type="number" v-model.number="localFilters[key][team][0]"
                   class="text-sm rounded-none text-center z-10 bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-black dark:border-neutral-800 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  :min="fixtureListField.data_field.settings?.[key].min" :max="fixtureListField.data_field.settings?.[key].max"
-                  @blur="localFilters[key][team][0] = ensureNotEmpty(localFilters[key][team][0], fixtureListField.data_field.settings?.[key].min)"
+                  :min="field.data_field.settings?.[key].min" :max="field.data_field.settings?.[key].max"
+                  @blur="localFilters[key][team][0] = ensureNotEmpty(localFilters[key][team][0], field.data_field.settings?.[key].min)"
                   step="0.01" />
                 <span
                   class="inline-flex items-center px-3 bg-gray-200 border-y border-gray-200 dark:bg-neutral-800 dark:border-neutral-800">
@@ -40,13 +39,13 @@
                 </span>
                 <input type="number" v-model.number="localFilters[key][team][1]"
                   class="text-sm rounded-none text-center z-10 rounded-e-lg bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-black dark:border-neutral-800 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  :min="fixtureListField.data_field.settings?.[key].min" :max="fixtureListField.data_field.settings?.[key].max"
-                  @blur="localFilters[key][team][1] = ensureNotEmpty(localFilters[key][team][1], fixtureListField.data_field.settings?.[key].max)"
+                  :min="field.data_field.settings?.[key].min" :max="field.data_field.settings?.[key].max"
+                  @blur="localFilters[key][team][1] = ensureNotEmpty(localFilters[key][team][1], field.data_field.settings?.[key].max)"
                   step="0.01" />
               </div>
               <!-- Slider -->
-              <Slider v-model="localFilters[key][team]" :min="fixtureListField.data_field.settings?.[key].min"
-                :max="fixtureListField.data_field.settings?.[key].max" :step="-1" show-tooltip="drag" tooltip-position="bottom"
+              <Slider v-model="localFilters[key][team]" :min="field.data_field.settings?.[key].min"
+                :max="field.data_field.settings?.[key].max" :step="-1" show-tooltip="drag" tooltip-position="bottom"
                 class="
                   [--slider-connect-bg:#155dfc]
                   [--slider-connect-bg-hover:#2563eb]
@@ -100,11 +99,14 @@ import Slider from "@vueform/slider"
 import { Modal } from "flowbite"
 
 const props = defineProps({
-  fixtureListField: Object,
-  modalId: String
+  modelValue: Object,
+  field: Object,
+  modalId: {
+    type: String
+  },
 })
 
-const emit = defineEmits(["update:fixtureListField", "close"])
+const emit = defineEmits(["update:modelValue", "close"])
 const localFilters = ref({})
 const appliedFilters = ref({})
 const modalInstance = ref(null)
@@ -125,7 +127,7 @@ const ensureNotEmpty = (value, fallback) => {
 
 const buildDefaultFilters = (existingFilters) =>
   Object.fromEntries(
-    Object.entries(props.fixtureListField?.data_field?.settings || {}).map(([key, config]) => [
+    Object.entries(props.field.data_field.settings || {}).map(([key, config]) => [
       key,
       {
         home: normalizeRange(existingFilters?.[key]?.home, config),
@@ -143,15 +145,14 @@ onMounted(() => {
     })
   }
 
-  appliedFilters.value = props.fixtureListField || {}
+  appliedFilters.value = props.modelValue || {}
   localFilters.value = buildDefaultFilters(appliedFilters.value)
 })
 
 watch(
   appliedFilters,
   (newVal) => {
-    console.log(newVal);
-    // emit("update:fixtureListField", newVal)
+    emit("update:modelValue", newVal)
   },
   { deep: true }
 )
