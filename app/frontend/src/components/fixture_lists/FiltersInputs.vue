@@ -198,11 +198,16 @@
   </div>
 </template>
 <script setup>
-import { inject } from 'vue'
+import { inject, onMounted } from 'vue'
 import { useFixtureList } from '@/composables/useFixtureList'
+import { initDropdowns } from 'flowbite'
 
 const props = defineProps({ metaData: Object })
 const form = inject('form')
+
+onMounted(() => {
+  initDropdowns()
+})
 
 const {
   search: fieldSearch,

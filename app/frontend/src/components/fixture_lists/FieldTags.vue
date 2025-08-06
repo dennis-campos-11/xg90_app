@@ -7,9 +7,13 @@
       :animation="200"
       ghost-class="opacity-50"
       @end="updateFormIndexes"
+      :key="draggableKey"
     >
       <template #item="{ element: fixtureListField }">
-        <div class="flex-none" :key="fixtureListField?.data_field?.id">
+        <div
+          class="flex-none"
+          :key="`${fixtureListField?.data_field?.id}-${draggableKey}`"
+        >
           <button
             type="button"
             class="inline-flex items-center cursor-pointer border border-gray-200 focus:outline-none rounded-lg dark:border-neutral-800 animated"
@@ -36,6 +40,7 @@
           <FiltersModal
             :fixture-list-field="fixtureListField"
             :ref="el => setModalRef(fixtureListField.data_field.id, el)"
+            :key="`modal-${fixtureListField?.data_field?.id}-${draggableKey}`"
             v-if="fixtureListField?.data_field"
           />
         </div>
@@ -49,6 +54,7 @@ import { inject, reactive, ref, watch } from 'vue'
 import { useFixtureList } from '@/composables/useFixtureList'
 import FiltersModal from './FiltersModal.vue'
 import draggable from 'vuedraggable'
+import { cloneDeep } from 'lodash-es'
 
 const props = defineProps({ metaData: Object })
 const form = inject('form')
@@ -60,12 +66,13 @@ const {
 
 const modals = reactive({})
 const draggableFields = ref([])
+const draggableKey = ref(0) // fuerza reinicio
 
-// inicializar draggableFields como copia del array de availableFields
 watch(
   () => availableFields.value ?? availableFields,
   (newVal) => {
-    draggableFields.value = Array.isArray(newVal) ? [...newVal] : []
+    draggableFields.value = Array.isArray(newVal) ? cloneDeep(newVal) : []
+    draggableKey.value++ // reinicia el componente y sus hijos
   },
   { immediate: true }
 )
@@ -78,8 +85,7 @@ const openFiltersModal = (fixtureListField) => {
   modals[fixtureListField.data_field.id]?.open()
 }
 
-const updateFormIndexes = () => {
-  // reasignamos el array del form con el mismo orden de draggableFields
+function updateFormIndexes() {
   form.fixture_list_fields_attributes = draggableFields.value.map((field, index) => {
     const formField = form.fixture_list_fields_attributes.find(
       f => f.data_field_id === field.data_field.id
@@ -89,6 +95,6 @@ const updateFormIndexes = () => {
       index: index,
     }
   })
+
 }
 </script>
-
