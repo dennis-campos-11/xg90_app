@@ -38,15 +38,20 @@
         "7": "Last 3 seasons"
       }
     },
+    "search": {
+      "not_found": "No fixture lists found"
+    },
     "fields": {
       "label": "Fields",
       "total": "{total} selected",
-      "search_placeholder": "Search fields"
+      "search_placeholder": "Search fields",
+      "not_found": "No fields found"
     },
     "competitions": {
       "label": "Competitions",
       "total": "{total} selected",
-      "search_placeholder": "Search competitions"
+      "search_placeholder": "Search competitions",
+      "not_found": "No competitions found"
     },
     "only_current_competition": { 
       "label": "Only current competition"

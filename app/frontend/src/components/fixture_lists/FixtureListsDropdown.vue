@@ -33,21 +33,19 @@
       id="dropdownFixtureLists"
       class="w-100 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800"
     >
-      <ul class="py-3 font-medium" aria-labelledby="dropdownFixtureListsButton">
-        <li>
-          <router-link
-            to="/fixture_lists"
-            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center gap-2"
-          >
-            <span class="material-symbols-outlined">add</span>
-            <span>{{ $t("fixture_lists.new_fixture_list") }}</span>
-          </router-link>
-        </li>
-      </ul>
+      <div class="p-3">
+        <div class="relative">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <span class="material-symbols-outlined text-gray-400 dark:text-neutral-400">search</span>
+          </div>
+          <input type="text" placeholder="fields" v-model="searchQuery"
+            class="block w-full text-sm p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+        </div>
+      </div>
 
-      <ul class="py-3" aria-labelledby="dropdownFixtureListsButton">
+      <ul class="py-3 max-h-64 overflow-y-auto" aria-labelledby="dropdownFixtureListsButton">
         <li
-          v-for="fixtureList in fixtureLists"
+          v-for="fixtureList in filteredFixtureLists"
           :key="'fixture-list-' + fixtureList.id"
           class="cursor-pointer"
           :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fixtureList.id === selectedFixtureList?.id }"
@@ -59,19 +57,54 @@
             {{ fixtureList.name }}
           </div>
         </li>
+        <li v-if="filteredFixtureLists.length === 0" class="px-4 py-2 text-sm text-gray-500 dark:text-neutral-500">
+          {{ $t('fixture_lists.search.not_found') }}
+        </li>
+      </ul>
+
+      <ul class="py-3 font-medium" aria-labelledby="dropdownFixtureListsButton">
+        <li>
+          <router-link
+            to="/fixture_lists"
+            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined">add</span>
+            <span>{{ $t("fixture_lists.new_fixture_list") }}</span>
+          </router-link>
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import Fuse from 'fuse.js'
+
 const router = useRouter()
 const emit = defineEmits(['selectFixtureList'])
 
-defineProps({
+const props = defineProps({
   fixtureLists: Array,
   selectedFixtureList: Object
+})
+
+const searchQuery = ref('')
+let fuse = null
+
+watch(() => props.fixtureLists, (newVal) => {
+  if (newVal) {
+    fuse = new Fuse(newVal, {
+      keys: ['name'],
+      threshold: 0.3
+    })
+  }
+}, { immediate: true })
+
+const filteredFixtureLists = computed(() => {
+  if (!searchQuery.value) return props.fixtureLists || []
+  return fuse.search(searchQuery.value).map(result => result.item)
 })
 
 const selectFixtureList = (selectedFixtureList) => {

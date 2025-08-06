@@ -117,6 +117,9 @@
               </label>
             </div>
           </li>
+          <li v-if="filteredFields.length === 0" class="px-4 py-2 text-sm text-gray-500 dark:text-neutral-500">
+            {{ $t('fixture_lists.fields.not_found') }}
+          </li>
         </ul>
         <div class="flex items-center p-3 rounded-b-lg bg-gray-100 dark:bg-white/5">
           <label class="inline-flex items-center cursor-pointer">
@@ -162,6 +165,9 @@
                 </span>
               </label>
             </div>
+          </li>
+          <li v-if="filteredCompetitions.length === 0" class="px-4 py-2 text-sm text-gray-500 dark:text-neutral-500">
+            {{ $t('fixture_lists.competitions.not_found') }}
           </li>
         </ul>
         <div class="flex items-center p-3 rounded-b-lg bg-gray-100 dark:bg-white/5">
