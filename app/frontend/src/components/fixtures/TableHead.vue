@@ -1,10 +1,10 @@
 <!-- components/FixtureTableHead.vue -->
 <template>
   <tr class="relative after:header-border-b">
-    <th class="bg-white dark:bg-black"></th>
-    <th class="sticky left-0 bg-white dark:bg-black" :class="{ 'right-shadow': hasScrolled }"></th>
+    <th class="bg-white dark:bg-neutral-900"></th>
+    <th class="sticky left-0 bg-white dark:bg-neutral-900" :class="{ 'right-shadow': hasScrolled }"></th>
     <th v-for="field in fields" :key="`head-${field.data_field.id}`" :colspan="colspan(field.data_field.field_type)"
-      class="px-3 h-12 font-medium bg-white dark:bg-black">
+      class="px-3 h-12 font-medium bg-white dark:bg-neutral-900">
       {{ $t(`data_fields.${field.data_field.code}`) }}
     </th>
   </tr>

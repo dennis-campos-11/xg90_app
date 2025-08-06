@@ -1,24 +1,15 @@
 <template>
-  <div
-    id="saveModal"
-    tabindex="-1"
-    aria-hidden="true"
-    class="hidden fixed inset-0 z-50 flex items-center justify-center"
-  >
+  <div id="saveModal" tabindex="-1" aria-hidden="true"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center">
     <div
-      class="relative bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 w-full max-w-2xl max-h-full"
-    >
-      <div
-        class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-neutral-800"
-      >
+      class="relative bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-700 w-full max-w-2xl max-h-full">
+      <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-neutral-700">
         <h3 class="text-lg font-semibold">
           {{ $t(`fixture_lists.save_modal.title.${action}`) }}
         </h3>
-        <button
-          type="button"
+        <button type="button"
           class="material-symbols-outlined text-gray-400 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-600"
-          @click="close"
-        >
+          @click="close">
           close
         </button>
       </div>
@@ -36,19 +27,13 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 p-4 border-t border-gray-200 dark:border-neutral-800">
-        <button
-          type="button"
+      <div class="flex justify-end gap-3 p-4 border-t border-gray-200 dark:border-neutral-700">
+        <button type="button"
           class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-neutral-800 hover:bg-gray-300 dark:hover:bg-neutral-700"
-          @click="close"
-        >
+          @click="close">
           Cancel
         </button>
-        <button
-          type="button"
-          class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
-          @click="saveModal"
-        >
+        <button type="button" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700" @click="saveModal">
           Apply
         </button>
       </div>
@@ -77,7 +62,7 @@ onMounted(() => {
   if ($targetEl) {
     modalInstance.value = new Modal($targetEl, {
       backdrop: 'static',
-      backdropClasses: 'bg-gray-900/50 dark:bg-black/80 fixed inset-0 z-40'
+      backdropClasses: 'bg-gray-900/50 dark:bg-neutral-900/80 fixed inset-0 z-40'
     })
   }
 })
@@ -94,9 +79,9 @@ const saveModal = async () => {
         : [{ fixture_list: form }])
     )
 
-    const fixtureList= data.fixture_list
+    const fixtureList = data.fixture_list
     errors.value = {}
-    
+
     emit('reloadData', fixtureList)
     close()
 

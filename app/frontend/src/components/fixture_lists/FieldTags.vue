@@ -1,48 +1,30 @@
 <template>
   <div class="flex flex-wrap gap-3 mt-5">
-    <draggable
-      v-model="draggableFields"
-      item-key="data_field.id"
-      class="flex flex-wrap gap-3"
-      :animation="200"
-      ghost-class="opacity-50"
-      @end="updateFormIndexes"
-      :key="draggableKey"
-    >
+    <draggable v-model="draggableFields" item-key="data_field.id" class="flex flex-wrap gap-3" :animation="200"
+      ghost-class="opacity-50" @end="updateFormIndexes" :key="draggableKey">
       <template #item="{ element: fixtureListField }">
-        <div
-          class="flex-none"
-          :key="`${fixtureListField?.data_field?.id}-${draggableKey}`"
-        >
-          <button
-            type="button"
-            class="inline-flex items-center cursor-pointer border border-gray-200 focus:outline-none rounded-lg dark:border-neutral-800 animated"
-            @click="openFiltersModal(fixtureListField)" 
-            :class="[
+        <div class="flex-none" :key="`${fixtureListField?.data_field?.id}-${draggableKey}`">
+          <button type="button"
+            class="inline-flex items-center cursor-pointer border focus:outline-none rounded-lg animated"
+            @click="openFiltersModal(fixtureListField)" :class="[
               fixtureListField.hasFiltersApplied
-                ? 'text-white bg-gray-950 hover:bg-gray-800 dark:text-black dark:bg-neutral-50 dark:hover:bg-neutral-300'
-                : 'bg-white hover:bg-gray-100 dark:bg-black dark:hover:bg-neutral-900'
-            ]"
-            v-if="fixtureListField?.data_field"
-          >
+                ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 font-semibold'
+                : 'bg-white hover:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 border-gray-200 dark:border-neutral-700'
+            ]" v-if="fixtureListField?.data_field">
             <span class="px-3 py-2.5">
               {{ $t(`data_fields.${fixtureListField?.data_field?.code}`) }}
             </span>
 
             <span
-              class="material-symbols-outlined !text-xl px-3 py-1 text-inherit hover:text-red-600 dark:text-neutral-500"
-              @click.stop="toggleField(fixtureListField?.data_field)"
-            >
+              class="material-symbols-outlined !text-xl px-3 py-1 text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white dark:text-neutral-500"
+              @click.stop="toggleField(fixtureListField?.data_field)">
               close
             </span>
           </button>
 
-          <FiltersModal
-            :fixture-list-field="fixtureListField"
+          <FiltersModal :fixture-list-field="fixtureListField"
             :ref="el => setModalRef(fixtureListField.data_field.id, el)"
-            :key="`modal-${fixtureListField?.data_field?.id}-${draggableKey}`"
-            v-if="fixtureListField?.data_field"
-          />
+            :key="`modal-${fixtureListField?.data_field?.id}-${draggableKey}`" v-if="fixtureListField?.data_field" />
         </div>
       </template>
     </draggable>

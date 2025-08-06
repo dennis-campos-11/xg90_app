@@ -3,7 +3,7 @@
     <div ref="tableWrapperHead" class="w-full overflow-x-auto sticky top-15 z-20 scrollbar-hidden"
       @scroll="syncScroll('head')">
       <table class="w-full border-collapse text-left" v-if="groupedFixtures.length">
-        <thead class="sticky top-20 bg-white z-30 dark:bg-black">
+        <thead class="sticky top-20 bg-white z-30 dark:bg-neutral-900">
           <TableHead :fields="activeFields" :hasScrolled="hasScrolled"
             :show-difference="fixtureList.show_variance_against_competition" />
         </thead>

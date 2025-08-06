@@ -1,22 +1,26 @@
 <template>
   <div v-if="props.metaData" class="flex flex-wrap gap-3">
     <div class="relative">
-      <button id="home-location-button" data-dropdown-toggle="home-location-dropdown" data-dropdown-placement="bottom-start"
-        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+      <button id="home-location-button" data-dropdown-toggle="home-location-dropdown"
+        data-dropdown-placement="bottom-start"
+        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-800 dark:border-neutral-700 animated"
         type="button">
         <div class="flex gap-2">
           <div>{{ $t('fixture_lists.home_location.label') }}</div>
-          <div v-if="form.home_location" class="font-semibold">{{ $t(`fixture_lists.home_location.values.${form.home_location}`) }}</div>
+          <div v-if="form.home_location" class="font-semibold">{{
+            $t(`fixture_lists.home_location.values.${form.home_location}`) }}</div>
         </div>
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
       <div id="home-location-dropdown"
-        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-black dark:border-neutral-800 dark:divide-neutral-800">
+        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:divide-neutral-700">
         <ul class="p-3" aria-labelledby="home-location-button">
           <li v-for="homeLocation in metaData.home_locations" :key="`home-location-${homeLocation.id}`" class="group">
             <div class="flex items-center">
-              <input type="radio" :id="`home-location-${homeLocation.id}`" :value="homeLocation.id" :name="`home-location-${homeLocation.id}`" v-model="form.home_location" class="hidden peer">
-              <label :for="`home-location-${homeLocation.id}`" class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:peer-checked:bg-neutral-800 dark:hover:bg-neutral-900">
+              <input type="radio" :id="`home-location-${homeLocation.id}`" :value="homeLocation.id"
+                :name="`home-location-${homeLocation.id}`" v-model="form.home_location" class="hidden peer">
+              <label :for="`home-location-${homeLocation.id}`"
+                class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:peer-checked:bg-neutral-800 dark:hover:bg-neutral-800">
                 {{ $t(`fixture_lists.home_location.values.${homeLocation.id}`) }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
@@ -29,22 +33,26 @@
     </div>
 
     <div class="relative">
-      <button id="away-location-button" data-dropdown-toggle="away-location-dropdown" data-dropdown-placement="bottom-start"
-        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+      <button id="away-location-button" data-dropdown-toggle="away-location-dropdown"
+        data-dropdown-placement="bottom-start"
+        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-800 dark:border-neutral-700 animated"
         type="button">
         <div class="flex gap-2">
           <div>{{ $t('fixture_lists.away_location.label') }}</div>
-          <div v-if="form.away_location" class="font-semibold">{{ $t(`fixture_lists.away_location.values.${form.away_location}`) }}</div>
+          <div v-if="form.away_location" class="font-semibold">{{
+            $t(`fixture_lists.away_location.values.${form.away_location}`) }}</div>
         </div>
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
       <div id="away-location-dropdown"
-        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-black dark:border-neutral-800 dark:divide-neutral-800">
+        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:divide-neutral-700">
         <ul class="p-3" aria-labelledby="away-location-button">
           <li v-for="awayLocation in metaData.home_locations" :key="`away-location-${awayLocation.id}`" class="group">
             <div class="flex items-center">
-              <input type="radio" :id="`away-location-${awayLocation.id}`" :value="awayLocation.id" :name="`away-location-${awayLocation.id}`" v-model="form.away_location" class="hidden peer">
-              <label :for="`away-location-${awayLocation.id}`" class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-900">
+              <input type="radio" :id="`away-location-${awayLocation.id}`" :value="awayLocation.id"
+                :name="`away-location-${awayLocation.id}`" v-model="form.away_location" class="hidden peer">
+              <label :for="`away-location-${awayLocation.id}`"
+                class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-800">
                 {{ $t(`fixture_lists.away_location.values.${awayLocation.id}`) }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
@@ -58,7 +66,7 @@
 
     <div class="relative">
       <button id="sample-button" data-dropdown-toggle="sample-dropdown" data-dropdown-placement="bottom-start"
-        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-800 dark:border-neutral-700 animated"
         type="button">
         <div class="flex gap-2">
           <div>{{ $t('fixture_lists.sample.label') }}</div>
@@ -67,12 +75,14 @@
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
       <div id="sample-dropdown"
-        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-black dark:border-neutral-800 dark:divide-neutral-800">
+        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:divide-neutral-700">
         <ul class="p-3" aria-labelledby="sample-button">
           <li v-for="sample in metaData.samples" :key="`sample-${sample.id}`" class="group">
             <div class="flex items-center">
-              <input type="radio" :id="`sample-${sample.id}`" :value="sample.id" :name="`sample-${sample.id}`" v-model="form.sample" class="hidden peer">
-              <label :for="`sample-${sample.id}`" class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-900">
+              <input type="radio" :id="`sample-${sample.id}`" :value="sample.id" :name="`sample-${sample.id}`"
+                v-model="form.sample" class="hidden peer">
+              <label :for="`sample-${sample.id}`"
+                class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-800">
                 {{ $t(`fixture_lists.sample.values.${sample.id}`) }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
@@ -86,7 +96,7 @@
 
     <div class="relative">
       <button id="fields-button" data-dropdown-toggle="fields-dropdown" data-dropdown-placement="bottom-start"
-        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-800 dark:border-neutral-700 animated"
         type="button">
         <div class="flex gap-2">
           <div>{{ $t('fixture_lists.fields.label') }}</div>
@@ -95,7 +105,7 @@
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
       <div id="fields-dropdown"
-        class="w-80 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800">
+        class="w-80 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:divide-neutral-700">
         <div class="p-3">
           <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -108,8 +118,11 @@
         <ul class="h-48 p-3 overflow-y-auto">
           <li v-for="dataField in filteredFields" :key="`data-field-${dataField.id}`" class="group">
             <div class="flex items-center">
-              <input type="checkbox" :id="`data-field-${dataField.id}`" :value="dataField.id" :name="`data-field-${dataField.id}`" :checked="hasField(dataField.id)" @change="toggleField(dataField)" class="hidden peer">
-              <label :for="`data-field-${dataField.id}`" class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-900">
+              <input type="checkbox" :id="`data-field-${dataField.id}`" :value="dataField.id"
+                :name="`data-field-${dataField.id}`" :checked="hasField(dataField.id)" @change="toggleField(dataField)"
+                class="hidden peer">
+              <label :for="`data-field-${dataField.id}`"
+                class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-800">
                 {{ $t(`data_fields.${dataField.code}`) }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
@@ -123,7 +136,7 @@
         </ul>
         <div class="flex items-center p-3 rounded-b-lg bg-gray-100 dark:bg-white/5">
           <label class="inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" v-model="showOnlySelectedFields"/>
+            <input type="checkbox" class="sr-only peer" v-model="showOnlySelectedFields" />
             <div
               class="relative w-9 h-5 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full">
             </div>
@@ -134,17 +147,19 @@
     </div>
 
     <div class="relative">
-      <button id="competitions-button" data-dropdown-toggle="competitions-dropdown" data-dropdown-placement="bottom-start"
-        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-800 animated"
+      <button id="competitions-button" data-dropdown-toggle="competitions-dropdown"
+        data-dropdown-placement="bottom-start"
+        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-800 dark:border-neutral-700 animated"
         type="button">
         <div class="flex gap-2">
           <div>{{ $t('fixture_lists.competitions.label') }}</div>
-          <div class="font-semibold">{{ $t('fixture_lists.competitions.total', { total: availableCompetitions?.length }) }}</div>
+          <div class="font-semibold">{{ $t('fixture_lists.competitions.total', { total: availableCompetitions?.length })
+            }}</div>
         </div>
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
       <div id="competitions-dropdown"
-        class="w-80 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-800 dark:divide-neutral-800">
+        class="w-80 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:divide-neutral-700">
         <div class="p-3">
           <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -157,8 +172,11 @@
         <ul class="h-48 p-3 overflow-y-auto">
           <li v-for="competition in filteredCompetitions" :key="`competition-${competition.id}`" class="group">
             <div class="flex items-center">
-              <input type="checkbox" :id="`competition-${competition.id}`" :value="competition.id" :name="`competition-${competition.id}`" :checked="hasCompetition(competition.id)" @change="toggleCompetition(competition)" class="hidden peer">
-              <label :for="`competition-${competition.id}`" class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-900">
+              <input type="checkbox" :id="`competition-${competition.id}`" :value="competition.id"
+                :name="`competition-${competition.id}`" :checked="hasCompetition(competition.id)"
+                @change="toggleCompetition(competition)" class="hidden peer">
+              <label :for="`competition-${competition.id}`"
+                class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-800">
                 {{ competition.name }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
@@ -172,7 +190,7 @@
         </ul>
         <div class="flex items-center p-3 rounded-b-lg bg-gray-100 dark:bg-white/5">
           <label class="inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" v-model="showOnlySelectedCompetitions"/>
+            <input type="checkbox" class="sr-only peer" v-model="showOnlySelectedCompetitions" />
             <div
               class="relative w-9 h-5 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full">
             </div>

@@ -21,7 +21,7 @@
     }
 
     .dark .after\:header-border-b::after {
-      @apply bg-neutral-800;
+      @apply bg-neutral-700;
     }
 
     .disable-transitions * {

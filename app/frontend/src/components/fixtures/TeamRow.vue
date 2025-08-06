@@ -2,8 +2,8 @@
   <!-- eslint-disable vue/no-v-for-template-key -->
   <tr @mouseenter="onMouseEnter(index)" @mouseleave="onMouseLeave" :class="[
     { 'bg-gray-100 dark:bg-neutral-900': (hoveredIndex === index) },
-    { 'bg-white dark:bg-black': (hoveredIndex !== index) },
-    { 'border-b-1 border-gray-200 dark:border-neutral-800': isLastColumn }
+    { 'bg-white dark:bg-neutral-900': (hoveredIndex !== index) },
+    { 'border-b-1 border-gray-200 dark:border-neutral-700': isLastColumn }
   ]">
     <td v-if="isFirstColumn" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle" :rowspan="2">
       <div class="mb-1">{{ fixture.kick_off }}</div>

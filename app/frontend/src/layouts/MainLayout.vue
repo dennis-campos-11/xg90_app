@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col max-w-screen">
-    <nav class="bg-white dark:bg-black sticky top-0 z-40 h-15 w-full">
+    <nav class="bg-white dark:bg-neutral-900 sticky top-0 z-40 h-15 w-full">
       <div class="container flex flex-wrap items-center justify-between mx-auto px-4 py-2">
         <span class="text-xl font-bold">XG90</span>
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
@@ -49,7 +49,7 @@
                 </span>
               </button>
               <div id="accountMenu"
-                class="z-50 hidden bg-white divide-y divide-gray-200 rounded-lg shadow-sm w-44 dark:bg-neutral-900 dark:divide-neutral-800">
+                class="z-50 hidden bg-white divide-y divide-gray-200 rounded-lg shadow-sm w-44 dark:bg-neutral-900 dark:divide-neutral-700">
                 <ul class="py-2" aria-labelledby="accountMenu">
                   <li>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800">Settings</a>
