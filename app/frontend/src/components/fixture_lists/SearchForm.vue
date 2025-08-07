@@ -108,8 +108,8 @@ const openSaveModal = () => {
 }
 
 const reloadData = (fixtureList) => {
-  emit('getAllFixtureLists')
   emit('getFixtureList', fixtureList.id)
+  emit('getAllFixtureLists')
 }
 
 watch(
@@ -125,6 +125,6 @@ watch(
   () => {
     search()
   },
-  { deep: true }
+  { immediate: true, deep: true }
 )
 </script>

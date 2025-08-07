@@ -4,9 +4,10 @@
       :meta-data="fixtureListMeta" @search="search" @getAllFixtureLists="getAllFixtureLists"
       @getFixtureList="getFixtureList" />
   </div>
-  <div class="flex-1 w-full">
+  <div class="flex-1 w-full" v-if="groupedFixtures">
     <FixturesTable :grouped-fixtures="groupedFixtures" :fixture-list="fixtureList" />
   </div>
+  <loadingSpinner v-else/>
 </template>
 
 <script setup>
@@ -15,11 +16,12 @@ import { useRoute } from 'vue-router'
 import fixtureListsApi from '@/api/fixture_list'
 import FixturesTable from '@/components/fixtures/DataTable.vue'
 import SearchForm from '@/components/fixture_lists/SearchForm.vue'
+import loadingSpinner from '@/components/loadingSpinner.vue'
 
 const route = useRoute()
 const fixtureLists = ref([])
 const fixtureListMeta = ref({})
-const groupedFixtures = ref([])
+const groupedFixtures = ref(null)
 const fixtureList = ref(null)
 const selectedFixtureList = ref(null)
 
@@ -32,12 +34,14 @@ onMounted(() => {
 })
 
 const search = async (params = {}) => {
+  groupedFixtures.value = null
   const data = await fixtureListsApi.search({ fixture_list: params })
   groupedFixtures.value = data?.grouped_fixtures || []
   fixtureList.value = data?.fixture_list
 }
 
 const getFixtureList = async (id) => {
+  groupedFixtures.value = null
   if (id === undefined) return
   const data = await fixtureListsApi.get(id)
   groupedFixtures.value = data?.grouped_fixtures || []

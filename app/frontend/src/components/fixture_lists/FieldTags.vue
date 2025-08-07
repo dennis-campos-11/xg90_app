@@ -8,8 +8,8 @@
             class="inline-flex items-center cursor-pointer border focus:outline-none rounded-lg animated"
             @click="openFiltersModal(fixtureListField)" :class="[
               fixtureListField.hasFiltersApplied
-                ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 font-semibold'
-                : 'bg-white hover:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 border-gray-200 dark:border-neutral-700'
+                ? 'bg-green-500 hover:bg-green-500/90 text-white border-green-500 font-semibold'
+                : 'bg-white hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 border-gray-200 dark:border-neutral-700'
             ]" v-if="fixtureListField?.data_field">
             <span class="px-3 py-2.5">
               {{ $t(`data_fields.${fixtureListField?.data_field?.code}`) }}

@@ -18,7 +18,7 @@
         <div>
           <label class="block font-medium">{{ $t("fixture_lists.save_modal.name") }}</label>
           <input type="text" id="name" v-model="localName" :class="[
-            'mt-1 w-full bg-white dark:bg-neutral-700 rounded-md focus:ring-blue-500 focus:border-blue-500',
+            'mt-1 w-full text-sm bg-white dark:bg-neutral-700 rounded-md focus:ring-blue-500 focus:border-blue-500',
             errors?.name ? 'border-red-500' : 'border-gray-300 dark:border-neutral-600'
           ]">
           <div v-if="errors?.name" class="text-red-500">

@@ -16,7 +16,7 @@
     </button>
 
     <div id="dropdownFixtureLists"
-      class="w-100 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:divide-neutral-700">
+      class="w-100 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg shadow-sm dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
       <div class="p-3">
         <div class="relative">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
