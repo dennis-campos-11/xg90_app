@@ -34,7 +34,6 @@ onMounted(() => {
 })
 
 const search = async (params = {}) => {
-  groupedFixtures.value = null
   const data = await fixtureListsApi.search({ fixture_list: params })
   groupedFixtures.value = data?.grouped_fixtures || []
   fixtureList.value = data?.fixture_list
@@ -42,9 +41,10 @@ const search = async (params = {}) => {
 
 const getFixtureList = async (id) => {
   groupedFixtures.value = null
+  selectedFixtureList.value = null
   if (id === undefined) return
   const data = await fixtureListsApi.get(id)
-  groupedFixtures.value = data?.grouped_fixtures || []
+  // groupedFixtures.value = data?.grouped_fixtures || []
   selectedFixtureList.value = data?.fixture_list
 }
 
