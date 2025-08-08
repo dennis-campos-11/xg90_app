@@ -8,11 +8,11 @@
 
     .right-shadow::after {
       content: '';
-      @apply absolute top-0 right-[-10px] w-[10px] h-full pointer-events-none bg-gradient-to-r from-black/10 to-transparent;
+      @apply absolute top-0 right-[-1px] w-[1px] h-full pointer-events-none bg-gray-200;
     }
 
     .dark .right-shadow::after {
-      @apply bg-gradient-to-r from-white/5 to-transparent;
+      @apply bg-neutral-700;
     }
 
     .after\:header-border-b::after {

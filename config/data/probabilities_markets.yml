@@ -1,0 +1,96 @@
+- half_type: 'ft'
+  markets:
+    - result_ft: 
+        0: 
+          stat_key: 'win_ft'
+          probability_key: 'home_win_ft'
+        1: 
+          stat_key: 'draw_ft'
+          probability_key: 'draw_ft'
+        2: 
+          stat_key: 'loss_ft'
+          probability_key: 'away_win_ft'
+    - both_teams_score_ft: 
+        0: 
+          stat_key: 'both_teams_score_ft'
+        1: 
+          stat_key: 'both_teams_do_not_score_ft'
+    - under_over_1_5_ft: 
+        0: 
+          stat_key: 'total_goals_under_1_5_ft'
+        1: 
+          stat_key: 'total_goals_over_1_5_ft'
+    - under_over_2_5_ft: 
+        0: 
+          stat_key: 'total_goals_under_2_5_ft'
+        1: 
+          stat_key: 'total_goals_over_2_5_ft'
+    - under_over_3_5_ft: 
+        0: 
+          stat_key: 'total_goals_under_3_5_ft'
+        1: 
+          stat_key: 'total_goals_over_3_5_ft'
+- half_type: '1h'
+  markets:
+    - result_ft: 
+        0: 
+          stat_key: 'win_1h'
+          probability_key: 'home_win_1h'
+        1: 
+          stat_key: 'draw_1h'
+          probability_key: 'draw_1h'
+        2: 
+          stat_key: 'loss_1h'
+          probability_key: 'away_win_1h'
+    - both_teams_score_1h: 
+        0: 
+          stat_key: 'both_teams_score_1h'
+        1: 
+          stat_key: 'both_teams_do_not_score_1h'
+    - under_over_1_5_1h: 
+        0: 
+          stat_key: 'total_goals_under_1_5_1h'
+        1: 
+          stat_key: 'total_goals_over_1_5_1h'
+    - under_over_2_5_1h: 
+        0: 
+          stat_key: 'total_goals_under_2_5_1h'
+        1: 
+          stat_key: 'total_goals_over_2_5_1h'
+    - under_over_3_5_1h: 
+        0: 
+          stat_key: 'total_goals_under_3_5_1h'
+        1: 
+          stat_key: 'total_goals_over_3_5_1h'
+- half_type: '2h'
+  markets:
+    - result_2h: 
+        0: 
+          stat_key: 'win_2h'
+          probability_key: 'home_win_2h'
+        1: 
+          stat_key: 'draw_2h'
+          probability_key: 'draw_2h'
+        2: 
+          stat_key: 'loss_2h'
+          probability_key: 'away_win_2h'
+    - both_teams_score_2h: 
+        0: 
+          stat_key: 'both_teams_score_2h'
+        1: 
+          stat_key: 'both_teams_do_not_score_2h'
+    - under_over_1_5_2h: 
+        0: 
+          stat_key: 'total_goals_under_1_5_2h'
+        1: 
+          stat_key: 'total_goals_over_1_5_2h'
+    - under_over_2_5_2h: 
+        0: 
+          stat_key: 'total_goals_under_2_5_2h'
+        1: 
+          stat_key: 'total_goals_over_2_5_2h'
+    - under_over_3_5_2h: 
+        0: 
+          stat_key: 'total_goals_under_3_5_2h'
+        1: 
+          stat_key: 'total_goals_over_3_5_2h'

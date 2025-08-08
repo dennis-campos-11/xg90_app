@@ -102,9 +102,18 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-aarch64-linux-musl)
+    ffi (1.17.2-arm-linux-gnu)
+    ffi (1.17.2-arm-linux-musl)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.2-x86_64-linux-musl)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
+    functionable-json (0.1.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -314,6 +323,8 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    xgb (0.10.0)
+      ffi
     zeitwerk (2.7.3)
 
 PLATFORMS
@@ -335,6 +346,7 @@ DEPENDENCIES
   bullet
   debug
   dotenv
+  functionable-json
   jbuilder
   jwt
   kamal
@@ -348,6 +360,7 @@ DEPENDENCIES
   solid_queue
   thruster
   tzinfo-data
+  xgb
 
 BUNDLED WITH
    2.6.6

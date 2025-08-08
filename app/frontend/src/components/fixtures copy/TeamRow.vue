@@ -3,9 +3,9 @@
   <tr @mouseenter="onMouseEnter(index)" @mouseleave="onMouseLeave" :class="{
     'bg-gray-50': hoveredIndex === index,
     'bg-white': hoveredIndex !== index,
-    'border-b-1 border-gray-200': isLastColumn,
+    'border-b-1 border-gray-200': isLastRow,
   }">
-    <td v-if="isFirstColumn" class="px-4 h-12 whitespace-nowrap text-center align-middle" :rowspan="2">
+    <td v-if="isFirstRow" class="px-4 h-12 whitespace-nowrap text-center align-middle" :rowspan="2">
       <div class="mb-1">{{ fixture.kick_off }}</div>
       <img :src="getCompetitionLogo(competition.id)" class="block mx-auto w-7 h-7" />
     </td>
@@ -42,8 +42,8 @@ const props = defineProps({
   opponentType: String,
   fields: Array,
   hasScrolled: Boolean,
-  isFirstColumn: Boolean,
-  isLastColumn: Boolean,
+  isFirstRow: Boolean,
+  isLastRow: Boolean,
   hoveredIndex: Number,
   showDifference: Boolean
 })

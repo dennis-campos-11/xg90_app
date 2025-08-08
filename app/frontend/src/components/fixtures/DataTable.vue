@@ -18,11 +18,11 @@
             <template v-for="(fixture, index) in group.fixtures" :key="`fixture-${fixture.id}`">
               <TeamRow :competition="group.competition" :fixture="fixture" :index="index" :team="fixture.home"
                 team-type="home" opponent-type="away" :fields="activeFields" :has-scrolled="hasScrolled"
-                :is-first-column="true" :is-last-column="false" :hovered-index="hoveredIndex"
+                :is-first-row="true" :is-last-row="false" :hovered-index="hoveredIndex"
                 :show-difference="fixtureList.show_variance_against_competition" @hover="handleHover" />
               <TeamRow :competition="group.competition" :fixture="fixture" :index="index" :team="fixture.away"
                 team-type="away" opponent-type="home" :fields="activeFields" :has-scrolled="hasScrolled"
-                :is-first-column="false" :is-last-column="true" :hovered-index="hoveredIndex"
+                :is-first-row="false" :is-last-row="true" :hovered-index="hoveredIndex"
                 :show-difference="fixtureList.show_variance_against_competition" @hover="handleHover" />
             </template>
           </template>

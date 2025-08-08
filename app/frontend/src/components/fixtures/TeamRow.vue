@@ -3,14 +3,15 @@
   <tr @mouseenter="onMouseEnter(index)" @mouseleave="onMouseLeave" :class="[
     { 'bg-gray-100 dark:bg-neutral-900': (hoveredIndex === index) },
     { 'bg-white dark:bg-neutral-950': (hoveredIndex !== index) },
-    { 'border-b-1 border-gray-200 dark:border-neutral-700': isLastColumn }
+    { 'fixture-team-border': isFirstRow },
+    { 'border-b-1 border-gray-200 dark:border-neutral-700': isLastRow }
   ]">
-    <td v-if="isFirstColumn" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle" :rowspan="2">
+    <td v-if="isFirstRow" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle" :rowspan="2">
       <div class="mb-1">{{ fixture.kick_off }}</div>
       <img :src="getCompetitionLogo(competition.id)" class="block mx-auto w-7 h-7" />
     </td>
 
-    <td class="px-3 min-w-50 max-w-50 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
+    <td class="px-3 min-w-50 max-w-50 !border-b-0 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
       :class="{ 'right-shadow': hasScrolled }">
       <div class="flex items-center w-45">
         <img :src="getTeamLogo(team.id)" class="inline w-7 h-7 mr-2" />
@@ -43,8 +44,8 @@ const props = defineProps({
   opponentType: String,
   fields: Array,
   hasScrolled: Boolean,
-  isFirstColumn: Boolean,
-  isLastColumn: Boolean,
+  isFirstRow: Boolean,
+  isLastRow: Boolean,
   hoveredIndex: Number,
   showDifference: Boolean
 })
