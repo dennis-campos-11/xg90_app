@@ -26,17 +26,18 @@
         "3": "Both"
       }
     },
-    "sample": {
-      "label": "Timeframe",
+    "season_index": {
+      "label": "Season",
       "values": {
-        "1": "Last 5 games",
-        "2": "Last 10 games",
-        "3": "Last 15 games",
-        "4": "Current season",
-        "5": "Last season",
-        "6": "Last 2 seasons",
-        "7": "Last 3 seasons"
+        "null": "Any season",
+        "0": "Current Season",
+        "1": "Last season",
+        "2": "Last 2 seasons",
+        "3": "Last 3 seasons"
       }
+    },
+    "total_matches": {
+      "label": "Matches to process"
     },
     "search": {
       "not_found": "No fixture lists found"
@@ -84,6 +85,10 @@
         "label": "Average",
         "short_label": "AVG"
       },
+      "average_overall": {
+        "label": "Average Overall",
+        "short_label": "OLL"
+      },
       "average_variance": {
         "label": "Average variance",
         "short_label": "AVG variance"
@@ -92,6 +97,10 @@
         "label": "Average90",
         "short_label": "AVG90"
       },
+      "average_by_period_overall": {
+        "label": "Average90 Overall",
+        "short_label": "OLL90"
+      },
       "average_90_variance": {
         "label": "Average 90 variance",
         "short_label": "AVG 90 variance"
@@ -99,6 +108,10 @@
       "total": {
         "label": "Total",
         "short_label": "Total"
+      },
+      "percentage_average": {
+        "label": "Rate Average",
+        "short_label": "AVG"
       },
       "percentage": {
         "label": "Rate",

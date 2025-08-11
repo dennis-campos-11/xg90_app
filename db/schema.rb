@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_11_193804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -39,6 +39,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
     t.jsonb "settings", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code", "field_type"], name: "idx_data_fields_code_type"
   end
 
   create_table "fixture_list_competitions", force: :cascade do |t|
@@ -46,6 +47,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
     t.bigint "competition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "idx_fixture_list_fields_competition_id"
     t.index ["competition_id"], name: "index_fixture_list_competitions_on_competition_id"
     t.index ["fixture_list_id", "competition_id"], name: "idx_on_fixture_list_id_competition_id_7e158515e7", unique: true
     t.index ["fixture_list_id"], name: "index_fixture_list_competitions_on_fixture_list_id"
@@ -58,21 +60,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
     t.integer "index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["data_field_id"], name: "idx_fixture_list_fields_data_field_id"
     t.index ["data_field_id"], name: "index_fixture_list_fields_on_data_field_id"
     t.index ["fixture_list_id", "data_field_id"], name: "index_fixture_list_fields_on_fixture_list_id_and_data_field_id", unique: true
     t.index ["fixture_list_id"], name: "index_fixture_list_fields_on_fixture_list_id"
   end
 
   create_table "fixture_lists", force: :cascade do |t|
-    t.integer "sample"
+    t.string "name"
     t.integer "home_location"
     t.integer "away_location"
+    t.integer "total_matches"
     t.integer "season_index"
-    t.boolean "only_current_competition"
+    t.boolean "only_current_competition", default: false
+    t.boolean "show_variance_against_competition", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "show_variance_against_competition", default: false
-    t.string "name"
   end
 
   create_table "fixtures", force: :cascade do |t|
@@ -89,23 +92,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
     t.jsonb "away_facts", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["away_id", "starting_at"], name: "idx_fixtures_away_id_starting_at"
     t.index ["away_id"], name: "index_fixtures_on_away_id"
+    t.index ["competition_id", "starting_at"], name: "idx_fixtures_competition_id_starting_at"
     t.index ["competition_id"], name: "index_fixtures_on_competition_id"
     t.index ["external_ws_id"], name: "index_fixtures_on_external_ws_id", unique: true
+    t.index ["home_id", "starting_at"], name: "idx_fixtures_home_id_starting_at"
     t.index ["home_id"], name: "index_fixtures_on_home_id"
     t.index ["season_id"], name: "index_fixtures_on_season_id"
-  end
-
-  create_table "grouped_teams_processed_data", force: :cascade do |t|
-    t.bigint "competition_id", null: false
-    t.boolean "only_current_competition"
-    t.integer "location"
-    t.integer "sample"
-    t.jsonb "stats", default: {}
-    t.jsonb "facts", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id"], name: "index_grouped_teams_processed_data_on_competition_id"
+    t.index ["starting_at"], name: "idx_fixtures_starting_at"
   end
 
   create_table "season_teams", force: :cascade do |t|
@@ -129,19 +124,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
     t.index ["external_ws_id"], name: "index_seasons_on_external_ws_id", unique: true
   end
 
-  create_table "team_processed_data", force: :cascade do |t|
-    t.bigint "team_id", null: false
-    t.bigint "competition_id"
-    t.integer "location"
-    t.integer "sample"
-    t.jsonb "stats", default: {}
-    t.jsonb "facts", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id"], name: "index_team_processed_data_on_competition_id"
-    t.index ["team_id"], name: "index_team_processed_data_on_team_id"
-  end
-
   create_table "teams", force: :cascade do |t|
     t.string "name"
     t.string "short_name"
@@ -158,12 +140,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
     t.string "password_digest"
     t.string "first_name"
     t.string "last_name"
+    t.string "language", default: "en"
+    t.string "appearance", default: "light"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.string "language", default: "en"
-    t.string "appearance", default: "light"
   end
 
   add_foreign_key "competitions", "countries"
@@ -175,10 +157,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_030230) do
   add_foreign_key "fixtures", "seasons"
   add_foreign_key "fixtures", "teams", column: "away_id"
   add_foreign_key "fixtures", "teams", column: "home_id"
-  add_foreign_key "grouped_teams_processed_data", "competitions"
   add_foreign_key "season_teams", "seasons"
   add_foreign_key "season_teams", "teams"
   add_foreign_key "seasons", "competitions"
-  add_foreign_key "team_processed_data", "competitions"
-  add_foreign_key "team_processed_data", "teams"
 end

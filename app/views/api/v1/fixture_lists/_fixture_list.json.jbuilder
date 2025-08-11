@@ -1,6 +1,7 @@
 json.id fixture_list.id
 json.name fixture_list.name
-json.sample fixture_list.sample_before_type_cast
+json.total_matches fixture_list.total_matches
+json.season_index fixture_list.season_index
 json.home_location fixture_list.home_location_before_type_cast
 json.away_location fixture_list.away_location_before_type_cast
 json.only_current_competition fixture_list.only_current_competition

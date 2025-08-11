@@ -4,7 +4,7 @@
       @getAllFixtureLists="getAllFixtureLists" />
   </div>
   <div class="flex-1 w-full">
-    <FixturesTable :grouped-fixtures="groupedFixtures" :fixture-list="fixtureList" />
+    <FixturesTable :fixtures="fixtures" :fixture-list="fixtureList" />
   </div>
 </template>
 
@@ -16,7 +16,7 @@ import SearchForm from '@/components/fixture_lists/SearchForm.vue'
 
 const fixtureLists = ref([])
 const fixtureListMeta = ref({})
-const groupedFixtures = ref([])
+const fixtures = ref([])
 const fixtureList = ref(null)
 
 onMounted(() => {
@@ -26,7 +26,7 @@ onMounted(() => {
 
 const search = async (params = {}) => {
   const data = await fixtureListsApi.search({ fixture_list: params })
-  groupedFixtures.value = data?.grouped_fixtures || []
+  fixtures.value = data?.fixtures || []
   fixtureList.value = data?.fixture_list
 }
 

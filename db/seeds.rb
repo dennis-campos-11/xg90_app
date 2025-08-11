@@ -279,11 +279,11 @@ Fixture.where(status: 1).each do |f|
   CalculateFacts.new(f).process
 end
 
-fixture_list = FixtureList.create(sample: 1, home_location: 1, away_location: 2, only_current_competition: true)
+fixture_list = FixtureList.create(total_matches: 10, home_location: 1, away_location: 2, only_current_competition: true)
 FixtureListField.create(fixture_list_id: fixture_list.id, data_field_id: 1, filters: [{ average: { home: { from: 0, to: 100 } } }])
 FixtureListField.create(fixture_list_id: fixture_list.id, data_field_id: 2, filters: [{ average: { home: { from: 0, to: 100 } } }])
 FixtureListField.create(fixture_list_id: fixture_list.id, data_field_id: 3, filters: [{ average: { home: { from: 0, to: 100 } } }])
 
-Team.all.each do |team|
-  CalculateTeamProcessedData.new(team, Competition.first).process
-end
+# Team.all.each do |team|
+#   CalculateTeamProcessedData.new(team, Competition.first).process
+# end

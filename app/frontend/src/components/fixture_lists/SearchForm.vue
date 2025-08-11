@@ -47,7 +47,8 @@ const props = defineProps({
 const form = reactive({
   id: null,
   name: null,
-  sample: null,
+  total_matches: null,
+  season_index: null,
   home_location: null,
   away_location: null,
   fixture_list_fields_attributes: [],
@@ -65,7 +66,8 @@ function hydrateForm(fixtureList) {
     Object.assign(form, {
       id: fixtureList.id,
       name: fixtureList.name,
-      sample: fixtureList.sample,
+      total_matches: fixtureList.total_matches,
+      season_index: fixtureList.season_index,
       home_location: fixtureList.home_location,
       away_location: fixtureList.away_location,
       fixture_list_fields_attributes: (fixtureList.fixture_list_fields).map((
@@ -84,7 +86,7 @@ const isFormValid = computed(() => {
   return (
     !!form.home_location &&
     !!form.away_location &&
-    !!form.sample &&
+    !!form.total_matches &&
     form.fixture_list_fields_attributes?.length > 0
   )
 })

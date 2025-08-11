@@ -59,7 +59,7 @@ class Api::V1::FixtureListsController < ApplicationController
 
   def fixture_list_params
     params.require(:fixture_list).permit(
-      :id, :name, :home_location, :away_location, :sample, 
+      :id, :name, :home_location, :away_location, :total_matches, :season_index,
       :only_current_competition, :show_variance_against_competition,
       fixture_list_fields_attributes: [:id, :data_field_id, :index, :_destroy, filters: {}],
       fixture_list_competitions_attributes: [:id, :competition_id, :_destroy],
@@ -67,16 +67,9 @@ class Api::V1::FixtureListsController < ApplicationController
   end
 
   def render_search
-    prepare_search_fields
-    @grouped_fixtures = FixtureListSearch.call(fixture_list: @fixture_list)
+    @fixture_list.preload_data_fields!
+    @fixtures = FixtureTeamProcessedDatum.new(@fixture_list).get_data
     render template: 'api/v1/fixture_lists/search'
-  end
-
-  def prepare_search_fields
-    fields = @fixture_list.preload_data_fields!
-
-    @allowed_stats = fields.select { |f| f.data_field&.statistic? }.map { |f| f.data_field.code }
-    @allowed_facts = fields.select { |f| f.data_field&.fact? }.map { |f| f.data_field.code }
   end
 end
 

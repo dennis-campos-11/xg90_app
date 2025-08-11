@@ -27,6 +27,7 @@
   --font-sans: 'TikTok Sans';
   --text-xxs: 0.65rem;
   --color-sun-glare: #daff00;
+  --color-electric-lime: #cfff04;
 }
 
 @source inline("bg-gray-900/50");

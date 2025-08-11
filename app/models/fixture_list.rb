@@ -11,7 +11,6 @@ class FixtureList < ApplicationRecord
 
   enum :home_location, { home: 1, away: 2, both: 3 }, prefix: true
   enum :away_location, { home: 1, away: 2, both: 3 }, prefix: true
-  enum :sample, { last_5_games: 1, last_10_games: 2, last_15_games: 3, current_season: 4, last_season: 5, last_2_seasons: 6, last_3_seasons: 7 }
 
   validates :name, uniqueness: true, presence: true
 
@@ -34,5 +33,17 @@ class FixtureList < ApplicationRecord
     end
 
     fields
+  end
+
+  def full_params
+    params = attributes.merge(
+      "fixture_list_fields_attributes" => fixture_list_fields.map(&:attributes),
+      "fixture_list_competitions_attributes" => fixture_list_competitions.map(&:attributes)
+    )
+
+    params["home_location"] = self.home_location_before_type_cast
+    params["away_location"] = self.away_location_before_type_cast
+
+    params
   end
 end

@@ -8,7 +8,7 @@
   ]">
     <td v-if="isFirstRow" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle" :rowspan="2">
       <div class="mb-1">{{ fixture.kick_off }}</div>
-      <img :src="getCompetitionLogo(competition.id)" class="block mx-auto w-7 h-7" />
+      <img :src="getCompetitionLogo(fixture.competition.id)" class="block mx-auto w-7 h-7" />
     </td>
 
     <td class="px-3 min-w-50 max-w-50 !border-b-0 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
@@ -21,11 +21,9 @@
 
     <template v-for="field in fields" :key="`${teamType}-${fixture.id}-${field.data_field.id}`">
       <StatsCell v-if="field.data_field.field_type === 'statistic'" :team-stats="teamStats?.[field.data_field.code]"
-        :opponent-stats="opponentStats?.[field.data_field.code]"
-        :competition-stats="competitionStats?.[field.data_field.code]" :show-difference="showDifference" />
+        :opponent-stats="opponentStats?.[field.data_field.code]" :isFirstRow="isFirstRow" />
       <FactsCell v-else-if="field.data_field.field_type === 'fact'" :team-facts="teamFacts?.[field.data_field.code]"
-        :opponent-facts="opponentFacts?.[field.data_field.code]"
-        :competition-facts="competitionFacts?.[field.data_field.code]" :show-difference="showDifference" />
+        :opponent-facts="opponentFacts?.[field.data_field.code]" :isFirstRow="isFirstRow" />
     </template>
   </tr>
 </template>
@@ -46,16 +44,13 @@ const props = defineProps({
   hasScrolled: Boolean,
   isFirstRow: Boolean,
   isLastRow: Boolean,
-  hoveredIndex: Number,
-  showDifference: Boolean
+  hoveredIndex: Number
 })
 
 const teamStats = computed(() => props.fixture[`${props.teamType}_processed_stats`])
 const opponentStats = computed(() => props.fixture[`${props.opponentType}_processed_stats`])
-const competitionStats = computed(() => props.competition.grouped_processed_stats[`${props.teamType}`])
 const teamFacts = computed(() => props.fixture[`${props.teamType}_processed_facts`])
 const opponentFacts = computed(() => props.fixture[`${props.opponentType}_processed_facts`])
-const competitionFacts = computed(() => props.competition.grouped_processed_facts[`${props.teamType}`])
 
 const emit = defineEmits(['hover'])
 

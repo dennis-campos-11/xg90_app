@@ -3,7 +3,6 @@ class FixtureLists::MetaService
     {
       home_locations: FixtureList.enum_options(:home_location),
       away_locations: FixtureList.enum_options(:away_location),
-      samples: FixtureList.enum_options(:sample),
       data_fields: data_field_options,
       competitions: Competition.select(:id, :name)
     }

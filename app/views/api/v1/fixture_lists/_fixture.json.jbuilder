@@ -22,7 +22,7 @@ json.away do
   json.name fixture.away.name
 end
 
-json.home_processed_stats round_fixture_stat_values(fixture.home_processed_data.stats.slice(*allowed_stats))
-json.away_processed_stats round_fixture_stat_values(fixture.away_processed_data.stats.slice(*allowed_stats))
-json.home_processed_facts round_fixture_fact_values(fixture.home_processed_data.facts.slice(*allowed_facts))
-json.away_processed_facts round_fixture_fact_values(fixture.away_processed_data.facts.slice(*allowed_facts))
+json.home_processed_stats fixture.home_processed_stats
+json.away_processed_stats fixture.away_processed_stats
+json.home_processed_facts fixture.home_processed_facts
+json.away_processed_facts fixture.away_processed_facts

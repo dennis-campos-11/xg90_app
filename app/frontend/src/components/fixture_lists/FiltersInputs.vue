@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.metaData" class="flex flex-wrap gap-3">
+  <div v-if="props.metaData" class="grid grid-cols-4 gap-2">
     <div class="relative">
       <button id="home-location-button" data-dropdown-toggle="home-location-dropdown"
         data-dropdown-placement="bottom-start"
@@ -65,25 +65,50 @@
     </div>
 
     <div class="relative">
-      <button id="sample-button" data-dropdown-toggle="sample-dropdown" data-dropdown-placement="bottom-start"
+      <button id="total-matches-button" data-dropdown-toggle="total-matches-dropdown" data-dropdown-placement="bottom-start"
         class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-700 animated"
         type="button">
         <div class="flex gap-2">
-          <div>{{ $t('fixture_lists.sample.label') }}</div>
-          <div v-if="form.sample" class="font-semibold">{{ $t(`fixture_lists.sample.values.${form.sample}`) }}</div>
+          <div>{{ $t('fixture_lists.total_matches.label') }}</div>
+          <div class="font-semibold">{{ form.total_matches }}</div>
         </div>
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
-      <div id="sample-dropdown"
+      <div id="total-matches-dropdown"
         class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
-        <ul class="p-3" aria-labelledby="sample-button">
-          <li v-for="sample in metaData.samples" :key="`sample-${sample.id}`" class="group">
+        <ul class="p-3" aria-labelledby="total-matches-button">
+          <input
+            type="number"
+            placeholder="total matches"
+            :value="form.total_matches"
+            @input="tempTotalMatches = $event.target.value"
+            @blur="form.total_matches = tempTotalMatches"
+            class="block w-full text-sm p-2 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500"
+          />
+        </ul>
+      </div>
+    </div>
+
+    <div class="relative">
+      <button id="season-index-button" data-dropdown-toggle="season-index-dropdown" data-dropdown-placement="bottom-start"
+        class="w-full border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-2 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-700 animated"
+        type="button">
+        <div class="flex gap-2">
+          <div>{{ $t('fixture_lists.season_index.label') }}</div>
+          <div class="font-semibold">{{ $t(`fixture_lists.season_index.values.${form.season_index}`) }}</div>
+        </div>
+        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+      </button>
+      <div id="season-index-dropdown"
+        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
+        <ul class="p-3" aria-labelledby="season-index-button">
+          <li v-for="seasonIndex in seasonIndexes" :key="`season-index-${seasonIndex}`" class="group">
             <div class="flex items-center">
-              <input type="radio" :id="`sample-${sample.id}`" :value="sample.id" :name="`sample-${sample.id}`"
-                v-model="form.sample" class="hidden peer">
-              <label :for="`sample-${sample.id}`"
+              <input type="radio" :id="`season-index-${seasonIndex}`" :value="seasonIndex" :name="`season-index-${seasonIndex}`"
+                v-model="form.season_index" class="hidden peer">
+              <label :for="`season-index-${seasonIndex}`"
                 class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-semibold dark:hover:bg-neutral-900">
-                {{ $t(`fixture_lists.sample.values.${sample.id}`) }}
+                {{ $t(`fixture_lists.season_index.values.${seasonIndex}`) }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
                 </span>
@@ -209,16 +234,6 @@
         <span class="ms-3">{{ $t('fixture_lists.only_current_competition.label') }}</span>
       </label>
     </div>
-
-    <div class="relative flex items-center">
-      <label class="inline-flex items-center cursor-pointer">
-        <input type="checkbox" v-model="form.show_variance_against_competition" class="sr-only peer" />
-        <div
-          class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
-        </div>
-        <span class="ms-3">{{ $t('fixture_lists.show_variance_against_competition.label') }}</span>
-      </label>
-    </div>
   </div>
 </template>
 <script setup>
@@ -228,6 +243,8 @@ import { initDropdowns } from 'flowbite'
 
 const props = defineProps({ metaData: Object })
 const form = inject('form')
+const seasonIndexes = [null, 0, 1, 2, 3]
+const tempTotalMatches = form.total_matches
 
 onMounted(() => {
   initDropdowns()

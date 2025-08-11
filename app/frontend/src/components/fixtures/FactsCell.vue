@@ -1,9 +1,9 @@
 <template>
+  <td class="px-3 h-10 min-w-18 max-w-18 whitespace-nowrap" v-if="isFirstRow" rowspan="2">
+    <span>{{ teamFacts?.average ?? '-' }}%</span>
+  </td>
   <td class="px-3 h-10 min-w-18 max-w-18 whitespace-nowrap">
     <span :class="bestPercentage.class">{{ teamFacts?.percentage ?? '-' }}%</span>
-  </td>
-  <td class="px-3 h-10 min-w-22 max-w-22 whitespace-nowrap" :class="percentageDifference.class" v-if="showDifference">
-    {{ percentageDifference.text }}
   </td>
   <td class="px-3 h-10 min-w-18 max-w-18 whitespace-nowrap">
     <span :class="bestTotal.class">{{ teamFacts?.total ?? '-' }}</span>
@@ -21,14 +21,10 @@ const props = defineProps({
   teamFacts: Object,
   opponentFacts: Object,
   competitionFacts: Object,
-  showDifference: Boolean
+  isFirstRow: Boolean
 })
 
-const { formatDifference, bestValue } = useComparison()
-
-const percentageDifference = computed(() =>
-  formatDifference(props.teamFacts?.percentage, props.competitionFacts?.percentage)
-)
+const { bestValue } = useComparison()
 
 const bestPercentage = computed(() =>
   bestValue(props.teamFacts?.percentage, props.opponentFacts?.percentage)
