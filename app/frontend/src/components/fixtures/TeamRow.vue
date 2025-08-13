@@ -1,66 +1,42 @@
 <template>
-  <!-- eslint-disable vue/no-v-for-template-key -->
-  <tr @mouseenter="onMouseEnter(index)" @mouseleave="onMouseLeave" :class="[
-    { 'bg-gray-100 dark:bg-neutral-900': (hoveredIndex === index) },
-    { 'bg-white dark:bg-neutral-950': (hoveredIndex !== index) },
-    { 'fixture-team-border': isFirstRow },
-    { 'border-b-1 border-gray-200 dark:border-neutral-700': isLastRow }
-  ]">
-    <td v-if="isFirstRow" class="px-3 min-w-22 max-w-22 whitespace-nowrap text-center align-middle" :rowspan="2">
+  <div class="flex min-w-max bg-inherit">
+    <div class="min-w-22 max-w-22 px-3 text-center">
       <div class="mb-1">{{ fixture.kick_off }}</div>
       <img :src="getCompetitionLogo(fixture.competition.id)" class="block mx-auto w-7 h-7" />
-    </td>
+    </div>
 
-    <td class="px-3 min-w-50 max-w-50 !border-b-0 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
-      :class="{ 'right-shadow': hasScrolled }">
-      <div class="flex items-center w-45">
-        <img :src="getTeamLogo(team.id)" class="inline w-7 h-7 mr-2" />
-        <div class="truncate" :title="team.name">{{ team.name }}</div>
+    <div class="min-w-50 max-w-50 px-3 !border-b-0 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"
+      :class="{ 'border-r border-gray-200 dark:border-neutral-700': hasScrolled }">
+      <div class="flex items-center h-8">
+        <img :src="getTeamLogo(fixture.home.id)" class="inline w-7 h-7 mr-2" />
+        <div class="truncate" :title="fixture.home.name">{{ fixture.home.name }}</div>
       </div>
-    </td>
+      <div class="flex items-center h-8">
+        <img :src="getTeamLogo(fixture.away.id)" class="inline w-7 h-7 mr-2" />
+        <div class="truncate" :title="fixture.away.name">{{ fixture.away.name }}</div>
+      </div>
+    </div>
 
-    <template v-for="field in fields" :key="`${teamType}-${fixture.id}-${field.data_field.id}`">
-      <StatsCell v-if="field.data_field.field_type === 'statistic'" :team-stats="teamStats?.[field.data_field.code]"
-        :opponent-stats="opponentStats?.[field.data_field.code]" :isFirstRow="isFirstRow" />
-      <FactsCell v-else-if="field.data_field.field_type === 'fact'" :team-facts="teamFacts?.[field.data_field.code]"
-        :opponent-facts="opponentFacts?.[field.data_field.code]" :isFirstRow="isFirstRow" />
+    <template v-for="field in fields" :key="`${fixture.id}-${field.data_field.id}`">
+      <StatsCell v-if="field.data_field.field_type === 'statistic'"
+        :home-stats="fixture.home_processed_stats?.[field.data_field.code]"
+        :away-stats="fixture.away_processed_stats?.[field.data_field.code]" />
+      <FactsCell v-else-if="field.data_field.field_type === 'fact'"
+        :home-facts="fixture.home_processed_facts?.[field.data_field.code]"
+        :away-facts="fixture.away_processed_facts?.[field.data_field.code]" />
     </template>
-  </tr>
+  </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import StatsCell from './StatsCell.vue'
 import FactsCell from './FactsCell.vue'
 
-const props = defineProps({
-  competition: Object,
+defineProps({
   fixture: Object,
-  index: Number,
-  team: Object,
-  teamType: String,
-  opponentType: String,
   fields: Array,
-  hasScrolled: Boolean,
-  isFirstRow: Boolean,
-  isLastRow: Boolean,
-  hoveredIndex: Number
+  hasScrolled: Boolean
 })
-
-const teamStats = computed(() => props.fixture[`${props.teamType}_processed_stats`])
-const opponentStats = computed(() => props.fixture[`${props.opponentType}_processed_stats`])
-const teamFacts = computed(() => props.fixture[`${props.teamType}_processed_facts`])
-const opponentFacts = computed(() => props.fixture[`${props.opponentType}_processed_facts`])
-
-const emit = defineEmits(['hover'])
-
-const onMouseEnter = (index) => {
-  emit('hover', index)
-}
-
-const onMouseLeave = () => {
-  emit('hover', null)
-}
 
 function getTeamLogo(teamId) {
   return `http://localhost:3000/laliga/${teamId}.png` // ajusta según tu estructura real

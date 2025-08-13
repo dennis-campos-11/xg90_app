@@ -86,44 +86,32 @@
         "short_label": "AVG"
       },
       "average_overall": {
-        "label": "Average Overall",
+        "label": "Average Oll",
         "short_label": "OLL"
       },
-      "average_variance": {
-        "label": "Average variance",
-        "short_label": "AVG variance"
-      },
       "average_by_period": {
-        "label": "Average90",
+        "label": "Average 90",
         "short_label": "AVG90"
       },
       "average_by_period_overall": {
-        "label": "Average90 Overall",
+        "label": "Average 90 Oll",
         "short_label": "OLL90"
-      },
-      "average_90_variance": {
-        "label": "Average 90 variance",
-        "short_label": "AVG 90 variance"
       },
       "total": {
         "label": "Total",
-        "short_label": "Total"
+        "short_label": "TOT"
       },
       "percentage_average": {
-        "label": "Rate Average",
+        "label": "Percentage Average",
         "short_label": "AVG"
       },
       "percentage": {
-        "label": "Rate",
-        "short_label": "Rate"
-      },
-      "percentage_variance": {
-        "label": "Rate variance",
-        "short_label": "Rate variance"
+        "label": "Percentage",
+        "short_label": "RATE"
       },
       "streak": {
         "label": "Streak",
-        "short_label": "str"
+        "short_label": "STR"
       }
     }
   },

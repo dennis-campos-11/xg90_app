@@ -1,42 +1,30 @@
 <template>
-  <div class="text-sm" v-if="fixtureList && activeFields.length > 0">
-    <div ref="tableWrapperHead" class="w-full overflow-x-auto sticky top-15 z-20 scrollbar-hidden"
+  <div v-if="fixtureList && activeFields.length > 0">
+    <div ref="tableWrapperHead"
+      class="w-full overflow-x-auto border border-white dark:border-neutral-950 rounded-lg sticky top-15 z-20 scrollbar-hidden"
       @scroll="syncScroll('head')">
-      <table class="w-full border-collapse text-left" v-if="fixtures.length">
-        <thead class="sticky top-20 bg-white z-30 dark:bg-neutral-900">
-          <TableHead :fields="activeFields" :hasScrolled="hasScrolled" />
-        </thead>
-      </table>
+      <TableHead :fields="activeFields" :hasScrolled="hasScrolled" />
     </div>
 
-    <div ref="tableWrapperBody" class="w-full overflow-x-auto" @scroll="syncScroll('body')">
-      <table class="w-full table-auto border-collapse text-left">
-        <tbody>
-          <template v-for="(fixture, index) in fixtures" :key="`fixture-${fixture.id}`">
-            <TeamRow :fixture="fixture" :index="index" :team="fixture.home"
-              team-type="home" opponent-type="away" :fields="activeFields" :has-scrolled="hasScrolled"
-              :is-first-row="true" :is-last-row="false" :hovered-index="hoveredIndex"
-              @hover="handleHover" />
-            <TeamRow :fixture="fixture" :index="index" :team="fixture.away"
-              team-type="away" opponent-type="home" :fields="activeFields" :has-scrolled="hasScrolled"
-              :is-first-row="false" :is-last-row="true" :hovered-index="hoveredIndex"
-              @hover="handleHover" />
-          </template>
-        </tbody>
-      </table>
+    <div class="w-full flex flex-col gap-3">
+      <template v-for="(fixture, i) in fixtures" :key="fixture.id">
+        <div :ref="el => rowEls[i] = el"
+          class="w-full overflow-x-auto border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-950 rounded-xl hover:bg-gray-100 dark:hover:bg-neutral-900 py-3 animated scrollbar-hidden"
+          @scroll="syncScroll('body', $event.target)">
+          <TeamRow :fixture="fixture" :fields="activeFields" :has-scrolled="hasScrolled" />
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import TeamRow from './TeamRow.vue'
 import TableHead from './TableHead.vue'
 
-const hoveredIndex = ref(null)
-
 const tableWrapperHead = ref(null)
-const tableWrapperBody = ref(null)
+const rowEls = ref([])
 let isSyncingScroll = false
 
 const props = defineProps({
@@ -44,36 +32,41 @@ const props = defineProps({
   fixtures: Array
 })
 
-const handleHover = (index) => {
-  hoveredIndex.value = index
-}
-
 const hasScrolled = ref(false)
 
 const activeFields = computed(() =>
   props.fixtureList.fixture_list_fields.filter(f => !f._destroy)
 )
 
-const syncScroll = (source) => {
+const syncScroll = (source, el = null) => {
   if (isSyncingScroll) return
   isSyncingScroll = true
 
   const head = tableWrapperHead.value
-  const body = tableWrapperBody.value
+  const rows = rowEls.value
 
   if (source === 'head') {
-    body.scrollLeft = head.scrollLeft
+    rows.forEach(r => { if (r) r.scrollLeft = head.scrollLeft })
   } else {
-    head.scrollLeft = body.scrollLeft
+    head.scrollLeft = el.scrollLeft
+    rows.forEach(r => {
+      if (r !== el && r) r.scrollLeft = el.scrollLeft
+    })
   }
 
   requestAnimationFrame(() => {
     isSyncingScroll = false
   })
 
-  hasScrolled.value = body.scrollLeft > 75
+  hasScrolled.value = head.scrollLeft > 75
 }
+
+onMounted(() => {
+  // Limpieza de refs duplicados si fixtures cambia
+  rowEls.value = []
+})
 </script>
+
 <style scoped>
 .scrollbar-hidden::-webkit-scrollbar {
   display: none;

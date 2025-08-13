@@ -29,7 +29,7 @@
 
       <ul class="py-3 max-h-64 overflow-y-auto" aria-labelledby="dropdownFixtureListsButton">
         <li v-for="fixtureList in filteredFixtureLists" :key="'fixture-list-' + fixtureList.id" class="cursor-pointer"
-          :class="{ 'font-semibold bg-gray-100 dark:bg-neutral-800': fixtureList.id === selectedFixtureList?.id }">
+          :class="{ 'font-medium bg-gray-100 dark:bg-neutral-800': fixtureList.id === selectedFixtureList?.id }">
           <div @click="selectFixtureList(fixtureList)"
             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800">
             {{ fixtureList.name }}

@@ -4,7 +4,7 @@
     <div
       class="relative bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-700 w-full max-w-2xl max-h-full">
       <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-neutral-700">
-        <h3 class="text-lg font-semibold">
+        <h3 class="text-lg font-medium">
           {{ $t(`data_fields.${fixtureListField.data_field.code}`) }}
         </h3>
         <button type="button"

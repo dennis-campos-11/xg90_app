@@ -1,43 +1,50 @@
-<!-- components/FixtureTableHead.vue -->
 <template>
-  <tr class="relative after:header-border-b">
-    <th class="bg-white dark:bg-neutral-950"></th>
-    <th class="sticky left-0 bg-white dark:bg-neutral-950" :class="{ 'right-shadow': hasScrolled }"></th>
-    <th v-for="field in fields" :key="`head-${field.data_field.id}`" :colspan="colspan(field.data_field.field_type)"
-      class="px-3 h-12 font-medium bg-white dark:bg-neutral-950">
-      {{ $t(`data_fields.${field.data_field.code}`) }}
-    </th>
-  </tr>
-  <tr class="text-xs uppercase bg-gray-100 relative after:header-border-b dark:bg-neutral-900">
-    <th class="font-semibold px-3 h-10 min-w-22 max-w-22 whitespace-nowrap text-center">{{ $t(`fixtures.kick_off`) }}
-    </th>
-    <th class="font-semibold px-3 h-10 min-w-50 max-w-50 sticky left-0 bg-inherit"
-      :class="{ 'right-shadow': hasScrolled }">{{ $t(`fixtures.matches`) }}</th>
-    <template v-for="field in fields">
-      <template v-if="field.data_field.field_type === 'statistic'">
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-stats-avg`">{{
-          $t(`fixtures.metrics.average_overall.short_label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-stats-avg`">{{
-          $t(`fixtures.metrics.average.short_label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-stats-avg`">{{
-          $t(`fixtures.metrics.average_by_period_overall.short_label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-stats-avg90`">{{
-          $t(`fixtures.metrics.average_by_period.short_label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-stats-total`">{{
-          $t(`fixtures.metrics.total.short_label`) }}</th>
-      </template>
-      <template v-else-if="field.data_field.field_type === 'fact'">
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-stats-avg`">{{
-          $t(`fixtures.metrics.percentage_average.short_label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-facts-percentage`">{{
-          $t(`fixtures.metrics.percentage.label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-facts-total`">{{
-          $t(`fixtures.metrics.total.label`) }}</th>
-        <th class="font-semibold px-3 h-10 min-w-18 max-w-18" :key="`field-${field.id}-facts-streak`">{{
-          $t(`fixtures.metrics.streak.label`) }}</th>
-      </template>
-    </template>
-  </tr>
+  <div class="flex min-w-max py-3 bg-white dark:bg-neutral-950">
+    <div class="min-w-22 max-w-22 font-medium">
+      {{ $t(`fixtures.kick_off`) }}
+    </div>
+    <div class="min-w-50 max-w-50 font-medium sticky left-0 bg-white dark:bg-neutral-950"
+      :class="{ 'border-r border-gray-200 dark:border-neutral-700': hasScrolled }">
+      {{ $t(`fixtures.matches`) }}
+    </div>
+    <div v-for="field in fields" :key="`head-${field.data_field.id}`" class="px-5">
+      <div class="font-medium mb-1">{{ $t(`data_fields.${field.data_field.code}`) }}</div>
+
+      <div class="flex gap-3 text-sm text-gray-500 dark:text-neutral-500"
+        v-if="field.data_field.field_type === 'statistic'">
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.average.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.average_overall.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.average_by_period.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.average_by_period_overall.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.total.short_label`) }}
+        </div>
+      </div>
+      <div class="flex gap-3 text-sm text-gray-500 dark:text-neutral-500"
+        v-else-if="field.data_field.field_type === 'fact'">
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.percentage.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.percentage_average.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.total.short_label`) }}
+        </div>
+        <div class="min-w-12 max-w-12">{{
+          $t(`fixtures.metrics.streak.short_label`) }}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -45,13 +52,4 @@ defineProps({
   fields: Array,
   hasScrolled: Boolean
 })
-
-function colspan(data_type) {
-  if (data_type === 'statistic') {
-    return 5
-  } else if (data_type === 'fact') {
-    return 4
-  }
-  return 1
-}
 </script>

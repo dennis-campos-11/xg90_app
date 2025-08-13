@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-wrap gap-3 mt-5">
-    <draggable v-model="draggableFields" item-key="data_field.id" class="flex flex-wrap gap-3" :animation="200"
+  <div class="mt-5">
+    <draggable v-model="draggableFields" item-key="data_field.id" class="flex flex-wrap gap-2" :animation="200"
       ghost-class="opacity-50" @end="updateFormIndexes" :key="draggableKey">
       <template #item="{ element: fixtureListField }">
         <div class="flex-none" :key="`${fixtureListField?.data_field?.id}-${draggableKey}`">
@@ -8,15 +8,14 @@
             class="inline-flex items-center cursor-pointer border focus:outline-none rounded-lg animated"
             @click="openFiltersModal(fixtureListField)" :class="[
               fixtureListField.hasFiltersApplied
-                ? 'bg-green-500 hover:bg-green-500/90 text-white border-green-500 font-semibold'
+                ? 'font-medium bg-gray-900 hover:bg-gray-800 text-white dark:text-black dark:bg-white dark:hover:bg-gray-200'
                 : 'bg-white hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 border-gray-200 dark:border-neutral-700'
             ]" v-if="fixtureListField?.data_field">
-            <span class="px-3 py-2.5">
+            <span class="px-3">
               {{ $t(`data_fields.${fixtureListField?.data_field?.code}`) }}
             </span>
 
-            <span
-              class="material-symbols-outlined !text-xl px-3 py-1 text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white dark:text-neutral-500"
+            <span class="material-symbols-outlined !text-xl px-3 py-1 hover:text-red-500 dark:hover:text-red-600"
               @click.stop="toggleField(fixtureListField?.data_field)">
               close
             </span>

@@ -31,12 +31,6 @@ import FiltersInputs from './FiltersInputs.vue'
 import FieldTags from './FieldTags.vue'
 import FixtureListsDropdown from './FixtureListsDropdown.vue'
 import SaveModal from './SaveModal.vue'
-// import FieldTag from './FieldTag.vue'
-// import DropdownRadio from './DropdownRadio.vue'
-// import DropdownCheckbox from './DropdownCheckbox.vue'
-// import SaveModal from "./SaveModal.vue"
-// import { showAlert } from "@/stores/alert"
-// import fixtureListsApi from '@/api/fixture_list'
 
 const props = defineProps({
   fixtureLists: Array,
