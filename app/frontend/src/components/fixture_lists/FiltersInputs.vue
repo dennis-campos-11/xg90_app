@@ -80,7 +80,7 @@
         <ul class="p-3" aria-labelledby="total-matches-button">
           <input type="number" placeholder="total matches" :value="form.total_matches"
             @input="tempTotalMatches = $event.target.value" @blur="form.total_matches = tempTotalMatches"
-            class="block w-full text-sm p-2 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+            class="block w-full p-2 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
         </ul>
       </div>
     </div>
@@ -134,7 +134,7 @@
               <span class="material-symbols-outlined text-gray-400 dark:text-neutral-400">search</span>
             </div>
             <input type="text" placeholder="fields" v-model="fieldSearch"
-              class="block w-full text-sm p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+              class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
           </div>
         </div>
         <ul class="h-48 p-3 overflow-y-auto">
@@ -188,7 +188,7 @@
               <span class="material-symbols-outlined text-gray-400 dark:text-neutral-400">search</span>
             </div>
             <input type="text" placeholder="competitions" v-model="competitionSearch"
-              class="block w-full text-sm p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+              class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
           </div>
         </div>
         <ul class="h-48 p-3 overflow-y-auto">

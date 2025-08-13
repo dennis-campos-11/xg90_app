@@ -1,6 +1,6 @@
 <template>
   <div class="flex gap-3 items-center px-5 border-l border-gray-200 dark:border-neutral-700">
-    <div class="min-w-12 max-w-12">
+    <div class="min-w-12">
       <div class="flex items-center h-8" :class="bestValue(homeStats?.average, awayStats?.average).class">
         {{ homeStats?.average ?? '-' }}
       </div>
@@ -8,7 +8,7 @@
         {{ awayStats?.average ?? '-' }}
       </div>
     </div>
-    <div class="min-w-12 max-w-12">
+    <div class="min-w-12">
       <div class="flex items-center h-8">
         {{ homeStats?.overall ?? '-' }}
       </div>
@@ -16,7 +16,7 @@
         {{ awayStats?.overall ?? '-' }}
       </div>
     </div>
-    <div class="min-w-12 max-w-12">
+    <div class="min-w-12">
       <div class="flex items-center h-8"
         :class="bestValue(homeStats?.average_by_period, awayStats?.average_by_period).class">
         {{ homeStats?.average_by_period ?? '-' }}
@@ -26,7 +26,7 @@
         {{ awayStats?.average_by_period ?? '-' }}
       </div>
     </div>
-    <div class="min-w-12 max-w-12">
+    <div class="min-w-12">
       <div class="flex items-center h-8">
         {{ homeStats?.overall_by_period ?? '-' }}
       </div>
@@ -34,7 +34,7 @@
         {{ awayStats?.overall_by_period ?? '-' }}
       </div>
     </div>
-    <div class="min-w-12 max-w-12">
+    <div class="min-w-9">
       <div class="flex items-center h-8" :class="bestValue(homeStats?.total, awayStats?.total).class">
         {{ homeStats?.total ?? '-' }}
       </div>
