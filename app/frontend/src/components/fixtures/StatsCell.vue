@@ -12,9 +12,9 @@
       <div class="flex items-center h-8">
         {{ homeStats?.overall ?? '-' }}
       </div>
-      <div class="flex items-center h-8">
+      <!-- <div class="flex items-center h-8">
         {{ awayStats?.overall ?? '-' }}
-      </div>
+      </div> -->
     </div>
     <div class="min-w-12">
       <div class="flex items-center h-8"
@@ -30,9 +30,9 @@
       <div class="flex items-center h-8">
         {{ homeStats?.overall_by_period ?? '-' }}
       </div>
-      <div class="flex items-center h-8">
+      <!-- <div class="flex items-center h-8">
         {{ awayStats?.overall_by_period ?? '-' }}
-      </div>
+      </div> -->
     </div>
     <div class="min-w-9">
       <div class="flex items-center h-8" :class="bestValue(homeStats?.total, awayStats?.total).class">

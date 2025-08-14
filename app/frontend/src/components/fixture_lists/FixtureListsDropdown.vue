@@ -23,7 +23,7 @@
             <span class="material-symbols-outlined text-gray-400 dark:text-neutral-400">search</span>
           </div>
           <input type="text" placeholder="fields" v-model="searchQuery"
-            class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+            class="text-sm block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
         </div>
       </div>
 

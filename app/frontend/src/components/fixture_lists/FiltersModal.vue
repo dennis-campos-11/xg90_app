@@ -40,11 +40,11 @@
                   :max="fixtureListField.data_field.settings?.[key]?.max" step="0.01" />
               </div>
 
-              <!-- Range Slider -->
-              <Slider :model-value="[localFilters[key][team].from, localFilters[key][team].to]" @update:modelValue="val => {
-                localFilters[key][team].from = val[0]
-                localFilters[key][team].to = val[1]
-              }" 
+              <Slider :model-value="[localFilters[key][team].from, localFilters[key][team].to]" 
+                @update:modelValue="val => {
+                  localFilters[key][team].from = val[0]
+                  localFilters[key][team].to = val[1]
+                }" 
                 :min="fixtureListField.data_field.settings?.[key]?.min"
                 :max="fixtureListField.data_field.settings?.[key]?.max" :step="-1" :range="true" show-tooltip="drag"
                 tooltip-position="bottom" class="

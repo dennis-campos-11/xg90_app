@@ -12,9 +12,9 @@
       <div class="flex items-center h-8">
         {{ homeFacts?.average ?? '-' }}%
       </div>
-      <div class="flex items-center h-8">
+      <!-- <div class="flex items-center h-8">
         {{ awayFacts?.average ?? '-' }}%
-      </div>
+      </div> -->
     </div>
     <div class="min-w-9">
       <div class="flex items-center h-8" :class="bestValue(homeFacts?.total, awayFacts?.total).class">

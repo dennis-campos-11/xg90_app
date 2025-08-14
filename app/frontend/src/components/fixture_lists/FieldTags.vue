@@ -1,6 +1,6 @@
 <template>
   <div class="mt-5">
-    <draggable v-model="draggableFields" item-key="data_field.id" class="flex flex-wrap gap-2" :animation="200"
+    <draggable v-model="draggableFields" item-key="data_field.id" class="flex flex-wrap gap-3" :animation="200"
       ghost-class="opacity-50" @end="updateFormIndexes" :key="draggableKey">
       <template #item="{ element: fixtureListField }">
         <div class="flex-none" :key="`${fixtureListField?.data_field?.id}-${draggableKey}`">

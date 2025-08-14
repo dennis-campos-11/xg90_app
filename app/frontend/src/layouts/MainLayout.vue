@@ -4,7 +4,7 @@
       <div class="container flex flex-wrap items-center justify-between mx-auto px-4 py-2">
         <span class="text-xl font-bold">XG90</span>
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
-          <ul class="flex flex-col font-medium space-x-8 rtl:space-x-reverse flex-row">
+          <ul class="flex flex-col text-base font-medium space-x-8 rtl:space-x-reverse flex-row">
             <li>
               <a href="#" class="block rounded-sm hover:text-blue-600">Leagues</a>
             </li>
@@ -69,7 +69,7 @@
       </div>
     </nav>
     <div class="flex-1">
-      <div class="container mx-auto px-4 md:px-0">
+      <div class="container mx-auto px-4 md:p-0">
         <router-view />
       </div>
     </div>

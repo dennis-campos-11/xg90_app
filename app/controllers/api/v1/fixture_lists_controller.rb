@@ -14,7 +14,6 @@ class Api::V1::FixtureListsController < ApplicationController
   end
 
   def show
-    render_search
   end
 
   def create
@@ -55,6 +54,7 @@ class Api::V1::FixtureListsController < ApplicationController
   def set_fixture_list
     @fixture_list = FixtureList.includes(:fixture_list_competitions, fixture_list_fields: :data_field)
                                .find(params[:id])
+    @fixture_list.preload_data_fields!
   end
 
   def fixture_list_params

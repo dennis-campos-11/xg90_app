@@ -37,12 +37,12 @@
         <div>
           <label for="email" class="block font-medium text-gray-700">Email</label>
           <input v-model="email" type="email" autocomplete="email"
-            class="mt-1 w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            class="text-sm mt-1 w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
         </div>
         <div>
           <label for="password" class="block font-medium text-gray-700">Password</label>
           <input v-model="password" type="password" autocomplete="current-password"
-            class="mt-1 w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            class="text-sm mt-1 w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
         </div>
         <div class="flex items-center justify-between">
           <label class="flex items-center">

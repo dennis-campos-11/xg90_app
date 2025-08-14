@@ -45,7 +45,6 @@ const getFixtureList = async (id) => {
   selectedFixtureList.value = null
   if (id === undefined) return
   const data = await fixtureListsApi.get(id)
-  // fixtures.value = data?.grouped_fixtures || []
   selectedFixtureList.value = data?.fixture_list
 }
 

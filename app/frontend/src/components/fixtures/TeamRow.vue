@@ -1,8 +1,10 @@
 <template>
   <div class="flex min-w-max bg-inherit">
-    <div class="min-w-22 max-w-22 px-3 text-center">
-      <div class="mb-1">{{ fixture.kick_off }}</div>
-      <img :src="getCompetitionLogo(fixture.competition.id)" class="block mx-auto w-7 h-7" />
+    <div class="min-w-22 max-w-22 px-3 text-center flex items-center text-center">
+      <div class="w-full">
+        <div class="mb-1">{{ fixture.kick_off }}</div>
+        <img :src="getCompetitionLogo(fixture.competition.id)" class="block mx-auto w-7 h-7" />
+      </div>
     </div>
 
     <div class="min-w-50 max-w-50 px-3 !border-b-0 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit"

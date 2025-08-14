@@ -41,7 +41,7 @@ const props = defineProps({
 const form = reactive({
   id: null,
   name: null,
-  total_matches: null,
+  total_matches: 20,
   season_index: null,
   home_location: null,
   away_location: null,

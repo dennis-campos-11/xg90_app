@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.metaData" class="grid grid-cols-4 gap-2">
+  <div v-if="props.metaData" class="grid grid-cols-5 gap-3">
     <div class="relative">
       <button id="home-location-button" data-dropdown-toggle="home-location-dropdown"
         data-dropdown-placement="bottom-start"
@@ -76,12 +76,25 @@
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </button>
       <div id="total-matches-dropdown"
-        class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
-        <ul class="p-3" aria-labelledby="total-matches-button">
-          <input type="number" placeholder="total matches" :value="form.total_matches"
-            @input="tempTotalMatches = $event.target.value" @blur="form.total_matches = tempTotalMatches"
-            class="block w-full p-2 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
-        </ul>
+        class="w-full z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
+        <div class="p-3" v-if="form.total_matches !== null">
+          <Slider 
+            v-model="form.total_matches"
+            :min="0"
+            :max="150"
+            show-tooltip="drag"
+            tooltip-position="bottom" class="
+              [--slider-connect-bg:#155dfc]
+              [--slider-connect-bg-hover:#2563eb]
+              [--slider-rail-bg:#bfdbfe]
+              [--slider-thumb-bg:#155dfc]
+              [--slider-thumb-bg-hover:#2563eb]
+              [--slider-thumb-border:#155dfc]
+              [--slider-handle-shadow:0_0_0_3px_#155dfc]
+              [--slider-tooltip-bg:#155dfc]
+              [--slider-tooltip-color:white]
+            " />
+        </div>
       </div>
     </div>
 
@@ -134,7 +147,7 @@
               <span class="material-symbols-outlined text-gray-400 dark:text-neutral-400">search</span>
             </div>
             <input type="text" placeholder="fields" v-model="fieldSearch"
-              class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+              class="text-sm block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
           </div>
         </div>
         <ul class="h-48 p-3 overflow-y-auto">
@@ -188,7 +201,7 @@
               <span class="material-symbols-outlined text-gray-400 dark:text-neutral-400">search</span>
             </div>
             <input type="text" placeholder="competitions" v-model="competitionSearch"
-              class="block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
+              class="text-sm block w-full p-2 ps-10 border-0 rounded-lg bg-gray-100 focus-visible:ring-blue-500 dark:bg-neutral-700 dark:placeholder-neutral-400 dark:focus-visible:ring-blue-500" />
           </div>
         </div>
         <ul class="h-48 p-3 overflow-y-auto">
@@ -237,11 +250,11 @@
 import { inject, onMounted } from 'vue'
 import { useFixtureList } from '@/composables/useFixtureList'
 import { initDropdowns } from 'flowbite'
+import Slider from "@vueform/slider"
 
 const props = defineProps({ metaData: Object })
 const form = inject('form')
 const seasonIndexes = [null, 0, 1, 2, 3]
-const tempTotalMatches = form.total_matches
 
 onMounted(() => {
   initDropdowns()

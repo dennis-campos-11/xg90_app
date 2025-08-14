@@ -6,7 +6,7 @@
         <div class="mb-4">
           <label class="block font-medium text-gray-700">New Password</label>
           <input v-model="password" type="password" :class="[
-            'mt-1 w-full rounded-md focus:ring-blue-500 focus:border-blue-500',
+            'text-sm mt-1 w-full rounded-md focus:ring-blue-500 focus:border-blue-500',
             errors?.value?.password ? 'border-red-500' : 'border-gray-300'
           ]">
           <div v-if="errors?.value?.password" class="text-red-500">
@@ -16,7 +16,7 @@
         <div class="mb-4">
           <label class="block font-medium text-gray-700">Confirm Password</label>
           <input v-model="passwordConfirmation" type="password" :class="[
-            'mt-1 w-full rounded-md focus:ring-blue-500 focus:border-blue-500',
+            'text-sm mt-1 w-full rounded-md focus:ring-blue-500 focus:border-blue-500',
             errors?.value?.password_confirmation ? 'border-red-500' : 'border-gray-300'
           ]">
           <div v-if="errors?.value?.password_confirmation" class="text-red-500">
