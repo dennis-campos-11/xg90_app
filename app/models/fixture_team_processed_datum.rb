@@ -6,9 +6,15 @@ class FixtureTeamProcessedDatum
   end
 
   def get_data
-    params = fixture_list.full_params
-    sanitized_json = ActiveRecord::Base.connection.quote(params.to_json)
-    sql = "SELECT * FROM process_fixture_list_data(#{sanitized_json}::jsonb)"
+    params_hash = fixture_list.full_params.deep_stringify_keys
+    json_string = JSON.dump(params_hash)
+
+    # Imprimir el JSON exacto antes de mandarlo a PG
+    Rails.logger.info "JSON ENVIADO A PG: #{json_string}"
+
+    quoted_json = ActiveRecord::Base.connection.quote(json_string)
+    sql = "SELECT * FROM process_fixture_list_data(#{quoted_json}::jsonb)"
+
     result = ActiveRecord::Base.connection.exec_query(sql)
     fixtures_with_mapped_stats(result)
   end
@@ -20,9 +26,10 @@ class FixtureTeamProcessedDatum
 
     fixture_ids = result.rows.map { |row| row[result.columns.index("fixture_id")] }.uniq
     fixtures = Fixture.includes(:home, :away, :competition, :season).where(id: fixture_ids).index_by(&:id)
+    ordered_fixtures = fixture_ids.map { |id| fixtures[id] }.compact.index_by(&:id)
     stats_per_fixture = result.to_a.group_by { |row| row["fixture_id"] }
 
-    fixtures.map do |id, fixture|
+    ordered_fixtures.map do |id, fixture|
       stats_for_fixture = stats_per_fixture[id] || []
       stats_by_location = stats_for_fixture.group_by { |r| r["team_location"].to_i }
 

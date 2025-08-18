@@ -25,7 +25,17 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           (params->>'home_location')::int AS home_location,
           (params->>'away_location')::int AS away_location,
           (params->>'only_current_competition')::boolean AS only_current_competition,
-          COALESCE(params->'fixture_list_fields_attributes', params->'fixture_list_fields') AS fixture_list_fields
+          COALESCE(params->'fixture_list_fields_attributes', params->'fixture_list_fields') AS fixture_list_fields,
+          params->'sort' AS sort
+      ),
+      sort_params AS (
+        SELECT
+          sort->>'field_code' AS field_code,
+          sort->>'field_type' AS field_type,
+          sort->>'metric' AS metric,
+          (sort->>'location')::int AS location,
+          COALESCE(sort->>'direction', 'asc') AS direction
+        FROM single_fixture_list
       ),
       total_matches_value AS (
         SELECT total_matches FROM single_fixture_list
@@ -89,25 +99,30 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
         FROM input_teams t
         JOIN LATERAL (
           SELECT fi.*
-          FROM fixtures fi
-          JOIN seasons s ON fi.season_id = s.id
-          CROSS JOIN single_fixture_list sfl
-          WHERE
-            (
-              sfl.season_index IS NULL
-              OR s.index <= sfl.season_index
-            )
-            AND fi.status = 1
-            AND t.team_id IN (fi.home_id, fi.away_id)
-            AND t.team_id = CASE
-              WHEN t.data_location = 1 THEN fi.home_id
-              WHEN t.data_location = 2 THEN fi.away_id
-              ELSE t.team_id
-            END
-            AND t.competition_id = CASE
-              WHEN sfl.only_current_competition IS TRUE THEN fi.competition_id
-              ELSE t.competition_id
-            END
+          FROM (
+            SELECT fi.*
+            FROM fixtures fi
+            JOIN seasons s ON fi.season_id = s.id
+            CROSS JOIN single_fixture_list sfl
+            WHERE fi.status = 1
+              AND (sfl.season_index IS NULL OR s.index <= sfl.season_index)
+              AND fi.home_id = t.team_id
+              AND (sfl.only_current_competition IS NOT TRUE OR fi.competition_id = t.competition_id)
+
+            UNION ALL
+
+            SELECT fi.*
+            FROM fixtures fi
+            JOIN seasons s ON fi.season_id = s.id
+            CROSS JOIN single_fixture_list sfl
+            WHERE fi.status = 1
+              AND (sfl.season_index IS NULL OR s.index <= sfl.season_index)
+              AND fi.away_id = t.team_id
+              AND (sfl.only_current_competition IS NOT TRUE OR fi.competition_id = t.competition_id)
+          ) fi
+          WHERE (t.data_location IS NULL OR t.data_location NOT IN (1,2)) 
+                OR (t.data_location = 1 AND fi.home_id = t.team_id)
+                OR (t.data_location = 2 AND fi.away_id = t.team_id)
           ORDER BY fi.starting_at DESC
           LIMIT (SELECT total_matches FROM total_matches_value)
         ) f ON true
@@ -118,17 +133,17 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           rf.team_id,
           rf.team_location,
           rf.fixture_id,
-          fields.field_code,
+          f1.field_code,
           COUNT(*) AS games_played,
-          ROUND(AVG((rf.stats ->> fields.field_code)::NUMERIC), 2) AS average,
-          ROUND(SUM((rf.stats ->> fields.field_code)::NUMERIC), 2) AS total,
+          ROUND(AVG((rf.stats ->> f1.field_code)::NUMERIC), 2) AS average,
+          ROUND(SUM((rf.stats ->> f1.field_code)::NUMERIC), 2) AS total,
           ROUND((
-            SUM((rf.stats ->> fields.field_code)::NUMERIC) /
+            SUM((rf.stats ->> f1.field_code)::NUMERIC) /
             (
-              SUM((rf.stats ->> ('minutes_on_field_' || RIGHT(fields.field_code, 2)))::NUMERIC) /
+              SUM((rf.stats ->> ('minutes_on_field_' || RIGHT(f1.field_code, 2)))::NUMERIC) /
               CASE
-                WHEN RIGHT(fields.field_code, 2) = 'ft' THEN 90.0
-                WHEN RIGHT(fields.field_code, 2) IN ('1h', '2h') THEN 45.0
+                WHEN RIGHT(f1.field_code, 2) = 'ft' THEN 90.0
+                WHEN RIGHT(f1.field_code, 2) IN ('1h', '2h') THEN 45.0
                 ELSE 1.0
               END
             )
@@ -139,14 +154,13 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
               'opponent_id', rf.opponent_id,
               'opponent_name', rf.opponent_name,
               'location', rf.location,
-              'value', ROUND((rf.stats ->> fields.field_code)::NUMERIC, 2)::FLOAT8,
-              'opponent_value', ROUND((rf.opponent_stats ->> fields.field_code)::NUMERIC, 2)::FLOAT8
+              'value', ROUND((rf.stats ->> f1.field_code)::NUMERIC, 2)::FLOAT8,
+              'opponent_value', ROUND((rf.opponent_stats ->> f1.field_code)::NUMERIC, 2)::FLOAT8
             ) ORDER BY rf.starting_at
           ) AS history
         FROM recent_fixtures rf
-        JOIN fields ON fields.field_code = fields.field_code AND fields.field_type = 1
-        WHERE fields.field_type = 1
-        GROUP BY rf.team_id, rf.team_location, rf.fixture_id, fields.field_code
+        JOIN fields f1 ON f1.field_type = 1
+        GROUP BY rf.team_id, rf.team_location, rf.fixture_id, f1.field_code
       ),
       stats_agg_extras AS (
         SELECT
@@ -159,32 +173,33 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
         GROUP BY s.fixture_id, s.field_code
       ),
       filtered_stats AS (
-        SELECT stats_agg.*, se.overall, se.overall_by_period
-        FROM stats_agg
-        JOIN stats_agg_extras se ON se.fixture_id = stats_agg.fixture_id AND stats_agg.field_code = se.field_code
-        LEFT JOIN fields ON stats_agg.field_code = fields.field_code AND fields.field_type = 1
+        SELECT s.*, se.overall, se.overall_by_period
+        FROM stats_agg s
+        JOIN stats_agg_extras se
+          ON se.fixture_id = s.fixture_id AND s.field_code = se.field_code
+        LEFT JOIN fields f ON s.field_code = f.field_code AND f.field_type = 1
         WHERE
-          se.overall BETWEEN COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'overall'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'overall'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'overall'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'overall'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
-          AND se.overall_by_period BETWEEN COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'overall_by_period'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'overall_by_period'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'overall_by_period'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'overall_by_period'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
-          AND stats_agg.average BETWEEN COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'average'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'average'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'average'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'average'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
-          AND stats_agg.average_by_period BETWEEN COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'average_by_period'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'average_by_period'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE stats_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'average_by_period'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'average_by_period'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          se.overall BETWEEN COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'overall'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'overall'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                          AND COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'overall'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'overall'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          AND se.overall_by_period BETWEEN COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'overall_by_period'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'overall_by_period'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                                    AND COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'overall_by_period'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'overall_by_period'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          AND s.average BETWEEN COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'average'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'average'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                          AND COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'average'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'average'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          AND s.average_by_period BETWEEN COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'average_by_period'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'average_by_period'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                                    AND COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'average_by_period'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'average_by_period'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
       ),
       facts_agg AS (
         SELECT
           rf.team_id,
           rf.team_location,
           rf.fixture_id,
-          fields.field_code,
+          f2.field_code,
           COUNT(*) AS games_played,
-          SUM((rf.facts ->> fields.field_code)::NUMERIC) AS total,
-          ROUND(AVG((rf.facts ->> fields.field_code)::NUMERIC * 100), 0) AS percentage,
+          SUM((rf.facts ->> f2.field_code)::NUMERIC) AS total,
+          ROUND(AVG((rf.facts ->> f2.field_code)::NUMERIC * 100), 0) AS percentage,
           COALESCE(
             ARRAY_POSITION(
-              ARRAY_APPEND(ARRAY_AGG((rf.facts ->> fields.field_code)::int ORDER BY rf.starting_at ASC), 0),
+              ARRAY_APPEND(ARRAY_AGG((rf.facts ->> f2.field_code)::int ORDER BY rf.starting_at ASC), 0),
               0
             ) - 1, 0
           ) AS streak,
@@ -194,14 +209,13 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
               'opponent_id', rf.opponent_id,
               'opponent_name', rf.opponent_name,
               'location', rf.location,
-              'value', ROUND((rf.facts ->> fields.field_code)::NUMERIC, 2)::FLOAT8,
-              'opponent_value', ROUND((rf.opponent_facts ->> fields.field_code)::NUMERIC, 2)::FLOAT8
+              'value', ROUND((rf.facts ->> f2.field_code)::NUMERIC, 2)::FLOAT8,
+              'opponent_value', ROUND((rf.opponent_facts ->> f2.field_code)::NUMERIC, 2)::FLOAT8
             ) ORDER BY rf.starting_at
           ) AS history
         FROM recent_fixtures rf
-        JOIN fields ON fields.field_code = fields.field_code AND fields.field_type = 2
-        WHERE fields.field_type = 2
-        GROUP BY rf.team_id, rf.team_location, rf.fixture_id, fields.field_code
+        JOIN fields f2 ON f2.field_type = 2
+        GROUP BY rf.team_id, rf.team_location, rf.fixture_id, f2.field_code
       ),
       facts_agg_extras AS (
         SELECT
@@ -213,20 +227,42 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
         GROUP BY f.fixture_id, f.field_code
       ),
       filtered_facts AS (
-        SELECT facts_agg.*, fe.average
-        FROM facts_agg
-        JOIN facts_agg_extras fe ON fe.fixture_id = facts_agg.fixture_id AND facts_agg.field_code = fe.field_code
-        LEFT JOIN fields ON facts_agg.field_code = fields.field_code AND fields.field_type = 2
+        SELECT fa.*, fe.average
+        FROM facts_agg fa
+        JOIN facts_agg_extras fe
+          ON fe.fixture_id = fa.fixture_id AND fa.field_code = fe.field_code
+        LEFT JOIN fields f ON fa.field_code = f.field_code AND f.field_type = 2
         WHERE
-          facts_agg.percentage BETWEEN COALESCE(CASE facts_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'percentage'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'percentage'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE facts_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'percentage'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'percentage'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
-          AND facts_agg.total BETWEEN COALESCE(CASE facts_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'total'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'total'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE facts_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'total'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'total'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
-          AND facts_agg.streak BETWEEN COALESCE(CASE facts_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'streak'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'streak'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
-          AND COALESCE(CASE facts_agg.team_location WHEN 1 THEN NULLIF(fields.filters->'streak'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(fields.filters->'streak'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          fa.percentage BETWEEN COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'percentage'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'percentage'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                          AND COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'percentage'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'percentage'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          AND fa.total BETWEEN COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'total'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'total'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                          AND COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'total'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'total'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
+          AND fa.streak BETWEEN COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'streak'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'streak'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
+                          AND COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'streak'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'streak'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
       ),
       field_count AS (
         SELECT COUNT(DISTINCT field_code) AS total_fields FROM fields
+      ),
+      stats_max AS (
+        SELECT
+          s.field_code,
+          MAX(s.average) AS max_average,
+          MAX(s.overall) AS max_overall,
+          MAX(s.overall_by_period) AS max_overall_by_period,
+          MAX(s.average_by_period) AS max_average_by_period,
+          MAX(s.total) AS max_total
+        FROM filtered_stats s
+        GROUP BY s.field_code
+      ),
+      facts_max AS (
+        SELECT
+          f.field_code,
+          MAX(f.average) AS max_average,
+          MAX(f.percentage) AS max_percentage,
+          MAX(f.total) AS max_total,
+          MAX(f.streak) AS max_streak
+        FROM filtered_facts f
+        GROUP BY f.field_code
       ),
       final_data AS (
         SELECT
@@ -235,38 +271,83 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           COALESCE(s.team_location, f.team_location) AS team_location,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', s.field_code,
+			'team_location', s.team_location,
             'games_played', s.games_played,
             'overall', s.overall::FLOAT8,
             'overall_by_period', s.overall_by_period::FLOAT8,
             'total', s.total::FLOAT8,
             'average', s.average::FLOAT8,
             'average_by_period', s.average_by_period::FLOAT8,
+            'max', JSONB_BUILD_OBJECT(
+              'overall', sm.max_overall::FLOAT8,
+              'overall_by_period', sm.max_overall_by_period::FLOAT8,
+              'total', sm.max_total::FLOAT8,
+              'average', sm.max_average::FLOAT8,
+              'average_by_period', sm.max_average_by_period::FLOAT8
+            ),
             'history', s.history
           )) AS processed_stats,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', f.field_code,
+			'team_location', f.team_location,
             'games_played', f.games_played,
             'average', f.average::FLOAT8,
             'total', f.total::FLOAT8,
             'percentage', f.percentage::FLOAT8,
             'streak', f.streak::FLOAT8,
+            'max', JSONB_BUILD_OBJECT(
+              'average', fm.max_average::FLOAT8,
+              'total', fm.max_total::FLOAT8,
+              'percentage', fm.max_percentage::FLOAT8,
+              'streak', fm.max_streak::FLOAT8
+            ),
             'history', f.history
           )) AS processed_facts
         FROM input_teams t
-        LEFT JOIN filtered_stats s ON s.team_id = t.team_id AND s.field_code IS NOT NULL
-        LEFT JOIN filtered_facts f ON f.team_id = t.team_id AND f.field_code IS NOT NULL
+        LEFT JOIN filtered_stats s 
+          ON s.team_id = t.team_id AND s.field_code IS NOT NULL
+        LEFT JOIN stats_max sm 
+          ON sm.field_code = s.field_code
+        LEFT JOIN filtered_facts f 
+          ON f.team_id = t.team_id AND f.field_code IS NOT NULL
+        LEFT JOIN facts_max fm 
+          ON fm.field_code = f.field_code
         GROUP BY t.fixture_id, t.team_id, s.team_location, f.team_location
         HAVING 
           (COUNT(DISTINCT s.field_code) + COUNT(DISTINCT f.field_code)) = (SELECT total_fields FROM field_count)
-      )
-      SELECT *
-      FROM final_data
-      WHERE fixture_id IN (
-        SELECT fixture_id
-        FROM final_data
-        GROUP BY fixture_id
-        HAVING COUNT(DISTINCT team_location) = 2
-      );
+      ),
+      final_data_with_sort AS (
+		  SELECT
+			fd.*,
+			sp.direction AS sorting_direction,
+			CASE 
+			  WHEN sp.field_type::INT = 1 THEN (
+				SELECT (elem ->> sp.metric)::NUMERIC
+				FROM jsonb_array_elements(fd.processed_stats) elem
+				WHERE elem->>'field_code' = sp.field_code
+				AND (elem->>'team_location')::int = sp.location
+			  )
+			  WHEN sp.field_type::INT = 2 THEN (
+				SELECT (elem ->> sp.metric)::NUMERIC
+				FROM jsonb_array_elements(fd.processed_facts) elem
+				WHERE elem->>'field_code' = sp.field_code
+				AND (elem->>'team_location')::int = sp.location
+			  )
+			  ELSE NULL
+			END AS sorting_value
+		  FROM final_data fd
+		  CROSS JOIN sort_params sp
+		)
+      SELECT
+        team_id,
+        fixture_id,
+        team_location,
+        processed_stats,
+        processed_facts
+      FROM final_data_with_sort
+      ORDER BY
+        CASE WHEN sorting_direction = 'asc' THEN sorting_value END ASC NULLS LAST,
+        CASE WHEN sorting_direction = 'desc' THEN sorting_value END DESC NULLS LAST;
       $$;
 
 
@@ -464,6 +545,7 @@ CREATE TABLE public.fixture_lists (
     season_index integer,
     only_current_competition boolean DEFAULT false,
     show_variance_against_competition boolean DEFAULT false,
+    sort jsonb DEFAULT '{}'::jsonb,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-10">
     <div class="flex mb-3 items-center justify-between">
       <FixtureListsDropdown 
         :fixture-lists="fixtureLists" 
@@ -48,7 +48,14 @@ const form = reactive({
   fixture_list_fields_attributes: [],
   fixture_list_competitions_attributes: [],
   only_current_competition: false,
-  show_variance_against_competition: false
+  show_variance_against_competition: false,
+  sort: {
+    field_code: "win_ft",
+    field_type: 2,
+    metric: "percentage",
+    location: 1,
+    direction: "asc"
+  }
 })
 const saveModalRef = ref(null)
 const emit = defineEmits(['search', 'getAllFixtureLists', 'getFixtureList'])
@@ -71,7 +78,8 @@ function hydrateForm(fixtureList) {
         { competition, ...rest }  // eslint-disable-line no-unused-vars
       ) => rest),
       only_current_competition: fixtureList.only_current_competition,
-      show_variance_against_competition: fixtureList.show_variance_against_competition
+      show_variance_against_competition: fixtureList.show_variance_against_competition,
+      sort: fixtureList.sort
     })
   }
 }

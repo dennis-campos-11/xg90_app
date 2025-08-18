@@ -6,6 +6,7 @@ json.home_location fixture_list.home_location_before_type_cast
 json.away_location fixture_list.away_location_before_type_cast
 json.only_current_competition fixture_list.only_current_competition
 json.show_variance_against_competition fixture_list.show_variance_against_competition
+json.sort fixture_list.sort
 
 json.fixture_list_competitions fixture_list.fixture_list_competitions do |lc|
   json.id lc.id

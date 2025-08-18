@@ -1,16 +1,24 @@
 <template>
   <div v-if="fixtures.length > 0 && fixtureList && activeFields.length > 0">
-    <div ref="tableWrapperHead"
-      class="w-full overflow-x-auto border border-white dark:border-neutral-950 sticky top-15 z-20 scrollbar-hidden"
-      @scroll="syncScroll('head')">
+    <!-- Head -->
+    <div
+      ref="tableWrapperHead"
+      class="w-full overflow-x-auto border-0 bg-white dark:bg-black sticky top-15 z-20 scrollbar-hidden"
+      @scroll="syncScroll('head')"
+    >
       <TableHead :fields="activeFields" :hasScrolled="hasScrolled" />
     </div>
 
-    <div class="w-full flex flex-col gap-3">
-      <template v-for="(fixture, i) in fixtures" :key="fixture.id">
-        <div :ref="el => rowEls[i] = el"
-          class="w-full overflow-x-auto border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-950 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-900 animated scrollbar-hidden"
-          @scroll="syncScroll('body', $event.target)">
+    <!-- Body -->
+    <div
+      ref="tableWrapperBody"
+      class="w-full flex flex-col overflow-x-auto"
+      @scroll="syncScroll('body', $event.target)"
+    >
+      <template v-for="fixture in fixtures" :key="fixture.id">
+        <div
+          class="w-full bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-neutral-800 animated scrollbar-hidden"
+        >
           <TeamRow :fixture="fixture" :fields="activeFields" :has-scrolled="hasScrolled" />
         </div>
       </template>
@@ -19,12 +27,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import TeamRow from './TeamRow.vue'
 import TableHead from './TableHead.vue'
 
 const tableWrapperHead = ref(null)
-const rowEls = ref([])
+const tableWrapperBody = ref(null)
+
 let isSyncingScroll = false
 
 const props = defineProps({
@@ -43,28 +52,20 @@ const syncScroll = (source, el = null) => {
   isSyncingScroll = true
 
   const head = tableWrapperHead.value
-  const rows = rowEls.value
+  const body = tableWrapperBody.value
 
-  if (source === 'head') {
-    rows.forEach(r => { if (r) r.scrollLeft = head.scrollLeft })
-  } else {
+  if (source === 'head' && body) {
+    body.scrollLeft = head.scrollLeft
+  } else if (source === 'body' && head) {
     head.scrollLeft = el.scrollLeft
-    rows.forEach(r => {
-      if (r !== el && r) r.scrollLeft = el.scrollLeft
-    })
   }
 
   requestAnimationFrame(() => {
     isSyncingScroll = false
   })
 
-  hasScrolled.value = head.scrollLeft > 75
+  hasScrolled.value = head?.scrollLeft > 75
 }
-
-onMounted(() => {
-  // Limpieza de refs duplicados si fixtures cambia
-  rowEls.value = []
-})
 </script>
 
 <style scoped>
@@ -73,9 +74,7 @@ onMounted(() => {
 }
 
 .scrollbar-hidden {
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
 }
 </style>

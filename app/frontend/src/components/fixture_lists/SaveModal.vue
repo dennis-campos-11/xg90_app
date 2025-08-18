@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 p-4 border-t border-gray-200 dark:border-neutral-700">
+      <div class="flex justify-end gap-3 p-4">
         <button type="button"
           class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-neutral-800 hover:bg-gray-300 dark:hover:bg-neutral-700"
           @click="close">

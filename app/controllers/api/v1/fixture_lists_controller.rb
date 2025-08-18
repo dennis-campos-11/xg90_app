@@ -60,7 +60,8 @@ class Api::V1::FixtureListsController < ApplicationController
   def fixture_list_params
     params.require(:fixture_list).permit(
       :id, :name, :home_location, :away_location, :total_matches, :season_index,
-      :only_current_competition, :show_variance_against_competition,
+      :only_current_competition, :show_variance_against_competition, 
+      sort: [:field_code, :field_type, :metric, :location, :direction],
       fixture_list_fields_attributes: [:id, :data_field_id, :index, :_destroy, filters: {}],
       fixture_list_competitions_attributes: [:id, :competition_id, :_destroy],
     )

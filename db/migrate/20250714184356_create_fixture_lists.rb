@@ -8,6 +8,7 @@ class CreateFixtureLists < ActiveRecord::Migration[8.0]
       t.integer :season_index
       t.boolean :only_current_competition, default: false
       t.boolean :show_variance_against_competition, default: false
+      t.jsonb :sort, default: {}
 
       t.timestamps
     end

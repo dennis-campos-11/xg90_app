@@ -1,34 +1,35 @@
 <template>
-  <div class="flex gap-3 items-center px-5 border-l border-gray-200 dark:border-neutral-700">
-    <div class="min-w-12">
-      <div class="flex items-center h-8" :class="bestValue(homeFacts?.percentage, awayFacts?.percentage).class">
+  <div class="flex items-center text-right border-l border-gray-200 dark:border-neutral-700">
+    <div class="min-w-16">
+      <div class="flex items-center h-8 px-2" :class="cellFormat(homeFacts?.percentage).class">
         {{ homeFacts?.percentage ?? '-' }}%
       </div>
-      <div class="flex items-center h-8" :class="bestValue(awayFacts?.percentage, homeFacts?.percentage).class">
+      <div class="flex items-center h-8 px-2"
+        :class="cellFormat(awayFacts?.percentage).class">
         {{ awayFacts?.percentage ?? '-' }}%
       </div>
     </div>
-    <div class="min-w-14">
-      <div class="flex items-center h-8">
+    <div class="min-w-16">
+      <div class="flex items-center h-8 px-2">
         {{ homeFacts?.average ?? '-' }}%
       </div>
-      <!-- <div class="flex items-center h-8">
+      <!-- <div class="flex items-center h-8 px-2">
         {{ awayFacts?.average ?? '-' }}%
       </div> -->
     </div>
-    <div class="min-w-9">
-      <div class="flex items-center h-8" :class="bestValue(homeFacts?.total, awayFacts?.total).class">
+    <div class="min-w-16">
+      <div class="flex items-center h-8 px-2" :class="bestValue(homeFacts?.total, awayFacts?.total).class">
         {{ homeFacts?.total ?? '-' }}
       </div>
-      <div class="flex items-center h-8" :class="bestValue(awayFacts?.total, homeFacts?.total).class">
+      <div class="flex items-center h-8 px-2" :class="bestValue(awayFacts?.total, homeFacts?.total).class">
         {{ awayFacts?.total ?? '-' }}
       </div>
     </div>
-    <div class="min-w-9">
-      <div class="flex items-center h-8" :class="bestValue(homeFacts?.streak, awayFacts?.streak).class">
+    <div class="min-w-16">
+      <div class="flex items-center h-8 px-2" :class="bestValue(homeFacts?.streak, awayFacts?.streak).class">
         {{ homeFacts?.streak ?? '-' }}
       </div>
-      <div class="flex items-center h-8" :class="bestValue(awayFacts?.streak, homeFacts?.streak).class">
+      <div class="flex items-center h-8 px-2" :class="bestValue(awayFacts?.streak, homeFacts?.streak).class">
         {{ awayFacts?.streak ?? '-' }}
       </div>
     </div>
@@ -43,5 +44,5 @@ defineProps({
   awayFacts: Object
 })
 
-const { bestValue } = useComparison()
+const { bestValue, cellFormat } = useComparison()
 </script>

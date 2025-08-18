@@ -53,6 +53,7 @@ export function useFixtureList(form, props, attributeKey, relationKey, searchKey
           hasFiltersApplied: checkFiltersApplied(item, relation),
         }
       })
+      .sort((a, b) => a.index - b.index)
   })
 
   const hasItem = (id) =>
@@ -69,7 +70,7 @@ export function useFixtureList(form, props, attributeKey, relationKey, searchKey
       items.push({
         id: null,
         [relationIdKey]: item.id,
-        index: null,
+        index: (items.length + 1),
         filters: {},
         _destroy: false,
       })

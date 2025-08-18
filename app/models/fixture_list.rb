@@ -43,7 +43,6 @@ class FixtureList < ApplicationRecord
 
     params["home_location"] = self.home_location_before_type_cast
     params["away_location"] = self.away_location_before_type_cast
-
     params
   end
 end

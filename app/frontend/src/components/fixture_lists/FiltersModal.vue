@@ -27,7 +27,7 @@
                   {{ $t(`fixture_lists.filters.locations.${team}`) }}
                 </span>
                 <input type="number" v-model.number="localFilters[key][team].from"
-                  class="rounded-none text-center z-10 bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="text-sm rounded-none text-center z-10 bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   :min="fixtureListField.data_field.settings?.[key]?.min"
                   :max="fixtureListField.data_field.settings?.[key]?.max" step="0.01" />
                 <span
@@ -35,17 +35,15 @@
                   to
                 </span>
                 <input type="number" v-model.number="localFilters[key][team].to"
-                  class="rounded-none text-center z-10 rounded-e-lg bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="text-sm rounded-none text-center z-10 rounded-e-lg bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   :min="fixtureListField.data_field.settings?.[key]?.min"
                   :max="fixtureListField.data_field.settings?.[key]?.max" step="0.01" />
               </div>
 
-              <Slider :model-value="[localFilters[key][team].from, localFilters[key][team].to]" 
-                @update:modelValue="val => {
-                  localFilters[key][team].from = val[0]
-                  localFilters[key][team].to = val[1]
-                }" 
-                :min="fixtureListField.data_field.settings?.[key]?.min"
+              <Slider :model-value="[localFilters[key][team].from, localFilters[key][team].to]" @update:modelValue="val => {
+                localFilters[key][team].from = val[0]
+                localFilters[key][team].to = val[1]
+              }" :min="fixtureListField.data_field.settings?.[key]?.min"
                 :max="fixtureListField.data_field.settings?.[key]?.max" :step="-1" :range="true" show-tooltip="drag"
                 tooltip-position="bottom" class="
                   [--slider-connect-bg:#155dfc]
@@ -63,7 +61,7 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 p-4 border-t border-gray-200 dark:border-neutral-700">
+      <div class="flex justify-end gap-3 p-4">
         <button type="button"
           class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-neutral-800 hover:bg-gray-300 dark:hover:bg-neutral-700"
           @click="close">
@@ -131,7 +129,15 @@ const applyFilters = () => {
   close()
 }
 
-const open = () => modalInstance.value?.show()
+const open = () => {
+  localFilters.value = JSON.parse(JSON.stringify(
+    props.fixtureListField.filters && Object.keys(props.fixtureListField.filters).length > 0
+      ? props.fixtureListField.filters
+      : buildFilters()
+  ))
+  modalInstance.value?.show()
+}
+
 const close = () => modalInstance.value?.hide()
 defineExpose({ open, close })
 </script>
