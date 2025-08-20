@@ -17,7 +17,7 @@
     >
       <template v-for="fixture in fixtures" :key="fixture.id">
         <div
-          class="w-full bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-neutral-800 animated scrollbar-hidden"
+          class="w-full bg-white dark:bg-black animated scrollbar-hidden"
         >
           <TeamRow :fixture="fixture" :fields="activeFields" :has-scrolled="hasScrolled" />
         </div>
@@ -64,7 +64,7 @@ const syncScroll = (source, el = null) => {
     isSyncingScroll = false
   })
 
-  hasScrolled.value = head?.scrollLeft > 75
+  hasScrolled.value = head?.scrollLeft > 0
 }
 </script>
 

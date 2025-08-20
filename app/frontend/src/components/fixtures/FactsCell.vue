@@ -1,37 +1,26 @@
 <template>
-  <div class="flex items-center text-right border-l border-gray-200 dark:border-neutral-700">
-    <div class="min-w-16">
-      <div class="flex items-center h-8 px-2" :class="cellFormat(homeFacts?.percentage).class">
-        {{ homeFacts?.percentage ?? '-' }}%
-      </div>
-      <div class="flex items-center h-8 px-2"
-        :class="cellFormat(awayFacts?.percentage).class">
-        {{ awayFacts?.percentage ?? '-' }}%
-      </div>
+  <div class="flex items-center border-l border-gray-200 dark:border-neutral-700">
+    <div class="min-w-15 h-full flex items-center px-1.5" :class="cellFormat(homeFacts?.percentage).class">
+      {{ homeFacts?.percentage ?? '-' }}%
     </div>
-    <div class="min-w-16">
-      <div class="flex items-center h-8 px-2">
-        {{ homeFacts?.average ?? '-' }}%
-      </div>
-      <!-- <div class="flex items-center h-8 px-2">
-        {{ awayFacts?.average ?? '-' }}%
-      </div> -->
+    <div class="min-w-15 h-full flex items-center px-1.5"
+      :class="cellFormat(awayFacts?.percentage).class">
+      {{ awayFacts?.percentage ?? '-' }}%
     </div>
-    <div class="min-w-16">
-      <div class="flex items-center h-8 px-2" :class="bestValue(homeFacts?.total, awayFacts?.total).class">
-        {{ homeFacts?.total ?? '-' }}
-      </div>
-      <div class="flex items-center h-8 px-2" :class="bestValue(awayFacts?.total, homeFacts?.total).class">
-        {{ awayFacts?.total ?? '-' }}
-      </div>
+    <div class="min-w-15 h-full flex items-center px-1.5">
+      {{ homeFacts?.average ?? '-' }}%
     </div>
-    <div class="min-w-16">
-      <div class="flex items-center h-8 px-2" :class="bestValue(homeFacts?.streak, awayFacts?.streak).class">
-        {{ homeFacts?.streak ?? '-' }}
-      </div>
-      <div class="flex items-center h-8 px-2" :class="bestValue(awayFacts?.streak, homeFacts?.streak).class">
-        {{ awayFacts?.streak ?? '-' }}
-      </div>
+    <div class="min-w-15 h-full flex items-center px-1.5" :class="bestValue(homeFacts?.total, awayFacts?.total).class">
+      {{ homeFacts?.total ?? '-' }}
+    </div>
+    <div class="min-w-15 h-full flex items-center px-1.5" :class="bestValue(awayFacts?.total, homeFacts?.total).class">
+      {{ awayFacts?.total ?? '-' }}
+    </div>
+    <div class="min-w-15 h-full flex items-center px-1.5" :class="bestValue(homeFacts?.streak, awayFacts?.streak).class">
+      {{ homeFacts?.streak ?? '-' }}
+    </div>
+    <div class="min-w-15 h-full flex items-center px-1.5" :class="bestValue(awayFacts?.streak, homeFacts?.streak).class">
+      {{ awayFacts?.streak ?? '-' }}
     </div>
   </div>
 </template>

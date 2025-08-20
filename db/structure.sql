@@ -1,3 +1,8 @@
+\restrict xtAyVNe07EtTRRSB1jlfCqd2YFOGitn5IOJMcRu3MlFI6Ibj6vwu8GD4kOBEa6U
+
+-- Dumped from database version 15.14 (Postgres.app)
+-- Dumped by pg_dump version 15.14 (Postgres.app)
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -271,7 +276,7 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           COALESCE(s.team_location, f.team_location) AS team_location,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', s.field_code,
-			'team_location', s.team_location,
+            'team_location', s.team_location,
             'games_played', s.games_played,
             'overall', s.overall::FLOAT8,
             'overall_by_period', s.overall_by_period::FLOAT8,
@@ -289,7 +294,7 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           )) AS processed_stats,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', f.field_code,
-			'team_location', f.team_location,
+            'team_location', f.team_location,
             'games_played', f.games_played,
             'average', f.average::FLOAT8,
             'total', f.total::FLOAT8,
@@ -337,6 +342,12 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
 			END AS sorting_value
 		  FROM final_data fd
 		  CROSS JOIN sort_params sp
+      WHERE fixture_id IN (
+        SELECT fixture_id
+        FROM final_data
+        GROUP BY fixture_id
+        HAVING COUNT(DISTINCT team_location) = 2
+      )
 		)
       SELECT
         team_id,
@@ -1228,6 +1239,8 @@ ALTER TABLE ONLY public.fixture_list_competitions
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict xtAyVNe07EtTRRSB1jlfCqd2YFOGitn5IOJMcRu3MlFI6Ibj6vwu8GD4kOBEa6U
 
 SET search_path TO "$user", public;
 

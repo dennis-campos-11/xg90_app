@@ -37,8 +37,8 @@ class FixtureList < ApplicationRecord
 
   def full_params
     params = attributes.merge(
-      "fixture_list_fields_attributes" => fixture_list_fields.map(&:attributes),
-      "fixture_list_competitions_attributes" => fixture_list_competitions.map(&:attributes)
+      "fixture_list_fields_attributes" => available_fixture_list_fields.map(&:attributes),
+      "fixture_list_competitions_attributes" => available_fixture_list_competitions.map(&:attributes)
     )
 
     params["home_location"] = self.home_location_before_type_cast

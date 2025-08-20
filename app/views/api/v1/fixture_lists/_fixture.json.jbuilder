@@ -15,11 +15,13 @@ end
 json.home do
   json.id fixture.home.id
   json.name fixture.home.name
+  json.short_name fixture.home.short_name
 end
 
 json.away do
   json.id fixture.away.id
   json.name fixture.away.name
+  json.short_name fixture.away.short_name
 end
 
 json.home_processed_stats fixture.home_processed_stats

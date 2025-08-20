@@ -1,3 +1,8 @@
+\restrict vgvzSIDv2P7YUNe8agMJqPg4D1utItt2dZr1oeN6FnvfwMTQK7xQMP5ILcd5xdI
+
+-- Dumped from database version 15.14 (Postgres.app)
+-- Dumped by pg_dump version 15.14 (Postgres.app)
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -26,15 +31,6 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.schema_migrations (
-    version character varying NOT NULL
-);
-
-
---
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -43,18 +39,10 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
--- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.schema_migrations
-    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
 -- PostgreSQL database dump complete
 --
 
+\unrestrict vgvzSIDv2P7YUNe8agMJqPg4D1utItt2dZr1oeN6FnvfwMTQK7xQMP5ILcd5xdI
+
 SET search_path TO "$user", public;
-
-
 

@@ -264,7 +264,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           COALESCE(s.team_location, f.team_location) AS team_location,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', s.field_code,
-			'team_location', s.team_location,
+			      'team_location', s.team_location,
             'games_played', s.games_played,
             'overall', s.overall::FLOAT8,
             'overall_by_period', s.overall_by_period::FLOAT8,
@@ -282,7 +282,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           )) AS processed_stats,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', f.field_code,
-			'team_location', f.team_location,
+			      'team_location', f.team_location,
             'games_played', f.games_played,
             'average', f.average::FLOAT8,
             'total', f.total::FLOAT8,
@@ -330,6 +330,12 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
 			END AS sorting_value
 		  FROM final_data fd
 		  CROSS JOIN sort_params sp
+      WHERE fixture_id IN (
+        SELECT fixture_id
+        FROM final_data
+        GROUP BY fixture_id
+        HAVING COUNT(DISTINCT team_location) = 2
+      )
 		)
       SELECT
         team_id,

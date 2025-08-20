@@ -81,37 +81,57 @@
     "kick_off": "Kick Off",
     "matches": "Matches",
     "metrics": {
-      "average": {
-        "label": "Average",
-        "short_label": "AVG"
+      "home_average": {
+        "label": "Home average",
+        "short_label": "Home avg"
       },
-      "average_overall": {
-        "label": "Average Oll",
-        "short_label": "OLL"
+      "away_average": {
+        "label": "Away average",
+        "short_label": "Away avg"
       },
-      "average_by_period": {
-        "label": "Average 90",
-        "short_label": "AVG90"
+      "total_average": {
+        "label": "Total average",
+        "short_label": "Total avg"
       },
-      "average_by_period_overall": {
-        "label": "Average 90 Oll",
-        "short_label": "OLL90"
+      "home_average_by_period": {
+        "label": "Home average 90",
+        "short_label": "Home avg 90"
       },
-      "total": {
-        "label": "Total",
-        "short_label": "TOT"
+      "away_average_by_period": {
+        "label": "Home average 90",
+        "short_label": "Away avg 90"
+      },
+      "total_average_by_period": {
+        "label": "Total average 90",
+        "short_label": "Total avg 90"
+      },
+      "home_total": {
+        "label": "Home total",
+        "short_label": "Home tot"
+      },
+      "away_total": {
+        "label": "Away total",
+        "short_label": "Away tot"
       },
       "percentage_average": {
-        "label": "Percentage Average",
-        "short_label": "AVG"
+        "label": "Rate Average",
+        "short_label": "Rate avg"
       },
-      "percentage": {
-        "label": "Percentage",
-        "short_label": "RATE"
+      "home_percentage": {
+        "label": "Home rate",
+        "short_label": "Home rate"
       },
-      "streak": {
-        "label": "Streak",
-        "short_label": "STR"
+      "away_percentage": {
+        "label": "Away rate",
+        "short_label": "Away rate"
+      },
+      "home_streak": {
+        "label": "Home streak",
+        "short_label": "Home str"
+      },
+      "away_streak": {
+        "label": "Away streak",
+        "short_label": "Away str"
       }
     }
   },
