@@ -1,7 +1,11 @@
 <template>
   <div class="flex-1 w-full my-5">
-    <SearchForm :fixture-lists="fixtureLists" :meta-data="fixtureListMeta" @search="search"
-      @getAllFixtureLists="getAllFixtureLists" />
+    <SearchForm 
+      :fixture-lists="fixtureLists" 
+      :meta-data="fixtureListMeta" 
+      @search="search" 
+      @getAllFixtureLists="getAllFixtureLists" 
+    />
   </div>
   <div class="flex-1 w-full">
     <FixturesTable :fixtures="fixtures" :fixture-list="fixtureList" />
@@ -9,34 +13,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import fixtureListsApi from '@/api/fixture_list'
+import { provide } from 'vue'
 import FixturesTable from '@/components/fixtures/DataTable.vue'
 import SearchForm from '@/components/fixture_lists/SearchForm.vue'
+import { useFixtureListForm } from '@/composables/useFixtureListForm'
 
-const fixtureLists = ref([])
-const fixtureListMeta = ref({})
-const fixtures = ref([])
-const fixtureList = ref(null)
+const { fixtureLists, fixtureListMeta, fixtures, fixtureList, form, search, getAllFixtureLists } =
+  useFixtureListForm(true)
 
-onMounted(() => {
-  getAllFixtureLists()
-  getFixtureListMeta()
-})
-
-const search = async (params = {}) => {
-  const data = await fixtureListsApi.search({ fixture_list: params })
-  fixtures.value = data?.fixtures || []
-  fixtureList.value = data?.fixture_list
-}
-
-const getAllFixtureLists = async () => {
-  const data = await fixtureListsApi.getAll()
-  fixtureLists.value = data
-}
-
-const getFixtureListMeta = async () => {
-  const data = await fixtureListsApi.meta()
-  fixtureListMeta.value = data
-}
+provide('form', form)
 </script>

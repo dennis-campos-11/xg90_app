@@ -26,7 +26,7 @@
 
 <script setup>
 import { debounce, omit } from 'lodash'
-import { reactive, provide, watch, computed, ref } from 'vue'
+import { inject, watch, computed, ref } from 'vue'
 import FiltersInputs from './FiltersInputs.vue'
 import FieldTags from './FieldTags.vue'
 import FixtureListsDropdown from './FixtureListsDropdown.vue'
@@ -38,29 +38,10 @@ const props = defineProps({
   metaData: Object
 })
 
-const form = reactive({
-  id: null,
-  name: null,
-  total_matches: 20,
-  season_index: null,
-  home_location: null,
-  away_location: null,
-  fixture_list_fields_attributes: [],
-  fixture_list_competitions_attributes: [],
-  only_current_competition: false,
-  show_variance_against_competition: false,
-  sort: {
-    field_code: "win_ft",
-    field_type: 2,
-    metric: "percentage",
-    location: 1,
-    direction: "asc"
-  }
-})
+const form = inject('form')
+
 const saveModalRef = ref(null)
 const emit = defineEmits(['search', 'getAllFixtureLists', 'getFixtureList'])
-
-provide('form', form)
 
 function hydrateForm(fixtureList) {
   if (fixtureList) {

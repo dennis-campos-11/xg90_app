@@ -9,7 +9,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         processed_stats JSONB,
         processed_facts JSONB
       ) AS $$
-      WITH single_fixture_list AS (
+      WITH single_fixture_list AS MATERIALIZED (
         SELECT
           params->>'id' AS id,
           params->>'name' AS name,
@@ -21,7 +21,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           COALESCE(params->'fixture_list_fields_attributes', params->'fixture_list_fields') AS fixture_list_fields,
           params->'sort' AS sort
       ),
-      sort_params AS (
+      sort_params AS MATERIALIZED (
         SELECT
           sort->>'field_code' AS field_code,
           sort->>'field_type' AS field_type,
@@ -30,18 +30,19 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           COALESCE(sort->>'direction', 'asc') AS direction
         FROM single_fixture_list
       ),
-      total_matches_value AS (
+      total_matches_value AS MATERIALIZED (
         SELECT total_matches FROM single_fixture_list
       ),
-      upcoming_fixtures AS (
+      upcoming_fixtures AS MATERIALIZED (
         SELECT id, starting_at, home_id, away_id, competition_id
         FROM fixtures
         WHERE starting_at >= now()
           AND starting_at < now() + interval '4 days'
       ),
-      input_teams AS (
+      input_teams AS MATERIALIZED (
         SELECT DISTINCT
           f.home_id AS team_id,
+          f.starting_at AS starting_at,
           1 AS team_location,
           sfl.home_location AS data_location,
           f.id AS fixture_id,
@@ -53,6 +54,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
 
         SELECT DISTINCT
           f.away_id AS team_id,
+          f.starting_at AS starting_at,
           2 AS team_location,
           sfl.away_location AS data_location,
           f.id AS fixture_id,
@@ -60,7 +62,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         FROM upcoming_fixtures f
         CROSS JOIN single_fixture_list sfl
       ),
-      fields AS (
+      fields AS MATERIALIZED (
         SELECT
           COALESCE(fl->>'field_code', df.code) AS field_code,
           COALESCE((fl->>'field_type')::NUMERIC, df.field_type) AS field_type,
@@ -76,7 +78,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           ON df.id = (fl->>'data_field_id')::INT
           OR df.code = fl->>'field_code'
       ),
-      recent_fixtures AS (
+      recent_fixtures AS MATERIALIZED (
         SELECT
           t.team_id,
           t.team_location,
@@ -121,7 +123,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         ) f ON true
         JOIN teams opponent ON opponent.id = CASE WHEN t.team_id = f.home_id THEN f.away_id ELSE f.home_id END
       ),
-      stats_agg AS (
+      stats_agg AS MATERIALIZED (
         SELECT
           rf.team_id,
           rf.team_location,
@@ -140,22 +142,12 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
                 ELSE 1.0
               END
             )
-          ), 2) AS average_by_period,
-          JSONB_AGG(
-            JSONB_BUILD_OBJECT(
-              'fixture_id', rf.fixture_id,
-              'opponent_id', rf.opponent_id,
-              'opponent_name', rf.opponent_name,
-              'location', rf.location,
-              'value', ROUND((rf.stats ->> f1.field_code)::NUMERIC, 2)::FLOAT8,
-              'opponent_value', ROUND((rf.opponent_stats ->> f1.field_code)::NUMERIC, 2)::FLOAT8
-            ) ORDER BY rf.starting_at
-          ) AS history
+          ), 2) AS average_by_period
         FROM recent_fixtures rf
         JOIN fields f1 ON f1.field_type = 1
         GROUP BY rf.team_id, rf.team_location, rf.fixture_id, f1.field_code
       ),
-      stats_agg_extras AS (
+      stats_agg_extras AS MATERIALIZED (
         SELECT
           s.fixture_id,
           s.field_code,
@@ -181,7 +173,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           AND s.average_by_period BETWEEN COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'average_by_period'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'average_by_period'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
                                     AND COALESCE(CASE s.team_location WHEN 1 THEN NULLIF(f.filters->'average_by_period'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'average_by_period'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
       ),
-      facts_agg AS (
+      facts_agg AS MATERIALIZED (
         SELECT
           rf.team_id,
           rf.team_location,
@@ -195,22 +187,12 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
               ARRAY_APPEND(ARRAY_AGG((rf.facts ->> f2.field_code)::int ORDER BY rf.starting_at ASC), 0),
               0
             ) - 1, 0
-          ) AS streak,
-          JSONB_AGG(
-            JSONB_BUILD_OBJECT(
-              'fixture_id', rf.fixture_id,
-              'opponent_id', rf.opponent_id,
-              'opponent_name', rf.opponent_name,
-              'location', rf.location,
-              'value', ROUND((rf.facts ->> f2.field_code)::NUMERIC, 2)::FLOAT8,
-              'opponent_value', ROUND((rf.opponent_facts ->> f2.field_code)::NUMERIC, 2)::FLOAT8
-            ) ORDER BY rf.starting_at
-          ) AS history
+          ) AS streak
         FROM recent_fixtures rf
         JOIN fields f2 ON f2.field_type = 2
         GROUP BY rf.team_id, rf.team_location, rf.fixture_id, f2.field_code
       ),
-      facts_agg_extras AS (
+      facts_agg_extras AS MATERIALIZED (
         SELECT
           f.fixture_id,
           f.field_code,
@@ -219,7 +201,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         WHERE f.fixture_id IS NOT NULL
         GROUP BY f.fixture_id, f.field_code
       ),
-      filtered_facts AS (
+      filtered_facts AS MATERIALIZED (
         SELECT fa.*, fe.average
         FROM facts_agg fa
         JOIN facts_agg_extras fe
@@ -233,10 +215,10 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           AND fa.streak BETWEEN COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'streak'->'home'->>'from', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'streak'->'away'->>'from', '')::NUMERIC ELSE NULL END, 0)
                           AND COALESCE(CASE fa.team_location WHEN 1 THEN NULLIF(f.filters->'streak'->'home'->>'to', '')::NUMERIC WHEN 2 THEN NULLIF(f.filters->'streak'->'away'->>'to', '')::NUMERIC ELSE NULL END, 'infinity')
       ),
-      field_count AS (
+      field_count AS MATERIALIZED (
         SELECT COUNT(DISTINCT field_code) AS total_fields FROM fields
       ),
-      stats_max AS (
+      stats_max AS MATERIALIZED (
         SELECT
           s.field_code,
           MAX(s.average) AS max_average,
@@ -247,7 +229,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         FROM filtered_stats s
         GROUP BY s.field_code
       ),
-      facts_max AS (
+      facts_max AS MATERIALIZED (
         SELECT
           f.field_code,
           MAX(f.average) AS max_average,
@@ -257,8 +239,9 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         FROM filtered_facts f
         GROUP BY f.field_code
       ),
-      final_data AS (
+      final_data AS MATERIALIZED (
         SELECT
+          t.starting_at,
           t.team_id,
           t.fixture_id,
           COALESCE(s.team_location, f.team_location) AS team_location,
@@ -277,8 +260,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
               'total', sm.max_total::FLOAT8,
               'average', sm.max_average::FLOAT8,
               'average_by_period', sm.max_average_by_period::FLOAT8
-            ),
-            'history', s.history
+            )
           )) AS processed_stats,
           JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'field_code', f.field_code,
@@ -293,8 +275,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
               'total', fm.max_total::FLOAT8,
               'percentage', fm.max_percentage::FLOAT8,
               'streak', fm.max_streak::FLOAT8
-            ),
-            'history', f.history
+            )
           )) AS processed_facts
         FROM input_teams t
         LEFT JOIN filtered_stats s 
@@ -305,38 +286,39 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           ON f.team_id = t.team_id AND f.field_code IS NOT NULL
         LEFT JOIN facts_max fm 
           ON fm.field_code = f.field_code
-        GROUP BY t.fixture_id, t.team_id, s.team_location, f.team_location
+        GROUP BY t.starting_at, t.fixture_id, t.team_id, s.team_location, f.team_location
         HAVING 
           (COUNT(DISTINCT s.field_code) + COUNT(DISTINCT f.field_code)) = (SELECT total_fields FROM field_count)
       ),
-      final_data_with_sort AS (
-		  SELECT
-			fd.*,
-			sp.direction AS sorting_direction,
-			CASE 
-			  WHEN sp.field_type::INT = 1 THEN (
-				SELECT (elem ->> sp.metric)::NUMERIC
-				FROM jsonb_array_elements(fd.processed_stats) elem
-				WHERE elem->>'field_code' = sp.field_code
-				AND (elem->>'team_location')::int = sp.location
-			  )
-			  WHEN sp.field_type::INT = 2 THEN (
-				SELECT (elem ->> sp.metric)::NUMERIC
-				FROM jsonb_array_elements(fd.processed_facts) elem
-				WHERE elem->>'field_code' = sp.field_code
-				AND (elem->>'team_location')::int = sp.location
-			  )
-			  ELSE NULL
-			END AS sorting_value
-		  FROM final_data fd
-		  CROSS JOIN sort_params sp
-      WHERE fixture_id IN (
-        SELECT fixture_id
-        FROM final_data
-        GROUP BY fixture_id
-        HAVING COUNT(DISTINCT team_location) = 2
+      final_data_with_sort AS MATERIALIZED (
+        SELECT
+        fd.*,
+        sp.direction AS sorting_direction,
+        CASE 
+          WHEN sp.metric = 'kick_off' THEN EXTRACT(EPOCH FROM fd.starting_at)
+          WHEN sp.field_type::INT = 1 THEN (
+            SELECT (elem ->> sp.metric)::NUMERIC
+            FROM jsonb_array_elements(fd.processed_stats) elem
+            WHERE elem->>'field_code' = sp.field_code
+            AND (elem->>'team_location')::int = sp.location
+          )
+          WHEN sp.field_type::INT = 2 THEN (
+            SELECT (elem ->> sp.metric)::NUMERIC
+            FROM jsonb_array_elements(fd.processed_facts) elem
+            WHERE elem->>'field_code' = sp.field_code
+            AND (elem->>'team_location')::int = sp.location
+          )
+          ELSE NULL
+        END AS sorting_value
+        FROM final_data fd
+        CROSS JOIN sort_params sp
+        WHERE fixture_id IN (
+          SELECT fixture_id
+          FROM final_data
+          GROUP BY fixture_id
+          HAVING COUNT(DISTINCT team_location) = 2
+        )
       )
-		)
       SELECT
         team_id,
         fixture_id,
@@ -344,9 +326,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         processed_stats,
         processed_facts
       FROM final_data_with_sort
-      ORDER BY
-        CASE WHEN sorting_direction = 'asc' THEN sorting_value END ASC NULLS LAST,
-        CASE WHEN sorting_direction = 'desc' THEN sorting_value END DESC NULLS LAST;
+      ORDER BY sorting_value * (CASE WHEN sorting_direction='desc' THEN -1 ELSE 1 END);
       $$ LANGUAGE sql STABLE;
     SQL
   end

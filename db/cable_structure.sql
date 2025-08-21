@@ -1,4 +1,4 @@
-\restrict vgvzSIDv2P7YUNe8agMJqPg4D1utItt2dZr1oeN6FnvfwMTQK7xQMP5ILcd5xdI
+\restrict hut8l7cRqOPdaCuR5IjuWtQ1OsBIRtUY3AFBUfqTlifG1w3vgaIcYdZfIxDAvit
 
 -- Dumped from database version 15.14 (Postgres.app)
 -- Dumped by pg_dump version 15.14 (Postgres.app)
@@ -31,6 +31,15 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.schema_migrations (
+    version character varying NOT NULL
+);
+
+
+--
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -39,10 +48,20 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict vgvzSIDv2P7YUNe8agMJqPg4D1utItt2dZr1oeN6FnvfwMTQK7xQMP5ILcd5xdI
+\unrestrict hut8l7cRqOPdaCuR5IjuWtQ1OsBIRtUY3AFBUfqTlifG1w3vgaIcYdZfIxDAvit
 
 SET search_path TO "$user", public;
+
+
 

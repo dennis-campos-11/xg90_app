@@ -16,18 +16,14 @@
 
       <div class="p-6 space-y-10">
         <div v-for="(filterValue, key) in localFilters" :key="key" class="space-y-3">
-          <div class="font-medium">
-            {{ $t(`fixtures.metrics.${key}.label`) }}
-          </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div v-for="team in ['home', 'away']" :key="team">
+              <div class="font-medium mb-4">
+                {{ $t(`fixtures.metrics.${team}_${key}.label`) }}
+              </div>
               <div class="flex mb-5">
-                <span
-                  class="inline-flex items-center px-3 bg-gray-200 border rounded-e-0 border-gray-200 border-e-0 rounded-s-md dark:bg-neutral-800 dark:border-neutral-700">
-                  {{ $t(`fixture_lists.filters.locations.${team}`) }}
-                </span>
                 <input type="number" v-model.number="localFilters[key][team].from"
-                  class="text-sm rounded-none text-center z-10 bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="text-sm rounded-none text-center z-10 rounded-s-lg bg-gray-50 border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full border-gray-200 p-2.5 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   :min="fixtureListField.data_field.settings?.[key]?.min"
                   :max="fixtureListField.data_field.settings?.[key]?.max" step="0.01" />
                 <span

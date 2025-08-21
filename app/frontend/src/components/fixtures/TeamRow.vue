@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-w-max bg-inherit h-10">
-    <div class="min-w-18 max-w-18 px-2 flex items-center justify-center">
+    <div class="min-w-15 max-w-15 px-2 flex items-center justify-center">
       {{ fixture.kick_off }}
     </div>
 

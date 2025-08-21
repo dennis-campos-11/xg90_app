@@ -1,9 +1,9 @@
 <template>
-  <div v-if="fixtures.length > 0 && fixtureList && activeFields.length > 0">
+  <div v-if="fixtures?.length > 0 && fixtureList && activeFields?.length > 0">
     <!-- Head -->
     <div
       ref="tableWrapperHead"
-      class="w-full overflow-x-auto border-0 bg-white dark:bg-black sticky top-15 z-20 scrollbar-hidden"
+      class="w-full overflow-x-auto border-0 border-gray-200 dark:border-neutral-700 bg-white dark:bg-black sticky top-15 z-20 scrollbar-hidden"
       @scroll="syncScroll('head')"
     >
       <TableHead :fields="activeFields" :hasScrolled="hasScrolled" />
@@ -17,7 +17,7 @@
     >
       <template v-for="fixture in fixtures" :key="fixture.id">
         <div
-          class="w-full bg-white dark:bg-black animated scrollbar-hidden"
+          class="w-full bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-neutral-800 animated scrollbar-hidden"
         >
           <TeamRow :fixture="fixture" :fields="activeFields" :has-scrolled="hasScrolled" />
         </div>
