@@ -112,13 +112,13 @@
       <div id="season-index-dropdown"
         class="w-55 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
         <ul class="p-3" aria-labelledby="season-index-button">
-          <li v-for="seasonIndex in seasonIndexes" :key="`season-index-${seasonIndex}`" class="group">
+          <li v-for="season in metaData?.season_indexes" :key="`season-index-${season.id}`" class="group">
             <div class="flex items-center">
-              <input type="radio" :id="`season-index-${seasonIndex}`" :value="seasonIndex"
-                :name="`season-index-${seasonIndex}`" v-model="form.season_index" class="hidden peer">
-              <label :for="`season-index-${seasonIndex}`"
+              <input type="radio" :id="`season-index-${season.id}`" :value="season.id"
+                :name="`season-index-${season.id}`" v-model="form.season_index" class="hidden peer">
+              <label :for="`season-index-${season.id}`"
                 class="inline-flex items-center justify-between w-full px-3 h-9 rounded-md cursor-pointer hover:bg-gray-100 peer-checked:font-medium dark:hover:bg-neutral-900">
-                {{ $t(`fixture_lists.season_index.values.${seasonIndex}`) }}
+                {{ season.value }}
                 <span class="material-symbols-outlined !hidden text-green-500 group-has-checked:!inline-block">
                   check
                 </span>
@@ -254,7 +254,6 @@ import Slider from "@vueform/slider"
 
 const props = defineProps({ metaData: Object })
 const form = inject('form')
-const seasonIndexes = [null, 0, 1, 2, 3]
 
 onMounted(() => {
   initDropdowns()

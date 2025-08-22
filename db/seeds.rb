@@ -1,68 +1,136 @@
-country = Country.find_or_create_by(external_ws_id: 1) do |c|
-  c.name = 'Spain'
+# db/seeds.rb
+
+def create_country(id, name)
+  Country.find_or_create_by(external_ws_id: id) { |c| c.name = name }
 end
 
-country2 = Country.find_or_create_by(external_ws_id: 2) do |c|
-  c.name = 'England'
-end
-
-country3 = Country.find_or_create_by(external_ws_id: 3) do |c|
-  c.name = 'Costa Rica'
-end
-
-competition = Competition.find_or_create_by(external_ws_id: 1) do |c|
-  c.name = 'La Liga'
-  c.country_id = country.id
-end
-
-Competition.find_or_create_by(external_ws_id: 2) do |c|
-  c.name = 'Premier League'
-  c.country_id = country2.id
-end
-
-Competition.find_or_create_by(external_ws_id: 3) do |c|
-  c.name = 'Liga Promerica'
-  c.country_id = country3.id
-end
-
-season = Season.find_or_create_by(external_ws_id: 1) do |s|
-  s.name = '2024/2025'
-  s.index = 0
-  s.competition_id = competition.id
-end
-
-[
-  { name: "Alavés", short_name: "ALA", primary_color: "#0761af", text_color: "#fff" },
-  { name: "Athletic Club", short_name: "ATH", primary_color: "#ee2523", text_color: "#fff" },
-  { name: "Atlético de Madrid", short_name: "ATM", primary_color: "#CB3524", text_color: "#fff" },
-  { name: "FC Barcelona", short_name: "FCB", primary_color: "#a50044", text_color: "#fff" },
-  { name: "Celta de Vigo", short_name: "CEL", primary_color: "#8ac3ee", text_color: "#000" },
-  { name: "RCD Espanyol", short_name: "ESP", primary_color: "#007fc8", text_color: "#fff" },
-  { name: "Getafe CF", short_name: "GET", primary_color: "#005999", text_color: "#fff" },
-  { name: "Girona FC", short_name: "GIR", primary_color: "#d00424", text_color: "#fff" },
-  { name: "UD Las Palmas", short_name: "LPA", primary_color: "#f7e603", text_color: "#000" },
-  { name: "CD Leganés", short_name: "LEG", primary_color: "#0c1f6e", text_color: "#fff" },
-  { name: "RCD Mallorca", short_name: "MLL", primary_color: "#E20613", text_color: "#fff" },
-  { name: "CA Osasuna", short_name: "OSA", primary_color: "#0a346f", text_color: "#fff" },
-  { name: "Rayo Vallecano", short_name: "RAY", primary_color: "#e43029", text_color: "#fff" },
-  { name: "Real Betis", short_name: "BET", primary_color: "#0BB363", text_color: "#fff" },
-  { name: "Real Madrid", short_name: "RMA", primary_color: "#00529F", text_color: "#fff" },
-  { name: "Real Sociedad", short_name: "RSO", primary_color: "#0067b1", text_color: "#fff" },
-  { name: "Sevilla FC", short_name: "SEV", primary_color: "#f43333", text_color: "#fff" },
-  { name: "Valencia CF", short_name: "VAL", primary_color: "#EE3524", text_color: "#fff" },
-  { name: "Real Valladolid", short_name: "VLL", primary_color: "#921b88", text_color: "#fff" },
-  { name: "Villarreal CF", short_name: "VIL", primary_color: "#ffe667", text_color: "#000" },
-].each.with_index(1) do |team, index|
-  team = Team.find_or_create_by(external_ws_id: index) do |t|
-    t.name = team[:name]
-    t.short_name = team[:short_name]
-    t.primary_color = team[:primary_color]
-    t.text_color = team[:text_color]
+def create_competition(id, name, country)
+  Competition.find_or_create_by(external_ws_id: id) do |c|
+    c.name = name
+    c.country = country
   end
-
-  SeasonTeam.find_or_create_by(team_id: team.id, season_id: season.id)
 end
 
+def create_season(id, name, competition, index: 0)
+  Season.find_or_create_by(external_ws_id: id) do |s|
+    s.name = name
+    s.index = index
+    s.competition = competition
+  end
+end
+
+def create_teams(teams, season, offset:)
+  teams.each.with_index(offset) do |team_data, index|
+    team = Team.find_or_create_by(external_ws_id: index) do |t|
+      t.name          = team_data[:name]
+      t.short_name    = team_data[:short_name]
+      t.primary_color = team_data[:primary_color]
+      t.text_color    = team_data[:text_color]
+    end
+
+    SeasonTeam.find_or_create_by(team: team, season: season)
+  end
+end
+
+# =======================
+# DATA DEFINITIONS
+# =======================
+
+countries = {
+  spain:      { id: 1, name: "Spain" },
+  england:    { id: 2, name: "England" },
+  costa_rica: { id: 3, name: "Costa Rica" }
+}
+
+competitions = {
+  la_liga:          { id: 1, name: "La Liga", country: :spain },
+  premier_league:   { id: 2, name: "Premier League", country: :england },
+  primera_division: { id: 3, name: "Liga Promerica", country: :costa_rica }
+}
+
+seasons = [
+  { id: 1, competition: :la_liga },
+  { id: 2, competition: :premier_league },
+  { id: 3, competition: :primera_division }
+]
+
+teams_data = {
+  la_liga: [
+    { name: "Alavés", short_name: "ALA", primary_color: "#0761af", text_color: "#fff" },
+    { name: "Athletic Club", short_name: "ATH", primary_color: "#ee2523", text_color: "#fff" },
+    { name: "Atlético de Madrid", short_name: "ATM", primary_color: "#CB3524", text_color: "#fff" },
+    { name: "FC Barcelona", short_name: "FCB", primary_color: "#a50044", text_color: "#fff" },
+    { name: "Celta de Vigo", short_name: "CEL", primary_color: "#8ac3ee", text_color: "#000" },
+    { name: "RCD Espanyol", short_name: "ESP", primary_color: "#007fc8", text_color: "#fff" },
+    { name: "Getafe CF", short_name: "GET", primary_color: "#005999", text_color: "#fff" },
+    { name: "Girona FC", short_name: "GIR", primary_color: "#d00424", text_color: "#fff" },
+    { name: "UD Las Palmas", short_name: "LPA", primary_color: "#f7e603", text_color: "#000" },
+    { name: "CD Leganés", short_name: "LEG", primary_color: "#0c1f6e", text_color: "#fff" },
+    { name: "RCD Mallorca", short_name: "MLL", primary_color: "#E20613", text_color: "#fff" },
+    { name: "CA Osasuna", short_name: "OSA", primary_color: "#0a346f", text_color: "#fff" },
+    { name: "Rayo Vallecano", short_name: "RAY", primary_color: "#e43029", text_color: "#fff" },
+    { name: "Real Betis", short_name: "BET", primary_color: "#0BB363", text_color: "#fff" },
+    { name: "Real Madrid", short_name: "RMA", primary_color: "#00529F", text_color: "#fff" },
+    { name: "Real Sociedad", short_name: "RSO", primary_color: "#0067b1", text_color: "#fff" },
+    { name: "Sevilla FC", short_name: "SEV", primary_color: "#f43333", text_color: "#fff" },
+    { name: "Valencia CF", short_name: "VAL", primary_color: "#EE3524", text_color: "#fff" },
+    { name: "Real Valladolid", short_name: "VLL", primary_color: "#921b88", text_color: "#fff" },
+    { name: "Villarreal CF", short_name: "VIL", primary_color: "#ffe667", text_color: "#000" }
+  ],
+  premier_league: [
+    { name: "Arsenal", short_name: "ARS", primary_color: "#EF0107", text_color: "#fff" },
+    { name: "Aston Villa", short_name: "AVL", primary_color: "#95BFE5", text_color: "#7A003C" },
+    { name: "Bournemouth", short_name: "BOU", primary_color: "#DA291C", text_color: "#000" },
+    { name: "Brentford", short_name: "BRE", primary_color: "#E30613", text_color: "#fff" },
+    { name: "Brighton & Hove Albion", short_name: "BHA", primary_color: "#0057B8", text_color: "#fff" },
+    { name: "Burnley", short_name: "BUR", primary_color: "#6C1D45", text_color: "#f1f1f1" },
+    { name: "Chelsea", short_name: "CHE", primary_color: "#034694", text_color: "#fff" },
+    { name: "Crystal Palace", short_name: "CRY", primary_color: "#1B458F", text_color: "#fff" },
+    { name: "Everton", short_name: "EVE", primary_color: "#003399", text_color: "#fff" },
+    { name: "Fulham", short_name: "FUL", primary_color: "#000000", text_color: "#fff" },
+    { name: "Leeds United", short_name: "LEE", primary_color: "#FFCD00", text_color: "#1D428A" },
+    { name: "Liverpool", short_name: "LIV", primary_color: "#C8102E", text_color: "#fff" },
+    { name: "Manchester City", short_name: "MCI", primary_color: "#6CABDD", text_color: "#1C2C5B" },
+    { name: "Manchester United", short_name: "MUN", primary_color: "#DA291C", text_color: "#fff" },
+    { name: "Newcastle United", short_name: "NEW", primary_color: "#241F20", text_color: "#fff" },
+    { name: "Nottingham Forest", short_name: "NFO", primary_color: "#DD0000", text_color: "#fff" },
+    { name: "Sunderland", short_name: "SUN", primary_color: "#E41B17", text_color: "#fff" },
+    { name: "Tottenham Hotspur", short_name: "TOT", primary_color: "#132257", text_color: "#fff" },
+    { name: "West Ham United", short_name: "WHU", primary_color: "#7A263A", text_color: "#F3D459" },
+    { name: "Wolverhampton Wanderers", short_name: "WOL", primary_color: "#FDB913", text_color: "#000" }
+  ],
+  primera_division: [
+    { name: "Club Sport Cartaginés", short_name: "CAR", primary_color: "#005BAA", text_color: "#fff" },
+    { name: "Liga Deportiva Alajuelense", short_name: "ALA", primary_color: "#C8102E", text_color: "#fff" },
+    { name: "Club Sport Herediano", short_name: "HER", primary_color: "#FFCC00", text_color: "#000" },
+    { name: "Deportivo Saprissa", short_name: "SAP", primary_color: "#522398", text_color: "#fff" },
+    { name: "Guadalupe Fútbol Club", short_name: "GUA", primary_color: "#007C41", text_color: "#fff" },
+    { name: "Asociación Deportiva San Carlos", short_name: "SCA", primary_color: "#005EB8", text_color: "#fff" },
+    { name: "Municipal Liberia", short_name: "LIB", primary_color: "#005BBB", text_color: "#fff" },
+    { name: "Municipal Pérez Zeledón", short_name: "PEZ", primary_color: "#770000", text_color: "#fff" },
+    { name: "Puntarenas Fútbol Club", short_name: "PUN", primary_color: "#E62020", text_color: "#fff" },
+    { name: "Sporting Football Club", short_name: "SPO", primary_color: "#E02828", text_color: "#fff" }
+  ]
+}
+
+# =======================
+# CREATION FLOW
+# =======================
+
+created_countries = countries.transform_values { |c| create_country(c[:id], c[:name]) }
+created_competitions = competitions.transform_values { |c| create_competition(c[:id], c[:name], created_countries[c[:country]]) }
+created_seasons = seasons.map { |s| [s[:competition], create_season(s[:id], "2024/2025", created_competitions[s[:competition]])] }.to_h
+
+offset = 1
+teams_data.each do |competition_key, teams|
+  season = created_seasons[competition_key]
+  create_teams(teams, season, offset: offset)
+  offset = offset + teams.count + 1
+end
+
+# ==============================
+# Fixtures fake stats
+# ==============================
 def fake_stats(half_type)
   divider = half_type == 'ft' ? 1 : 2
 
@@ -150,44 +218,56 @@ def fake_stats(half_type)
   .transform_values { |v| (v / divider.to_f).floor }
 end
 
-(1..5).each do |year_index|
-  Team.pluck(:id).permutation(2).to_a.each.with_index(1) do |(home_id, away_id), index|
-    fixture = Fixture.find_or_create_by(external_ws_id: index * year_index) do |f|
-      starting_at = (year_index.year.ago + away_id.week)
-      f.home_id = home_id
-      f.away_id = away_id
-      f.competition_id = competition.id
-      f.season_id = season.id
-      f.starting_at = starting_at
-      f.status = 1
-      f.home_stats = fake_stats("ft").merge(fake_stats("1h")).merge(fake_stats("2h"))
-      f.away_stats = fake_stats("ft").merge(fake_stats("1h")).merge(fake_stats("2h"))
+def create_fixtures_for_competition(competition, seasons: 5)
+  seasons.times do |year_index|
+    season = competition.current_season
+
+    season.teams.pluck(:id).permutation(2).each.with_index(1) do |(home_id, away_id), idx|
+      external_id = Random.rand(99999999999999)
+      starting_at = (year_index + 1).years.ago + away_id.weeks
+
+      Fixture.find_or_create_by(external_ws_id: external_id) do |f|
+        f.home_id       = home_id
+        f.away_id       = away_id
+        f.competition   = competition
+        f.season        = season
+        f.starting_at   = starting_at
+        f.status        = 1
+        f.home_stats    = %w[ft 1h 2h].map { |p| fake_stats(p) }.reduce(:merge)
+        f.away_stats    = %w[ft 1h 2h].map { |p| fake_stats(p) }.reduce(:merge)
+      end
     end
   end
 end
 
-next_matches = [ 
-  { home_id: 1, away_id: 2 }, 
-  { home_id: 3, away_id: 4 }, 
-  { home_id: 5, away_id: 6 },
-  { home_id: 7, away_id: 8 },
-  { home_id: 9, away_id: 10 },
-  { home_id: 11, away_id: 12 },
-  { home_id: 13, away_id: 14 },
-  { home_id: 15, away_id: 16 },
-  { home_id: 17, away_id: 18 },
-  { home_id: 19, away_id: 20 },
-]
-next_matches.each do |next_match|
-  Fixture.create(
-    home_id: next_match[:home_id],
-    away_id: next_match[:away_id],
-    competition_id: competition.id,
-    season_id: season.id,
-    starting_at: Time.now + 2.days,
-    status: 0
-  )
+# ==============================
+# Crear temporadas pasadas con fixtures simulados
+# ==============================
+created_competitions.values.each do |competition|
+  create_fixtures_for_competition(competition, seasons: 5)
 end
+
+# ==============================
+# Crear un set inicial de fixtures próximos (2 días)
+# ==============================
+created_competitions.each do |key, competition|
+  season = created_seasons[key]
+  teams = season.teams.pluck(:id)
+
+  teams.each_slice(2).with_index do |(home_id, away_id), index|
+    next unless away_id
+
+    Fixture.find_or_create_by!(
+      home_id: home_id,
+      away_id: away_id,
+      competition: competition,
+      season: season,
+      starting_at: Time.current + 2.days + index.hours,
+      status: 0
+    )
+  end
+end
+
 
 [
   "goal_kick", "throw_in", "throw_in_success", "corner_with_shot", "deep_completed_cross",
@@ -278,12 +358,3 @@ end
 Fixture.where(status: 1).each do |f|
   CalculateFacts.new(f).process
 end
-
-fixture_list = FixtureList.create(total_matches: 10, home_location: 1, away_location: 2, only_current_competition: true)
-FixtureListField.create(fixture_list_id: fixture_list.id, data_field_id: 1, filters: [{ average: { home: { from: 0, to: 100 } } }])
-FixtureListField.create(fixture_list_id: fixture_list.id, data_field_id: 2, filters: [{ average: { home: { from: 0, to: 100 } } }])
-FixtureListField.create(fixture_list_id: fixture_list.id, data_field_id: 3, filters: [{ average: { home: { from: 0, to: 100 } } }])
-
-# Team.all.each do |team|
-#   CalculateTeamProcessedData.new(team, Competition.first).process
-# end

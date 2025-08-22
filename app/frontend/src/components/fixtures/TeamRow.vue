@@ -1,10 +1,10 @@
 <template>
   <div class="flex min-w-max bg-inherit h-10">
-    <div class="min-w-15 max-w-15 px-2 flex items-center justify-center">
+    <div class="min-w-15 max-w-15 px-1.5 flex items-center">
       {{ fixture.kick_off }}
     </div>
 
-    <div class="px-2 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit animated"
+    <div class="px-1.5 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit animated"
       :class="[
         hasScrolled ? 'right-shadow min-w-44 max-w-44' : 'min-w-80 max-w-80'
       ]"
@@ -12,7 +12,7 @@
       <div class="flex items-center w-full h-full">
         <img :src="getTeamLogo(fixture.home.id)" class="flex-none w-7 h-7" />
         <img :src="getTeamLogo(fixture.away.id)" class="flex-none w-7 h-7" />
-        <div class="grow font-semibold truncate ml-3" :title="`${fixture.home.name} vs ${fixture.away.name}`">
+        <div class="grow font-semibold truncate ml-2" :title="`${fixture.home.name} vs ${fixture.away.name}`">
           <div v-if="hasScrolled" class="flex w-full gap-1">
             {{ fixture.home.short_name }} VS {{ fixture.away.short_name }}
           </div>

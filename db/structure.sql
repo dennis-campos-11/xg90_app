@@ -1,4 +1,4 @@
-\restrict 0xwNnUSgAo0do6DLWhw7dHsreepCE6bbh6jY6w4sL2Xl87jPggsiDE8NpiRr27Y
+\restrict g45tBQ2eVmilzTuTUuiifsyChGF24CvIgpi6JD39IjlfRAGmhiBiahnako4Vvnm
 
 -- Dumped from database version 15.14 (Postgres.app)
 -- Dumped by pg_dump version 15.14 (Postgres.app)
@@ -30,7 +30,9 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           (params->>'home_location')::int AS home_location,
           (params->>'away_location')::int AS away_location,
           (params->>'only_current_competition')::boolean AS only_current_competition,
+          (params->>'fixture_date')::int AS fixture_date,
           COALESCE(params->'fixture_list_fields_attributes', params->'fixture_list_fields') AS fixture_list_fields,
+          COALESCE(params->'fixture_list_competitions_attributes', params->'fixture_list_competitions') AS fixture_list_competitions,
           params->'sort' AS sort
       ),
       sort_params AS MATERIALIZED (
@@ -45,11 +47,40 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
       total_matches_value AS MATERIALIZED (
         SELECT total_matches FROM single_fixture_list
       ),
+      fixture_date_value AS MATERIALIZED (
+        SELECT fixture_date FROM single_fixture_list
+      ),
+      selected_competitions AS MATERIALIZED (
+        SELECT (comp->>'competition_id')::int AS competition_id
+        FROM single_fixture_list sfl,
+            LATERAL jsonb_array_elements(sfl.fixture_list_competitions) comp
+      ),
       upcoming_fixtures AS MATERIALIZED (
         SELECT id, starting_at, home_id, away_id, competition_id
         FROM fixtures
-        WHERE starting_at >= now()
-          AND starting_at < now() + interval '4 days'
+        WHERE 
+          starting_at >= CASE (SELECT fixture_date FROM fixture_date_value)
+            WHEN 0 THEN now()
+            WHEN 1 THEN date_trunc('day', now())
+            WHEN 2 THEN date_trunc('day', now() + interval '1 day')
+            WHEN 3 THEN date_trunc('day', now() + interval '2 day')
+            WHEN 4 THEN date_trunc('day', now() + interval '3 day')
+            ELSE now()
+          END
+          AND starting_at < CASE (SELECT fixture_date FROM fixture_date_value)
+            WHEN 0 THEN 'infinity'::timestamp
+            WHEN 1 THEN date_trunc('day', now()) + interval '1 day'
+            WHEN 2 THEN date_trunc('day', now() + interval '1 day') + interval '1 day'
+            WHEN 3 THEN date_trunc('day', now() + interval '2 day') + interval '1 day'
+            WHEN 4 THEN date_trunc('day', now() + interval '3 day') + interval '1 day'
+            ELSE 'infinity'::timestamp
+          END
+          AND (
+            EXISTS (SELECT 1 FROM selected_competitions)
+              AND competition_id IN (SELECT competition_id FROM selected_competitions)
+            OR
+            NOT EXISTS (SELECT 1 FROM selected_competitions)
+          )
       ),
       input_teams AS MATERIALIZED (
         SELECT DISTINCT
@@ -130,6 +161,10 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           WHERE (t.data_location IS NULL OR t.data_location NOT IN (1,2)) 
                 OR (t.data_location = 1 AND fi.home_id = t.team_id)
                 OR (t.data_location = 2 AND fi.away_id = t.team_id)
+                AND (
+                  NOT (SELECT only_current_competition FROM single_fixture_list)
+                  OR fi.competition_id = t.competition_id
+                )
           ORDER BY fi.starting_at DESC
           LIMIT (SELECT total_matches FROM total_matches_value)
         ) f ON true
@@ -1241,7 +1276,7 @@ ALTER TABLE ONLY public.fixture_list_competitions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 0xwNnUSgAo0do6DLWhw7dHsreepCE6bbh6jY6w4sL2Xl87jPggsiDE8NpiRr27Y
+\unrestrict g45tBQ2eVmilzTuTUuiifsyChGF24CvIgpi6JD39IjlfRAGmhiBiahnako4Vvnm
 
 SET search_path TO "$user", public;
 

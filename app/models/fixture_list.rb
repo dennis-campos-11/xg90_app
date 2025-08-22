@@ -1,5 +1,7 @@
 class FixtureList < ApplicationRecord
   include EnumOptions
+
+  attr_accessor :fixture_date
   
   has_many :fixture_list_fields, inverse_of: :fixture_list, dependent: :destroy
 
@@ -43,6 +45,7 @@ class FixtureList < ApplicationRecord
 
     params["home_location"] = self.home_location_before_type_cast
     params["away_location"] = self.away_location_before_type_cast
+    params["fixture_date"] = self.fixture_date
     params
   end
 end

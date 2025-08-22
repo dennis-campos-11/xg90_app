@@ -20,6 +20,7 @@
     
     <FiltersInputs :meta-data="metaData"/>
     <FieldTags :meta-data="metaData"/>
+    <DateFilters :meta-data="metaData"/>
     <SaveModal ref="saveModalRef" @reloadData="reloadData"/>
   </div>
 </template>
@@ -27,9 +28,10 @@
 <script setup>
 import { debounce, omit } from 'lodash'
 import { inject, watch, computed, ref } from 'vue'
+import FixtureListsDropdown from './FixtureListsDropdown.vue'
 import FiltersInputs from './FiltersInputs.vue'
 import FieldTags from './FieldTags.vue'
-import FixtureListsDropdown from './FixtureListsDropdown.vue'
+import DateFilters from './DateFilters.vue'
 import SaveModal from './SaveModal.vue'
 
 const props = defineProps({

@@ -14,19 +14,20 @@ export function useFixtureListForm(loadId = false) {
     id: null,
     name: null,
     total_matches: 20,
-    season_index: null,
+    season_index: 1,
     home_location: 1,
     away_location: 2,
+    fixture_date: 0,
     fixture_list_fields_attributes: [],
     fixture_list_competitions_attributes: [],
     only_current_competition: false,
     show_variance_against_competition: false,
     sort: {
-      field_code: "",
+      field_code: "kick_off",
       field_type: null,
-      metric: "",
+      metric: "kick_off",
       location: null,
-      direction: ""
+      direction: "asc"
     }
   })
 

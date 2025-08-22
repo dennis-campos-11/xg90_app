@@ -39,11 +39,14 @@ en:
           home: "Home"
           away: "Away"
           both: "Both"
-        sample:
-          last_5_games: "Last 5 Games"
-          last_10_games: "Last 10 Games"
-          last_15_games: "Last 15 Games"
-          current_season: "Current Season"
-          last_season: "Last Season"
-          last_2_seasons: "Last 2 Seasons"
-          last_3_seasons: "Last 3 Seasons"
+        season_indexes:
+          0: "Current season"
+          1: "Last season"
+          2: "Last 2 seasons"
+          3: "Last 3 seasons"
+        dates:
+          0: "All"
+          1: "Today"
+          2: "Tomorrow"
+          3: "In 2 days"
+          4: "In 3 days"

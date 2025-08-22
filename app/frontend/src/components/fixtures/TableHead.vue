@@ -117,7 +117,7 @@ const factMetrics = [
 // Helpers
 function toggleSort(fieldCode, m) {
   if (!m.metric) return
-  let direction = 'desc'
+  let direction = 'asc'
   if (isSortActive(fieldCode, m)) {
     direction = form.sort.direction === 'asc' ? 'desc' : 'asc'
   }
