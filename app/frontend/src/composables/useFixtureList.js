@@ -9,9 +9,6 @@ export function useFixtureList(form, props, attributeKey, relationKey, searchKey
   const relationPlural = `${relationKey}s`
   const relationIdKey = `${relationKey}_id`
 
-  /**
-   * Verifica si el item tiene filtros distintos a los defaults en settings
-   */
   const checkFiltersApplied = (item, relation) => {
     if (!relation?.settings || !item.filters) return false
 
@@ -37,7 +34,6 @@ export function useFixtureList(form, props, attributeKey, relationKey, searchKey
     return false
   }
 
-  // Normaliza el listado con metadatos asociados y detecta filtros aplicados
   const availableItems = computed(() => {
     const items = form?.[attributeKey] ?? []
     const source = metaData.value?.[relationPlural] ?? []

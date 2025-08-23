@@ -1,4 +1,4 @@
-\restrict g45tBQ2eVmilzTuTUuiifsyChGF24CvIgpi6JD39IjlfRAGmhiBiahnako4Vvnm
+\restrict EdWRZenb7mFdNu2UgQVaersivDeqiv9OblwKlhJaxPhij60hrIzkbhoMS6kduPo
 
 -- Dumped from database version 15.14 (Postgres.app)
 -- Dumped by pg_dump version 15.14 (Postgres.app)
@@ -29,7 +29,7 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
           (params->>'season_index')::int AS season_index,
           (params->>'home_location')::int AS home_location,
           (params->>'away_location')::int AS away_location,
-          (params->>'only_current_competition')::boolean AS only_current_competition,
+          (params->>'settings')::jsonb AS settings,
           (params->>'fixture_date')::int AS fixture_date,
           COALESCE(params->'fixture_list_fields_attributes', params->'fixture_list_fields') AS fixture_list_fields,
           COALESCE(params->'fixture_list_competitions_attributes', params->'fixture_list_competitions') AS fixture_list_competitions,
@@ -145,7 +145,7 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
             WHERE fi.status = 1
               AND (sfl.season_index IS NULL OR s.index <= sfl.season_index)
               AND fi.home_id = t.team_id
-              AND (sfl.only_current_competition IS NOT TRUE OR fi.competition_id = t.competition_id)
+              AND ((sfl.settings->'general'->>'only_current_competition')::boolean IS NOT TRUE OR fi.competition_id = t.competition_id)
 
             UNION ALL
 
@@ -156,13 +156,13 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
             WHERE fi.status = 1
               AND (sfl.season_index IS NULL OR s.index <= sfl.season_index)
               AND fi.away_id = t.team_id
-              AND (sfl.only_current_competition IS NOT TRUE OR fi.competition_id = t.competition_id)
+              AND ((sfl.settings->'general'->>'only_current_competition')::boolean IS NOT TRUE OR fi.competition_id = t.competition_id)
           ) fi
           WHERE (t.data_location IS NULL OR t.data_location NOT IN (1,2)) 
                 OR (t.data_location = 1 AND fi.home_id = t.team_id)
                 OR (t.data_location = 2 AND fi.away_id = t.team_id)
                 AND (
-                  NOT (SELECT only_current_competition FROM single_fixture_list)
+                  NOT (SELECT (settings->'general'->>'only_current_competition')::boolean FROM single_fixture_list)
                   OR fi.competition_id = t.competition_id
                 )
           ORDER BY fi.starting_at DESC
@@ -336,35 +336,6 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
         GROUP BY t.starting_at, t.fixture_id, t.team_id, s.team_location, f.team_location
         HAVING 
           (COUNT(DISTINCT s.field_code) + COUNT(DISTINCT f.field_code)) = (SELECT total_fields FROM field_count)
-      ),
-      final_data_with_sort AS MATERIALIZED (
-        SELECT
-        fd.*,
-        sp.direction AS sorting_direction,
-        CASE 
-          WHEN sp.metric = 'kick_off' THEN EXTRACT(EPOCH FROM fd.starting_at)
-          WHEN sp.field_type::INT = 1 THEN (
-            SELECT (elem ->> sp.metric)::NUMERIC
-            FROM jsonb_array_elements(fd.processed_stats) elem
-            WHERE elem->>'field_code' = sp.field_code
-            AND (elem->>'team_location')::int = sp.location
-          )
-          WHEN sp.field_type::INT = 2 THEN (
-            SELECT (elem ->> sp.metric)::NUMERIC
-            FROM jsonb_array_elements(fd.processed_facts) elem
-            WHERE elem->>'field_code' = sp.field_code
-            AND (elem->>'team_location')::int = sp.location
-          )
-          ELSE NULL
-        END AS sorting_value
-        FROM final_data fd
-        CROSS JOIN sort_params sp
-        WHERE fixture_id IN (
-          SELECT fixture_id
-          FROM final_data
-          GROUP BY fixture_id
-          HAVING COUNT(DISTINCT team_location) = 2
-        )
       )
       SELECT
         team_id,
@@ -372,8 +343,7 @@ CREATE FUNCTION public.process_fixture_list_data(params jsonb) RETURNS TABLE(tea
         team_location,
         processed_stats,
         processed_facts
-      FROM final_data_with_sort
-      ORDER BY sorting_value * (CASE WHEN sorting_direction='desc' THEN -1 ELSE 1 END);
+      FROM final_data
       $$;
 
 
@@ -569,9 +539,8 @@ CREATE TABLE public.fixture_lists (
     away_location integer,
     total_matches integer,
     season_index integer,
-    only_current_competition boolean DEFAULT false,
-    show_variance_against_competition boolean DEFAULT false,
     sort jsonb DEFAULT '{}'::jsonb,
+    settings jsonb DEFAULT '{}'::jsonb,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -719,6 +688,7 @@ ALTER SEQUENCE public.seasons_id_seq OWNED BY public.seasons.id;
 CREATE TABLE public.teams (
     id bigint NOT NULL,
     name character varying,
+    common_name character varying,
     short_name character varying,
     external_ws_id bigint,
     primary_color character varying,
@@ -1276,7 +1246,7 @@ ALTER TABLE ONLY public.fixture_list_competitions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict g45tBQ2eVmilzTuTUuiifsyChGF24CvIgpi6JD39IjlfRAGmhiBiahnako4Vvnm
+\unrestrict EdWRZenb7mFdNu2UgQVaersivDeqiv9OblwKlhJaxPhij60hrIzkbhoMS6kduPo
 
 SET search_path TO "$user", public;
 

@@ -235,15 +235,99 @@
       </div>
     </div>
 
-    <div class="relative flex items-center">
-      <label class="inline-flex items-center cursor-pointer">
-        <input type="checkbox" v-model="form.only_current_competition" class="sr-only peer" />
-        <div
-          class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+    <div class="relative">
+      <button id="settings-button" data-dropdown-toggle="settings-dropdown"
+        data-dropdown-placement="bottom-start"
+        class="border border-gray-200 hover:bg-gray-100 focus-visible:ring-4 focus:outline-none focus-visible:ring-gray-100 rounded-lg px-3 py-1.5 text-center flex items-center justify-between dark:focus-visible:ring-neutral-600 dark:hover:bg-neutral-900 dark:border-neutral-700 animated"
+        type="button">
+        <div>{{ $t('fixture_lists.settings.label') }}</div>
+        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+      </button>
+      <div id="settings-dropdown"
+        class="w-70 z-30 hidden bg-white border border-gray-200 divide-y divide-gray-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-700 dark:divide-neutral-700">
+        <div class="p-3 divide-y divide-gray-200 dark:divide-neutral-700" aria-labelledby="settings-button">
+          <div class="py-3">
+            <div class="text-xs text-gray-500 dark:text-neutral-400 mb-2">
+              {{ $t('fixture_lists.settings.general.label') }}
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.general.only_current_competition" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.general.only_current_competition.label') }}</span>
+              </label>
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.general.highlight_cells" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.general.highlight_cells.label') }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="py-3">
+            <div class="text-xs text-gray-500 dark:text-neutral-400 mb-2">
+              {{ $t('fixture_lists.settings.statistics.label') }}
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.statistics.show_total_average" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.statistics.show_total_average.label') }}</span>
+              </label>
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.statistics.show_total_average_per_period" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.statistics.show_total_average_per_period.label') }}</span>
+              </label>
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.statistics.show_totals" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.statistics.show_totals.label') }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="py-3">
+            <div class="text-xs text-gray-500 dark:text-neutral-400 mb-2">
+              {{ $t('fixture_lists.settings.facts.label') }}
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.facts.show_percentage_average" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.facts.show_percentage_average.label') }}</span>
+              </label>
+            </div>
+            <div class="relative flex items-center mt-2">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="form.settings.facts.show_totals" class="sr-only peer" />
+                <div
+                  class="relative w-11 h-6 bg-gray-300 rounded-full peer dark:bg-neutral-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-neutral-300 peer-checked:after:border-blue-700 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full">
+                </div>
+                <span class="ms-3">{{ $t('fixture_lists.settings.statistics.show_totals.label') }}</span>
+              </label>
+            </div>
+          </div>
         </div>
-        <span class="ms-3">{{ $t('fixture_lists.only_current_competition.label') }}</span>
-      </label>
+      </div>
     </div>
+
   </div>
 </template>
 <script setup>

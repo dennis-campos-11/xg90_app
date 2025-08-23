@@ -20,14 +20,27 @@ export function useFixtureListForm(loadId = false) {
     fixture_date: 0,
     fixture_list_fields_attributes: [],
     fixture_list_competitions_attributes: [],
-    only_current_competition: false,
-    show_variance_against_competition: false,
     sort: {
       field_code: "kick_off",
       field_type: null,
       metric: "kick_off",
       location: null,
       direction: "asc"
+    },
+    settings: {
+      general: {
+        only_current_competition: false,
+        highlight_cells: true
+      },
+      statistics: {
+        show_total_average: true,
+        show_total_average_per_period: true,
+        show_totals: true
+      },
+      facts: {
+        show_percentage_average: true,
+        show_totals: true
+      }
     }
   })
 
@@ -38,8 +51,6 @@ export function useFixtureListForm(loadId = false) {
   }
 
   const getFixtureList = async (id) => {
-    fixtures.value = null
-    selectedFixtureList.value = null
     if (!id) return
     const data = await fixtureListsApi.get(id)
     selectedFixtureList.value = data?.fixture_list

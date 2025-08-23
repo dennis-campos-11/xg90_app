@@ -1,4 +1,4 @@
-\restrict PVJzwl0IT7airRHJUXmHzrSf7di4xVOreejxXIz7uhHhyWj3B8059gkfpUTUUd9
+\restrict 7ImAGEvJGB4CBtzTcJ2w1JW1vSOTZkOkgtg83qwvdvHiTbywX9z05Ips569eBQf
 
 -- Dumped from database version 15.14 (Postgres.app)
 -- Dumped by pg_dump version 15.14 (Postgres.app)
@@ -59,7 +59,7 @@ ALTER TABLE ONLY public.schema_migrations
 -- PostgreSQL database dump complete
 --
 
-\unrestrict PVJzwl0IT7airRHJUXmHzrSf7di4xVOreejxXIz7uhHhyWj3B8059gkfpUTUUd9
+\unrestrict 7ImAGEvJGB4CBtzTcJ2w1JW1vSOTZkOkgtg83qwvdvHiTbywX9z05Ips569eBQf
 
 SET search_path TO "$user", public;
 

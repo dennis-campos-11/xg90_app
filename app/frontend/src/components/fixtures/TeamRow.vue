@@ -10,14 +10,14 @@
       ]"
     >
       <div class="flex items-center w-full h-full">
-        <img :src="getTeamLogo(fixture.home.id)" class="flex-none w-7 h-7" />
-        <img :src="getTeamLogo(fixture.away.id)" class="flex-none w-7 h-7" />
+        <img :src="getTeamLogo(fixture.competition.id, fixture.home.id)" class="flex-none w-7 h-7" />
+        <img :src="getTeamLogo(fixture.competition.id, fixture.away.id)" class="flex-none w-7 h-7" />
         <div class="grow font-semibold truncate ml-2" :title="`${fixture.home.name} vs ${fixture.away.name}`">
           <div v-if="hasScrolled" class="flex w-full gap-1">
             {{ fixture.home.short_name }} VS {{ fixture.away.short_name }}
           </div>
           <div v-else>
-            {{ fixture.home.name }} vs {{ fixture.away.name }}
+            {{ fixture.home.common_name }} vs {{ fixture.away.common_name }}
           </div>
         </div>
       </div>
@@ -44,8 +44,8 @@ defineProps({
   hasScrolled: Boolean
 })
 
-function getTeamLogo(teamId) {
-  return `http://localhost:3000/laliga/${teamId}.png` // ajusta según tu estructura real
+function getTeamLogo(competitionId, teamId) {
+  return `http://localhost:3000/${competitionId}/${teamId}.png` // ajusta según tu estructura real
 }
 
 // function getCompetitionLogo(competitionId) {

@@ -7,8 +7,13 @@
       @getAllFixtureLists="getAllFixtureLists" 
     />
   </div>
-  <div class="flex-1 w-full">
-    <FixturesTable :fixtures="fixtures" :fixture-list="fixtureList" />
+  
+  <div class="flex-1 w-full" v-if="fixtures">
+    <FixturesTable 
+      :fixtures="fixtures" 
+      :fixture-list="fixtureList" 
+      :meta-data="fixtureListMeta"
+    />
   </div>
 </template>
 

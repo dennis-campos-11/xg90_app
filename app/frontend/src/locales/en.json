@@ -54,12 +54,40 @@
       "search_placeholder": "Search competitions",
       "not_found": "No competitions found"
     },
-    "only_current_competition": { 
-      "label": "Only current competition"
+    "settings": {
+      "label": "Settings",
+      "general": {
+        "label": "General",
+        "only_current_competition": { 
+          "label": "Only current competition"
+        },
+        "highlight_cells": {
+          "label": "Show data intensity"
+        }
+      },
+      "statistics": {
+        "label": "Statistics",
+        "show_total_average": {
+          "label": "Show total average"
+        },
+        "show_total_average_per_period": {
+          "label": "Show total average per period"
+        },
+        "show_totals": {
+          "label": "Show totals"
+        }
+      },
+      "facts": {
+        "label": "Facts",
+        "show_percentage_average": {
+          "label": "Show percentage average"
+        },
+        "show_totals": {
+          "label": "Show totals"
+        }
+      }
     },
-    "show_variance_against_competition": {
-      "label": "Show variance"
-    },
+    
     "selected_fields": "Selected Fields",
     "filters": {
       "locations": {

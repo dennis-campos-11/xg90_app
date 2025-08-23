@@ -24,6 +24,7 @@ def create_teams(teams, season, offset:)
     team = Team.find_or_create_by(external_ws_id: index) do |t|
       t.name          = team_data[:name]
       t.short_name    = team_data[:short_name]
+      t.common_name   = team_data[:common_name]
       t.primary_color = team_data[:primary_color]
       t.text_color    = team_data[:text_color]
     end
@@ -56,60 +57,60 @@ seasons = [
 
 teams_data = {
   la_liga: [
-    { name: "Alavés", short_name: "ALA", primary_color: "#0761af", text_color: "#fff" },
-    { name: "Athletic Club", short_name: "ATH", primary_color: "#ee2523", text_color: "#fff" },
-    { name: "Atlético de Madrid", short_name: "ATM", primary_color: "#CB3524", text_color: "#fff" },
-    { name: "FC Barcelona", short_name: "FCB", primary_color: "#a50044", text_color: "#fff" },
-    { name: "Celta de Vigo", short_name: "CEL", primary_color: "#8ac3ee", text_color: "#000" },
-    { name: "RCD Espanyol", short_name: "ESP", primary_color: "#007fc8", text_color: "#fff" },
-    { name: "Getafe CF", short_name: "GET", primary_color: "#005999", text_color: "#fff" },
-    { name: "Girona FC", short_name: "GIR", primary_color: "#d00424", text_color: "#fff" },
-    { name: "UD Las Palmas", short_name: "LPA", primary_color: "#f7e603", text_color: "#000" },
-    { name: "CD Leganés", short_name: "LEG", primary_color: "#0c1f6e", text_color: "#fff" },
-    { name: "RCD Mallorca", short_name: "MLL", primary_color: "#E20613", text_color: "#fff" },
-    { name: "CA Osasuna", short_name: "OSA", primary_color: "#0a346f", text_color: "#fff" },
-    { name: "Rayo Vallecano", short_name: "RAY", primary_color: "#e43029", text_color: "#fff" },
-    { name: "Real Betis", short_name: "BET", primary_color: "#0BB363", text_color: "#fff" },
-    { name: "Real Madrid", short_name: "RMA", primary_color: "#00529F", text_color: "#fff" },
-    { name: "Real Sociedad", short_name: "RSO", primary_color: "#0067b1", text_color: "#fff" },
-    { name: "Sevilla FC", short_name: "SEV", primary_color: "#f43333", text_color: "#fff" },
-    { name: "Valencia CF", short_name: "VAL", primary_color: "#EE3524", text_color: "#fff" },
-    { name: "Real Valladolid", short_name: "VLL", primary_color: "#921b88", text_color: "#fff" },
-    { name: "Villarreal CF", short_name: "VIL", primary_color: "#ffe667", text_color: "#000" }
+    { name: "Deportivo Alavés", common_name: "Alavés", short_name: "ALA", primary_color: "#0761af", text_color: "#fff" },
+    { name: "Athletic Club de Bilbao", common_name: "Athletic Club", short_name: "ATH", primary_color: "#ee2523", text_color: "#fff" },
+    { name: "Club Atlético de Madrid", common_name: "Atlético de Madrid", short_name: "ATM", primary_color: "#CB3524", text_color: "#fff" },
+    { name: "Futbol Club Barcelona", common_name: "Barcelona", short_name: "FCB", primary_color: "#a50044", text_color: "#fff" },
+    { name: "Real Club Celta de Vigo", common_name: "Celta de Vigo", short_name: "CEL", primary_color: "#8ac3ee", text_color: "#000" },
+    { name: "Reial Club Deportiu Espanyol", common_name: "Espanyol", short_name: "ESP", primary_color: "#007fc8", text_color: "#fff" },
+    { name: "Getafe Club de Fútbol", common_name: "Getafe", short_name: "GET", primary_color: "#005999", text_color: "#fff" },
+    { name: "Girona Futbol Club", common_name: "Girona", short_name: "GIR", primary_color: "#d00424", text_color: "#fff" },
+    { name: "Unión Deportiva Las Palmas", common_name: "Las Palmas", short_name: "LPA", primary_color: "#f7e603", text_color: "#000" },
+    { name: "Club Deportivo Leganés", common_name: "Leganés", short_name: "LEG", primary_color: "#0c1f6e", text_color: "#fff" },
+    { name: "Real Club Deportivo Mallorca", common_name: "Mallorca", short_name: "MLL", primary_color: "#E20613", text_color: "#fff" },
+    { name: "Club Atlético Osasuna", common_name: "Osasuna", short_name: "OSA", primary_color: "#0a346f", text_color: "#fff" },
+    { name: "Rayo Vallecano de Madrid", common_name: "Rayo Vallecano", short_name: "RAY", primary_color: "#e43029", text_color: "#fff" },
+    { name: "Real Betis Balompié", common_name: "Real Betis", short_name: "BET", primary_color: "#0BB363", text_color: "#fff" },
+    { name: "Real Madrid Club de Fútbol", common_name: "Real Madrid", short_name: "RMA", primary_color: "#00529F", text_color: "#fff" },
+    { name: "Real Sociedad de Fútbol", common_name: "Real Sociedad", short_name: "RSO", primary_color: "#0067b1", text_color: "#fff" },
+    { name: "Sevilla Fútbol Club", common_name: "Sevilla", short_name: "SEV", primary_color: "#f43333", text_color: "#fff" },
+    { name: "Valencia Club de Fútbol", common_name: "Valencia", short_name: "VAL", primary_color: "#EE3524", text_color: "#fff" },
+    { name: "Real Valladolid Club de Fútbol", common_name: "Real Valladolid", short_name: "VLL", primary_color: "#921b88", text_color: "#fff" },
+    { name: "Villarreal Club de Fútbol", common_name: "Villarreal", short_name: "VIL", primary_color: "#ffe667", text_color: "#000" }
   ],
   premier_league: [
-    { name: "Arsenal", short_name: "ARS", primary_color: "#EF0107", text_color: "#fff" },
-    { name: "Aston Villa", short_name: "AVL", primary_color: "#95BFE5", text_color: "#7A003C" },
-    { name: "Bournemouth", short_name: "BOU", primary_color: "#DA291C", text_color: "#000" },
-    { name: "Brentford", short_name: "BRE", primary_color: "#E30613", text_color: "#fff" },
-    { name: "Brighton & Hove Albion", short_name: "BHA", primary_color: "#0057B8", text_color: "#fff" },
-    { name: "Burnley", short_name: "BUR", primary_color: "#6C1D45", text_color: "#f1f1f1" },
-    { name: "Chelsea", short_name: "CHE", primary_color: "#034694", text_color: "#fff" },
-    { name: "Crystal Palace", short_name: "CRY", primary_color: "#1B458F", text_color: "#fff" },
-    { name: "Everton", short_name: "EVE", primary_color: "#003399", text_color: "#fff" },
-    { name: "Fulham", short_name: "FUL", primary_color: "#000000", text_color: "#fff" },
-    { name: "Leeds United", short_name: "LEE", primary_color: "#FFCD00", text_color: "#1D428A" },
-    { name: "Liverpool", short_name: "LIV", primary_color: "#C8102E", text_color: "#fff" },
-    { name: "Manchester City", short_name: "MCI", primary_color: "#6CABDD", text_color: "#1C2C5B" },
-    { name: "Manchester United", short_name: "MUN", primary_color: "#DA291C", text_color: "#fff" },
-    { name: "Newcastle United", short_name: "NEW", primary_color: "#241F20", text_color: "#fff" },
-    { name: "Nottingham Forest", short_name: "NFO", primary_color: "#DD0000", text_color: "#fff" },
-    { name: "Sunderland", short_name: "SUN", primary_color: "#E41B17", text_color: "#fff" },
-    { name: "Tottenham Hotspur", short_name: "TOT", primary_color: "#132257", text_color: "#fff" },
-    { name: "West Ham United", short_name: "WHU", primary_color: "#7A263A", text_color: "#F3D459" },
-    { name: "Wolverhampton Wanderers", short_name: "WOL", primary_color: "#FDB913", text_color: "#000" }
+    { name: "Arsenal Football Club", common_name: "Arsenal", short_name: "ARS", primary_color: "#EF0107", text_color: "#fff" },
+    { name: "Aston Villa Football Club", common_name: "Aston Villa", short_name: "AVL", primary_color: "#95BFE5", text_color: "#7A003C" },
+    { name: "AFC Bournemouth", common_name: "Bournemouth", short_name: "BOU", primary_color: "#DA291C", text_color: "#000" },
+    { name: "Brentford Football Club", common_name: "Brentford", short_name: "BRE", primary_color: "#E30613", text_color: "#fff" },
+    { name: "Brighton & Hove Albion Football Club", common_name: "Brighton", short_name: "BHA", primary_color: "#0057B8", text_color: "#fff" },
+    { name: "Burnley Football Club", common_name: "Burnley", short_name: "BUR", primary_color: "#6C1D45", text_color: "#f1f1f1" },
+    { name: "Chelsea Football Club", common_name: "Chelsea", short_name: "CHE", primary_color: "#034694", text_color: "#fff" },
+    { name: "Crystal Palace Football Club", common_name: "Crystal Palace", short_name: "CRY", primary_color: "#1B458F", text_color: "#fff" },
+    { name: "Everton Football Club", common_name: "Everton", short_name: "EVE", primary_color: "#003399", text_color: "#fff" },
+    { name: "Fulham Football Club", common_name: "Fulham", short_name: "FUL", primary_color: "#000000", text_color: "#fff" },
+    { name: "Leeds United Football Club", common_name: "Leeds United", short_name: "LEE", primary_color: "#FFCD00", text_color: "#1D428A" },
+    { name: "Liverpool Football Club", common_name: "Liverpool", short_name: "LIV", primary_color: "#C8102E", text_color: "#fff" },
+    { name: "Manchester City Football Club", common_name: "Manchester City", short_name: "MCI", primary_color: "#6CABDD", text_color: "#1C2C5B" },
+    { name: "Manchester United Football Club", common_name: "Manchester United", short_name: "MUN", primary_color: "#DA291C", text_color: "#fff" },
+    { name: "Newcastle United Football Club", common_name: "Newcastle", short_name: "NEW", primary_color: "#241F20", text_color: "#fff" },
+    { name: "Nottingham Forest Football Club", common_name: "Nottingham Forest", short_name: "NFO", primary_color: "#DD0000", text_color: "#fff" },
+    { name: "Sunderland Association Football Club", common_name: "Sunderland", short_name: "SUN", primary_color: "#E41B17", text_color: "#fff" },
+    { name: "Tottenham Hotspur Football Club", common_name: "Tottenham Hotspur", short_name: "TOT", primary_color: "#132257", text_color: "#fff" },
+    { name: "West Ham United Football Club", common_name: "West Ham", short_name: "WHU", primary_color: "#7A263A", text_color: "#F3D459" },
+    { name: "Wolverhampton Wanderers Football Club", common_name: "Wolverhampton", short_name: "WOL", primary_color: "#FDB913", text_color: "#000" }
   ],
   primera_division: [
-    { name: "Club Sport Cartaginés", short_name: "CAR", primary_color: "#005BAA", text_color: "#fff" },
-    { name: "Liga Deportiva Alajuelense", short_name: "ALA", primary_color: "#C8102E", text_color: "#fff" },
-    { name: "Club Sport Herediano", short_name: "HER", primary_color: "#FFCC00", text_color: "#000" },
-    { name: "Deportivo Saprissa", short_name: "SAP", primary_color: "#522398", text_color: "#fff" },
-    { name: "Guadalupe Fútbol Club", short_name: "GUA", primary_color: "#007C41", text_color: "#fff" },
-    { name: "Asociación Deportiva San Carlos", short_name: "SCA", primary_color: "#005EB8", text_color: "#fff" },
-    { name: "Municipal Liberia", short_name: "LIB", primary_color: "#005BBB", text_color: "#fff" },
-    { name: "Municipal Pérez Zeledón", short_name: "PEZ", primary_color: "#770000", text_color: "#fff" },
-    { name: "Puntarenas Fútbol Club", short_name: "PUN", primary_color: "#E62020", text_color: "#fff" },
-    { name: "Sporting Football Club", short_name: "SPO", primary_color: "#E02828", text_color: "#fff" }
+    { name: "Club Sport Cartaginés", common_name: "Cartaginés", short_name: "CSC", primary_color: "#005BAA", text_color: "#fff" },
+    { name: "Liga Deportiva Alajuelense", common_name: "Alajuelense", short_name: "LDA", primary_color: "#C8102E", text_color: "#fff" },
+    { name: "Club Sport Herediano", common_name: "Herediano", short_name: "CSH", primary_color: "#FFCC00", text_color: "#000" },
+    { name: "Deportivo Saprissa", common_name: "Saprissa", short_name: "SAP", primary_color: "#522398", text_color: "#fff" },
+    { name: "Guadalupe Fútbol Club", common_name: "Guadalupe", short_name: "GUA", primary_color: "#007C41", text_color: "#fff" },
+    { name: "Asociación Deportiva San Carlos", common_name: "San Carlos", short_name: "SCA", primary_color: "#005EB8", text_color: "#fff" },
+    { name: "Municipal Liberia", common_name: "Liberia", short_name: "LIB", primary_color: "#005BBB", text_color: "#fff" },
+    { name: "Municipal Pérez Zeledón", common_name: "Pérez Zeledón", short_name: "MPZ", primary_color: "#770000", text_color: "#fff" },
+    { name: "Puntarenas Fútbol Club", common_name: "Puntarenas", short_name: "PFC", primary_color: "#E62020", text_color: "#fff" },
+    { name: "Sporting Football Club", common_name: "Sporting", short_name: "SFC", primary_color: "#E02828", text_color: "#fff" }
   ]
 }
 
@@ -262,7 +263,7 @@ created_competitions.each do |key, competition|
       away_id: away_id,
       competition: competition,
       season: season,
-      starting_at: Time.current + 2.days + index.hours,
+      starting_at: Time.current + (index * 3).hours,
       status: 0
     )
   end

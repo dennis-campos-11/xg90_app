@@ -26,8 +26,8 @@
 </template>
 
 <script setup>
-import { debounce, omit } from 'lodash'
-import { inject, watch, computed, ref } from 'vue'
+import { debounce } from 'lodash'
+import { inject, watch, computed, ref, toRaw } from 'vue'
 import FixtureListsDropdown from './FixtureListsDropdown.vue'
 import FiltersInputs from './FiltersInputs.vue'
 import FieldTags from './FieldTags.vue'
@@ -41,6 +41,7 @@ const props = defineProps({
 })
 
 const form = inject('form')
+let previous = JSON.parse(JSON.stringify(toRaw(form)))
 
 const saveModalRef = ref(null)
 const emit = defineEmits(['search', 'getAllFixtureLists', 'getFixtureList'])
@@ -60,9 +61,8 @@ function hydrateForm(fixtureList) {
       fixture_list_competitions_attributes: (fixtureList.fixture_list_competitions).map((
         { competition, ...rest }  // eslint-disable-line no-unused-vars
       ) => rest),
-      only_current_competition: fixtureList.only_current_competition,
-      show_variance_against_competition: fixtureList.show_variance_against_competition,
-      sort: fixtureList.sort
+      sort: fixtureList.sort,
+      settings: fixtureList.settings
     })
   }
 }
@@ -81,10 +81,6 @@ const search = debounce(() => {
     emit('search', form)
   }
 }, 200)
-
-const formWatched = computed(() => {
-  return omit({ ...form }, ['name'])
-})
 
 const selectFixtureList = (fixtureList) => {
   emit('getFixtureList', fixtureList.id)
@@ -108,10 +104,44 @@ watch(
 )
 
 watch(
-  formWatched,
-  () => {
-    search()
+  form,
+  (newVal) => {
+    const rawNew = toRaw(newVal)
+
+    const clean = (obj) => {
+      const rest = { ...obj }
+      delete rest.highlight_cells
+      delete rest.sort
+
+      const fields = (rest.fixture_list_fields_attributes || []).map(f => {
+        const fCopy = { ...f }
+        delete fCopy.index
+        return fCopy
+      })
+      rest.fixture_list_fields_attributes = fields
+
+      if (rest.settings) {
+        rest.settings = {
+          general: {
+            only_current_competition: rest.settings?.general?.only_current_competition ?? false
+          }
+        }
+      }
+
+      return rest
+    }
+
+    const prevClean = clean(previous)
+    const newClean = clean(rawNew)
+
+    if (JSON.stringify(prevClean) !== JSON.stringify(newClean)) {
+      search()
+    }
+
+    previous = JSON.parse(JSON.stringify(rawNew))
   },
   { immediate: true, deep: true }
 )
+
+
 </script>

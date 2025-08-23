@@ -44,7 +44,7 @@
         class="flex"
       >
         <div 
-          v-for="m in statisticMetrics" 
+          v-for="m in visibleStatisticMetrics" 
           :key="m.label"
           class="min-w-15 max-w-15 relative p-1.5 flex text-xs uppercase leading-tight font-medium"
           :class="getSortCellClass(field.data_field.code, m)"
@@ -63,7 +63,7 @@
         class="flex"
       >
         <div 
-          v-for="m in factMetrics" 
+          v-for="m in visibleFactMetrics" 
           :key="m.label"
           class="min-w-15 max-w-15 relative p-1.5 flex text-xs uppercase leading-tight font-medium"
           :class="getSortCellClass(field.data_field.code, m)"
@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from 'vue'
+import { inject, ref, computed } from 'vue'
 
 defineProps({
   fields: Array,
@@ -93,28 +93,33 @@ const kickOffColumn = ref({
   label: 'fixtures.kick_off', metric: 'kick_off', location: null, fieldType: null
 })
 
-const statisticMetrics = [
-  { label: 'fixtures.metrics.home_average.short_label', metric: 'average', location: 1, fieldType: 1 },
-  { label: 'fixtures.metrics.away_average.short_label', metric: 'average', location: 2, fieldType: 1 },
-  { label: 'fixtures.metrics.total_average.short_label', metric: 'overall', location: 1, fieldType: 1 },
-  { label: 'fixtures.metrics.home_average_by_period.short_label', metric: 'average_by_period', location: 1, fieldType: 1 },
-  { label: 'fixtures.metrics.away_average_by_period.short_label', metric: 'average_by_period', location: 2, fieldType: 1 },
-  { label: 'fixtures.metrics.total_average_by_period.short_label', metric: 'overall_by_period', location: 1, fieldType: 1 },
-  { label: 'fixtures.metrics.home_total.label', metric: 'total', location: 1, fieldType: 1 },
-  { label: 'fixtures.metrics.away_total.label', metric: 'total', location: 2, fieldType: 1 }
-]
+const visibleStatisticMetrics = computed(() => {
+  const statisticMetrics = [
+    { label: 'fixtures.metrics.home_average.short_label', metric: 'average', location: 1, fieldType: 1, show: true },
+    { label: 'fixtures.metrics.away_average.short_label', metric: 'average', location: 2, fieldType: 1, show: true },
+    { label: 'fixtures.metrics.total_average.short_label', metric: 'overall', location: 1, fieldType: 1, show: form.settings?.statistics?.show_total_average },
+    { label: 'fixtures.metrics.home_average_by_period.short_label', metric: 'average_by_period', location: 1, fieldType: 1, show: true },
+    { label: 'fixtures.metrics.away_average_by_period.short_label', metric: 'average_by_period', location: 2, fieldType: 1, show: true },
+    { label: 'fixtures.metrics.total_average_by_period.short_label', metric: 'overall_by_period', location: 1, fieldType: 1, show: form.settings?.statistics?.show_total_average_per_period },
+    { label: 'fixtures.metrics.home_total.label', metric: 'total', location: 1, fieldType: 1, show: form.settings?.statistics?.show_totals },
+    { label: 'fixtures.metrics.away_total.label', metric: 'total', location: 2, fieldType: 1, show: form.settings?.statistics?.show_totals },
+  ]
+  return statisticMetrics.filter(m => m.show)
+})
 
-const factMetrics = [
-  { label: 'fixtures.metrics.home_percentage.short_label', metric: 'percentage', location: 1, fieldType: 2 },
-  { label: 'fixtures.metrics.away_percentage.short_label', metric: 'percentage', location: 2, fieldType: 2 },
-  { label: 'fixtures.metrics.percentage_average.short_label', metric: 'average', location: 1, fieldType: 2 },
-  { label: 'fixtures.metrics.home_total.label', metric: 'total', location: 1, fieldType: 2 },
-  { label: 'fixtures.metrics.away_total.label', metric: 'total', location: 2, fieldType: 2 },
-  { label: 'fixtures.metrics.home_streak.label', metric: 'streak', location: 1, fieldType: 2 },
-  { label: 'fixtures.metrics.away_streak.label', metric: 'streak', location: 2, fieldType: 2 }
-]
+const visibleFactMetrics = computed(() => {
+  const factMetrics = [
+    { label: 'fixtures.metrics.home_percentage.short_label', metric: 'percentage', location: 1, fieldType: 2, show: true },
+    { label: 'fixtures.metrics.away_percentage.short_label', metric: 'percentage', location: 2, fieldType: 2, show: true },
+    { label: 'fixtures.metrics.percentage_average.short_label', metric: 'average', location: 1, fieldType: 2, show: form.settings?.facts?.show_percentage_average },
+    { label: 'fixtures.metrics.home_total.label', metric: 'total', location: 1, fieldType: 2, show: form.settings?.facts?.show_totals },
+    { label: 'fixtures.metrics.away_total.label', metric: 'total', location: 2, fieldType: 2, show: form.settings?.facts?.show_totals },
+    { label: 'fixtures.metrics.home_streak.label', metric: 'streak', location: 1, fieldType: 2, show: true },
+    { label: 'fixtures.metrics.away_streak.label', metric: 'streak', location: 2, fieldType: 2, show: true }
+  ]
+  return factMetrics.filter(m => m.show)
+})
 
-// Helpers
 function toggleSort(fieldCode, m) {
   if (!m.metric) return
   let direction = 'asc'

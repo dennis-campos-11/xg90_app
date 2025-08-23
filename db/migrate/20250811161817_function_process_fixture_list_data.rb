@@ -17,7 +17,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
           (params->>'season_index')::int AS season_index,
           (params->>'home_location')::int AS home_location,
           (params->>'away_location')::int AS away_location,
-          (params->>'only_current_competition')::boolean AS only_current_competition,
+          (params->>'settings')::jsonb AS settings,
           (params->>'fixture_date')::int AS fixture_date,
           COALESCE(params->'fixture_list_fields_attributes', params->'fixture_list_fields') AS fixture_list_fields,
           COALESCE(params->'fixture_list_competitions_attributes', params->'fixture_list_competitions') AS fixture_list_competitions,
@@ -133,7 +133,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
             WHERE fi.status = 1
               AND (sfl.season_index IS NULL OR s.index <= sfl.season_index)
               AND fi.home_id = t.team_id
-              AND (sfl.only_current_competition IS NOT TRUE OR fi.competition_id = t.competition_id)
+              AND ((sfl.settings->'general'->>'only_current_competition')::boolean IS NOT TRUE OR fi.competition_id = t.competition_id)
 
             UNION ALL
 
@@ -144,13 +144,13 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
             WHERE fi.status = 1
               AND (sfl.season_index IS NULL OR s.index <= sfl.season_index)
               AND fi.away_id = t.team_id
-              AND (sfl.only_current_competition IS NOT TRUE OR fi.competition_id = t.competition_id)
+              AND ((sfl.settings->'general'->>'only_current_competition')::boolean IS NOT TRUE OR fi.competition_id = t.competition_id)
           ) fi
           WHERE (t.data_location IS NULL OR t.data_location NOT IN (1,2)) 
                 OR (t.data_location = 1 AND fi.home_id = t.team_id)
                 OR (t.data_location = 2 AND fi.away_id = t.team_id)
                 AND (
-                  NOT (SELECT only_current_competition FROM single_fixture_list)
+                  NOT (SELECT (settings->'general'->>'only_current_competition')::boolean FROM single_fixture_list)
                   OR fi.competition_id = t.competition_id
                 )
           ORDER BY fi.starting_at DESC
@@ -324,35 +324,6 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         GROUP BY t.starting_at, t.fixture_id, t.team_id, s.team_location, f.team_location
         HAVING 
           (COUNT(DISTINCT s.field_code) + COUNT(DISTINCT f.field_code)) = (SELECT total_fields FROM field_count)
-      ),
-      final_data_with_sort AS MATERIALIZED (
-        SELECT
-        fd.*,
-        sp.direction AS sorting_direction,
-        CASE 
-          WHEN sp.metric = 'kick_off' THEN EXTRACT(EPOCH FROM fd.starting_at)
-          WHEN sp.field_type::INT = 1 THEN (
-            SELECT (elem ->> sp.metric)::NUMERIC
-            FROM jsonb_array_elements(fd.processed_stats) elem
-            WHERE elem->>'field_code' = sp.field_code
-            AND (elem->>'team_location')::int = sp.location
-          )
-          WHEN sp.field_type::INT = 2 THEN (
-            SELECT (elem ->> sp.metric)::NUMERIC
-            FROM jsonb_array_elements(fd.processed_facts) elem
-            WHERE elem->>'field_code' = sp.field_code
-            AND (elem->>'team_location')::int = sp.location
-          )
-          ELSE NULL
-        END AS sorting_value
-        FROM final_data fd
-        CROSS JOIN sort_params sp
-        WHERE fixture_id IN (
-          SELECT fixture_id
-          FROM final_data
-          GROUP BY fixture_id
-          HAVING COUNT(DISTINCT team_location) = 2
-        )
       )
       SELECT
         team_id,
@@ -360,8 +331,7 @@ class FunctionProcessFixtureListData < ActiveRecord::Migration[8.0]
         team_location,
         processed_stats,
         processed_facts
-      FROM final_data_with_sort
-      ORDER BY sorting_value * (CASE WHEN sorting_direction='desc' THEN -1 ELSE 1 END);
+      FROM final_data
       $$ LANGUAGE sql STABLE;
     SQL
   end

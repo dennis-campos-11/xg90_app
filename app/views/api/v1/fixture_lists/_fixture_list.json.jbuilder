@@ -4,9 +4,8 @@ json.total_matches fixture_list.total_matches
 json.season_index fixture_list.season_index
 json.home_location fixture_list.home_location_before_type_cast
 json.away_location fixture_list.away_location_before_type_cast
-json.only_current_competition fixture_list.only_current_competition
-json.show_variance_against_competition fixture_list.show_variance_against_competition
 json.sort fixture_list.sort
+json.settings fixture_list.settings
 
 json.fixture_list_competitions fixture_list.fixture_list_competitions do |lc|
   json.id lc.id
@@ -18,7 +17,7 @@ json.fixture_list_competitions fixture_list.fixture_list_competitions do |lc|
   json._destroy lc._destroy
 end
 
-json.fixture_list_fields fixture_list.fixture_list_fields.sort_by { |lf| lf.index || Float::INFINITY } do |lf|
+json.fixture_list_fields fixture_list.fixture_list_fields do |lf|
   json.id lf.id
   json.data_field do
     json.id lf.data_field.id
